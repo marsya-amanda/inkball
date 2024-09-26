@@ -9,7 +9,8 @@ public class Ball {
     int colour;
     private float[] vector;
     private float ballRadius;
-    private final int artificialRadius;
+    private static final int ARTIFICIAL_RADIUS = 10;
+    private static final int MAX_SPEED = 12;
 
     private boolean isAbsorbed;
     private int points;
@@ -28,7 +29,6 @@ public class Ball {
         this.ballRadius = 12;
         this.isAbsorbed = false;
         this.points = 0;
-        this.artificialRadius = 10;
     }
 
     public void draw(App app) {
@@ -53,6 +53,10 @@ public class Ball {
 
     public void setVector(float[] vector) {
         this.vector = vector;
+    }
+
+    public boolean getIsAbsorbed() {
+        return this.isAbsorbed;
     }
 
     public void moveOne() {
@@ -83,7 +87,7 @@ public class Ball {
         double distP2 = App.getDistance(ballXY, P2);
         double distP1P2 = App.getDistance(P1, P2);
 
-        return distP1 + distP2 < this.artificialRadius + distP1P2;
+        return distP1 + distP2 < ARTIFICIAL_RADIUS + distP1P2;
     }
 
     public void setNewDirection(Line line) {
@@ -129,40 +133,40 @@ public class Ball {
             return;
         }
         if (1 <= line.getColourTo() && line.getColourTo() <= 4) {
-            System.out.println("colour changed");
             this.colour = line.getColourTo();
         }
     }
 
-    public boolean meetHole(Hole hole) {
+    public /*boolean*/ void meetHole(Hole hole) {
         if (this.isAbsorbed) {
-            return false;
+            return;
+        }
+
+        if (hole.getHoleCenter() == null) {
+            return;
         }
 
         float[] ballCenter = this.getBallCenter();
-        float[] holeCenter = new float[] {hole.getX()*App.CELLSIZE, hole.getY()*App.CELLSIZE+App.TOPBAR};
-
-        if (App.getDistance(ballCenter, holeCenter) > 32) {
-            return false;
-        }
-
-        float shrinkFactor = (float) (App.getDistance(holeCenter, ballCenter) / 32);
-        this.ballRadius = this.ballRadius * shrinkFactor;
-
-        if (App.getDistance(holeCenter, ballCenter) < 0.05f) {
-            this.ballRadius = 0;
-            this.isAbsorbed = true;
-            return false;
-        }
+        float[] holeCenter = hole.getHoleCenter(); // used to use getX/Y() method, which returned inaccurate calculations
+        //System.out.println(Arrays.equals(holeCenterGet, holeCenter));
 
         //System.out.println("Distance between ball and hole " + App.getDistance(ballCenter, holeCenter));
 
         float[] attractionVector = this.getAttractionVector(hole);
-        //System.out.println(Arrays.toString(attractionVector));
         this.vector[0] += attractionVector[0];
         this.vector[1] += attractionVector[1];
 
-        return true;
+        float shrinkFactor = (float) (App.getDistance(holeCenter, ballCenter) / 32);
+        this.ballRadius = 12 * shrinkFactor; //make ball increase/decrease proportionally to its original radius
+
+        if (this.ballRadius < 1 || App.getDistance(ballCenter, holeCenter) < 2) {
+            //System.out.println("ball suitable to absorb"); //does not pass
+            this.ballRadius = 0;
+            this.isAbsorbed = true;
+            return/* false*/;
+        }
+
+        return/* true*/;
     }
 
     public float[] getBallCenter() {
@@ -171,13 +175,20 @@ public class Ball {
 
     public float[] getAttractionVector(Hole hole) {
         float[] ballCenter = this.getBallCenter();
-        float[] holeCenter = new float[] {hole.getX(), hole.getY()};
+        float[] holeCenter = hole.getHoleCenter();
         float[] attractionVec = new float[] {holeCenter[0] - ballCenter[0], holeCenter[1] - ballCenter[1]};
 
         float mag = (float) (Math.sqrt(Math.pow(attractionVec[0], 2) + Math.pow(attractionVec[1], 2)));
-        double speed = App.getDistance(ballCenter, holeCenter) * 0.005;
-        float attractionX = attractionVec[0] / mag * (float) speed;
-        float attractionY = attractionVec[1] / mag * (float) speed;
+
+        if (mag == 0) { //prevent zero division error
+            this.isAbsorbed = true;
+            this.ballRadius = 0;
+            return new float[] {0, 0};
+        }
+
+        float speed = (float) (Math.min(MAX_SPEED, (App.getDistance(ballCenter, holeCenter) * 0.005f)));
+        float attractionX = attractionVec[0] / mag * speed;
+        float attractionY = attractionVec[1] / mag * speed;
 
 //        System.out.println("Normalised attraction vector is " + Arrays.toString(new float[] {attractionX, attractionY}));
 //        System.out.println("Magnitude of attraction vector is " + mag);

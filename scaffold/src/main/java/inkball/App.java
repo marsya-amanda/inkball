@@ -626,12 +626,44 @@ public class App extends PApplet {
             }
         }
 
+//        for (Hole hole : this.holes) {
+//            for (Ball ball : this.balls) {
+//                if (getDistance(ball.getBallCenter(), hole.getHoleCenter()) < 32) {
+//                    ball.meetHole(hole);
+//                    break;
+//                }
+//                else {
+//                    ball.setBallRadius(12);
+//                }
+//            }
+//        }
+//
+//        boolean hasCollided = false;
+//        for (int i = this.allLines.size() - 1; i >= 0; i--) {
+//            for (Ball ball : this.balls) {
+//                Line line = this.allLines.get(i);
+//                line.draw(this);
+//                if (ball.willCollide(line)) {
+//                    ball.interact(line, this);
+//                    hasCollided = true;
+//                    break;
+//                }
+//
+//                if (!hasCollided) {
+//                    ball.moveOne();
+//                }
+//            }
+//        }
+
         for (Ball ball : this.balls) {
             ball.draw(this);
             for (Hole hole : this.holes) {
-                if (ball.meetHole(hole)) {
+                if (getDistance(ball.getBallCenter(), hole.getHoleCenter()) < 32) {
                     ball.meetHole(hole);
                     break;
+                }
+                else {
+                    ball.setBallRadius(12);
                 }
             }
             boolean hasCollided = false;

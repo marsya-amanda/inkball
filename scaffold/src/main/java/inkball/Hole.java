@@ -47,9 +47,9 @@ public class Hole extends Tile {
         else if (this.gridPosition == GridPosition.TR) {
             return new float[] {this.getX()*App.CELLSIZE, (this.getY()+1)*App.CELLSIZE+App.TOPBAR};
         }
-        else { //BR
+        else if (this.gridPosition == GridPosition.BR) { //BR
             return new float[] {this.getX()*App.CELLSIZE, this.getY()*App.CELLSIZE+App.TOPBAR};
         }
-
+        return null;
     }
 }
