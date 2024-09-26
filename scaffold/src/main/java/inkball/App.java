@@ -1,12 +1,12 @@
 package inkball;
 
-import org.checkerframework.checker.units.qual.C;
 import processing.core.PApplet;
 import processing.core.PImage;
 import processing.data.JSONObject;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 
+import java.sql.SQLOutput;
 import java.util.*;
 import java.lang.*;
 import java.io.*;
@@ -149,9 +149,6 @@ public class App extends PApplet {
     }
 
     public void setLayout() {
-        //Add borders
-        //this.addBorders();
-
         File JSONfile = new File(this.json.getJSONArray("levels").getJSONObject(gameLevel - 1).getString("layout"));
         Scanner scan = null;
         try {
@@ -190,14 +187,35 @@ public class App extends PApplet {
         }
 
         //CREATE OBJECTS BASED ON FILE
-        for (int i = 0; i < tempHeight; i++) {
-            for (int j = 0; j < tempWidth; j++) { //not using length of file bc file might be too long
+        for (int i = 0; i < this.board.length; i++) {
+
+            // Handle insufficient number of lines in file
+            if (i + 1 > lines.size()) {
+                for (int k = i + 1; k < this.board.length; k++) {
+                    for (int l = 0; l < this.board[0].length; l++) {
+                        this.board[k][l] = new Blank(l, k);
+                    }
+                }
+                break;
+            }
+
+            for (int j = 0; j < this.board[0].length; j++) { //not using length of file bc file might be too long
+
+                // HANDLE insufficient number of characters in a line
+                if (j + 1 > lines.get(i).size()) {
+                    for (int k = j + 1; k < this.board[i].length; k++) {
+                        this.board[i][k] = new Blank(k, i);
+                    }
+                    break;
+                }
+
                 if (this.board[i][j] != null) { //if board has something in it, skip
                     continue;
                 }
 
                 //BLANK
-                if (lines.get(i).get(j).equals(" ")) {
+
+                else if (lines.get(i).get(j).equals(" ")) {
                     this.board[i][j] = new Blank(j, i);
                 }
 
@@ -223,13 +241,14 @@ public class App extends PApplet {
                         int colour = getColourCode(lines, i, j);
                         for (int k = 0; k <= 1; k++) {
                             for (int l = 0; l <= 1; l++) {
-                                Hole.GridPosition gp = this.getPosition(k, l);
+                                Hole.GridPosition gp = this.getPosition(l, k);
                                 /*if (gp == null) {
                                     this.board[i][j] = new Blank(j, i);
                                     break;
                                 }*/
                                 if (k == 1 && l == 1) {
                                     this.holes.add(new Hole (j+l, i+k, colour, gp)); // add the one w center coords
+                                    //System.out.println("Added hole with center coords at " + gp + " " + Integer.toString(j+l) + ", " + (i+k));
                                     //System.out.println(Hole.toString(new Hole (j+l, i+k, colour, gp)));
                                 }
                                 this.board[i+k][j+l] = new Hole(j+l, i+k, colour, gp);
@@ -250,7 +269,7 @@ public class App extends PApplet {
                     this.board[i][j] = new Blank(j, i);
                     if (App.getColourCode(lines, i, j) != -1) {
                         int colour = getColourCode(lines, i, j);
-                        this.balls.add(new Ball(j*CELLSIZE, i*CELLSIZE+TOPBAR, colour));
+                        this.balls.add(new Ball(j*CELLSIZE + 4, i*CELLSIZE+TOPBAR + 4, colour)); //add 4 so spawns in the middle
                     }
                 }
 
@@ -260,39 +279,50 @@ public class App extends PApplet {
             }
         }
 
+//        for (int i = 0; i < this.board.length; i++) {
+//            for (int j = 0; j < this.board[0].length; j++) {
+//                if (this.board[i][j] == null) {
+//                    this.board[i][j] = new Blank(j, i);
+//                }
+//            }
+//        }
+
         // ADD LINES FROM WALLS
         this.addBorders();
 
     }
 
     public void addBorders() {
-        float[] topLeftCorner = new float[] {0, TOPBAR}; // H0, V0
-        float[] topRightCorner = new float[] {WIDTH, TOPBAR}; // H1, V0
-        float[] bottomLeftCorner = new float[] {0, HEIGHT}; // H0, V1
-        float[] bottomRightCorner = new float[] {WIDTH, HEIGHT}; // H1, V1
 
-        boolean visible = true;
-        this.allLines.add(new Line(topLeftCorner, topRightCorner, 0, false)); //TOP
-        this.allLines.add(new Line(topLeftCorner, bottomLeftCorner, 0, false)); //LEFT
-        this.allLines.add(new Line(bottomLeftCorner, bottomRightCorner, 0, false)); // BOTTOM
-        this.allLines.add(new Line(bottomRightCorner, topRightCorner, 0, false)); //RIGHT
+        float[] topLeftCorner = new float[] {-32, TOPBAR-32}; // H0, V0
+        float[] topRightCorner = new float[] {WIDTH+32, TOPBAR-32}; // H1, V0
+        float[] bottomLeftCorner = new float[] {-32, HEIGHT+32}; // H0, V1
+        float[] bottomRightCorner = new float[] {WIDTH+32, HEIGHT+32}; // H1, V1
+
+        boolean isDrawn = false;
+        this.allLines.add(new Line(topLeftCorner, topRightCorner, 0, isDrawn)); //TOP
+        this.allLines.add(new Line(topLeftCorner, bottomLeftCorner, 0, isDrawn)); //LEFT
+        this.allLines.add(new Line(bottomLeftCorner, bottomRightCorner, 0, isDrawn)); // BOTTOM
+        this.allLines.add(new Line(bottomRightCorner, topRightCorner, 0, isDrawn)); //RIGHT
 
         // line for non-border tiles
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board[0].length; j++) {
-                if (this.getBoard()[i][j].getClass() == Wall.class) {
+        for (int i = 0; i < this.board.length; i++) {
+            for (int j = 0; j < this.board[0].length; j++) {
+                if (this.getBoard()[i][j].getClass() == Wall.class) { //null pointer?
                     Wall wall = (Wall) this.getBoard()[i][j];
                     this.addWallLineSegment(wall);
                 }
             }
         }
+
     }
 
     public void addWallLineSegment(Wall wall) {
-        float[] topLeftCorner = new float[] {wall.getX()*CELLSIZE - 2, wall.getY() * CELLSIZE + TOPBAR - 2}; // H0, V0
-        float[] topRightCorner = new float[] {(wall.getX()+1)*CELLSIZE + 2, wall.getY() * CELLSIZE + TOPBAR - 2}; // H1, V0
-        float[] bottomLeftCorner = new float[] {wall.getX()*CELLSIZE - 2, (wall.getY()+1) * CELLSIZE + TOPBAR + 2}; // H0, V1
-        float[] bottomRightCorner = new float[] {(wall.getX()+1)*CELLSIZE + 2, (wall.getY()+1)*CELLSIZE + TOPBAR + 2};
+
+        float[] topLeftCorner = new float[] {wall.getX()*CELLSIZE, wall.getY() * CELLSIZE + TOPBAR}; // H0, V0
+        float[] topRightCorner = new float[] {(wall.getX()+1)*CELLSIZE, wall.getY() * CELLSIZE + TOPBAR}; // H1, V0
+        float[] bottomLeftCorner = new float[] {wall.getX()*CELLSIZE, (wall.getY()+1) * CELLSIZE + TOPBAR}; // H0, V1
+        float[] bottomRightCorner = new float[] {(wall.getX()+1)*CELLSIZE, (wall.getY()+1)*CELLSIZE + TOPBAR};
 
         int colour = wall.getColour();
         boolean isDrawn = false;
@@ -392,7 +422,7 @@ public class App extends PApplet {
     }
 
     public void removeLine(float[] toRemove) {
-        System.out.println("calling removeline"); //calling when no right click
+        //System.out.println("calling removeline"); //calling when no right click
         int removeInd = 0;
         boolean canRemove = false;
         ArrayList<Line> removedLine = new ArrayList<>();
@@ -402,7 +432,7 @@ public class App extends PApplet {
                     removedLine = this.drawnLines.get(i);
                     canRemove = true;
                     removeInd = i;
-                    System.out.println("Line found in Drawn!"); //some liens found & removed in Drawnlines, but not found in allLines
+                    //System.out.println("Line found in Drawn!"); //some liens found & removed in Drawnlines, but not found in allLines
                     break;
                 }
             }
@@ -573,7 +603,7 @@ public class App extends PApplet {
                 this.lastLine = frameCount;
                 this.drawnLines.add(new ArrayList<Line>());
                 isDrawing = false;
-                System.out.println("line " + this.numDrawnLines + " drawn!");
+                //System.out.println("line " + this.numDrawnLines + " drawn!");
             }
         }
     }
@@ -614,7 +644,6 @@ public class App extends PApplet {
                     break;
                 }
             }
-
             if (!hasCollided) {
                 ball.moveOne();
             }

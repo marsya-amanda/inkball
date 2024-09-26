@@ -9,14 +9,15 @@ public class Ball {
     int colour;
     private float[] vector;
     private float ballRadius;
+    private final int artificialRadius;
 
     private boolean isAbsorbed;
     private int points;
     private static Random rand = new Random();
 
     public Ball(float x, float y, int colour) {
-        this.x = x + 4; // so it spawns in the middle of the tile/spawner
-        this.y = y + 4;
+        this.x = x; // so it spawns in the middle of the tile/spawner
+        this.y = y;
         this.colour = colour;
         if (Ball.rand.nextBoolean()) {
             this.vector = new float[] {2, -2};
@@ -27,6 +28,7 @@ public class Ball {
         this.ballRadius = 12;
         this.isAbsorbed = false;
         this.points = 0;
+        this.artificialRadius = 10;
     }
 
     public void draw(App app) {
@@ -61,12 +63,12 @@ public class Ball {
     public void interact(Line line, App app) {
         if (this.willCollide(line)) {
             //System.out.println("Collided!");
-            this.setNewDirection(line);
             this.setNewColour(line);
+            this.setNewDirection(line);
             this.moveOne();
-            /*if (line.isDrawn) {
-                app.removeLine(new float[] {this.x, this.y});
-            }*/
+//            if (line.isDrawn) {
+//                app.removeLine(new float[] {this.x, this.y}); // only removed by one ball
+//            }
         }
     }
 
@@ -81,7 +83,7 @@ public class Ball {
         double distP2 = App.getDistance(ballXY, P2);
         double distP1P2 = App.getDistance(P1, P2);
 
-        return distP1 + distP2 < this.ballRadius + distP1P2;
+        return distP1 + distP2 < this.artificialRadius + distP1P2;
     }
 
     public void setNewDirection(Line line) {
@@ -127,6 +129,7 @@ public class Ball {
             return;
         }
         if (1 <= line.getColourTo() && line.getColourTo() <= 4) {
+            System.out.println("colour changed");
             this.colour = line.getColourTo();
         }
     }
@@ -136,10 +139,6 @@ public class Ball {
             return false;
         }
 
-        /*if (hole.getColour() != this.colour && hole.getColour() != 0 && this.colour != 0) {
-            return false;
-        }*/
-
         float[] ballCenter = this.getBallCenter();
         float[] holeCenter = new float[] {hole.getX()*App.CELLSIZE, hole.getY()*App.CELLSIZE+App.TOPBAR};
 
@@ -147,12 +146,10 @@ public class Ball {
             return false;
         }
 
-        /*if (this.x == holeCenter[0] && this.y == holeCenter[1]) {
-            this.isAbsorbed = true;
-            return false;
-        }*/
+        float shrinkFactor = (float) (App.getDistance(holeCenter, ballCenter) / 32);
+        this.ballRadius = this.ballRadius * shrinkFactor;
 
-        if (App.getDistance(ballCenter, holeCenter) < 1) {
+        if (App.getDistance(holeCenter, ballCenter) < 0.05f) {
             this.ballRadius = 0;
             this.isAbsorbed = true;
             return false;
@@ -160,22 +157,12 @@ public class Ball {
 
         //System.out.println("Distance between ball and hole " + App.getDistance(ballCenter, holeCenter));
 
-        float shrinkFactor = (float) (App.getDistance(holeCenter, ballCenter) / 32);
-        this.ballRadius = this.ballRadius * shrinkFactor;
-        //this.ballRadius -= 0.5f;
-
         float[] attractionVector = this.getAttractionVector(hole);
         //System.out.println(Arrays.toString(attractionVector));
         this.vector[0] += attractionVector[0];
         this.vector[1] += attractionVector[1];
 
-        /*if (this.ballRadius < 1) {
-            this.isAbsorbed = true;
-            return false;
-        }*/
-
         return true;
-        //this.ballRadius -= (float) Math.exp(x * 0.0005);
     }
 
     public float[] getBallCenter() {
@@ -184,10 +171,9 @@ public class Ball {
 
     public float[] getAttractionVector(Hole hole) {
         float[] ballCenter = this.getBallCenter();
-        float[] holeCenter = hole.getHoleCenter();
+        float[] holeCenter = new float[] {hole.getX(), hole.getY()};
         float[] attractionVec = new float[] {holeCenter[0] - ballCenter[0], holeCenter[1] - ballCenter[1]};
 
-        //double mag = Math.sqrt((Math.pow(this.vector[0], 2) + Math.pow(this.vector[1], 2)) * 0.0005);
         float mag = (float) (Math.sqrt(Math.pow(attractionVec[0], 2) + Math.pow(attractionVec[1], 2)));
         double speed = App.getDistance(ballCenter, holeCenter) * 0.005;
         float attractionX = attractionVec[0] / mag * (float) speed;
