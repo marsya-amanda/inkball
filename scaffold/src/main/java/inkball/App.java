@@ -1,5 +1,6 @@
 package inkball;
 
+import org.checkerframework.checker.units.qual.C;
 import processing.core.PApplet;
 import processing.core.PImage;
 import processing.data.JSONObject;
@@ -53,12 +54,12 @@ public class App extends PApplet {
     public float [] remove = new float[2];
     public static int mouseRadius = 5;
     public int lastLine = 0;
-    public int numDrawnLines = 0;
+    public int numDrawnLines = -1;
 
     private Tile[][] board;
     private ArrayList<Ball> balls = new ArrayList<Ball>();
     private ArrayList<Line> allLines = new ArrayList<Line>();
-    private ArrayList<ArrayList<Line>> drawnLines = new ArrayList<>(numDrawnLines + 1);
+    private ArrayList<ArrayList<Line>> drawnLines = new ArrayList<>(1);
     private ArrayList<Spawner> spawners = new ArrayList<Spawner>();
     private ArrayList<Hole> holes = new ArrayList<Hole>();
     private HashMap<String, PImage> sprites = new HashMap();
@@ -387,26 +388,15 @@ public class App extends PApplet {
 
         this.allLines.add(line);
         this.drawnLines.get(num).add(line);
-        //this.numDrawnLines++;
-
-        // HANDLE IF NUM LESS THAN
-        /*if (num == this.drawnLines.size()) {
-            this.drawnLines.add(new ArrayList<Line>());
-        }
-
-        if (num < this.drawnLines.size()) {
-            this.drawnLines.add(new ArrayList<Line>());
-            num = this.drawnLines.size() - 1;
-        }*/
 
     }
 
     public void removeLine(float[] toRemove) {
-
+        System.out.println("calling removeline"); //calling when no right click
         ArrayList<Line> removedLine = new ArrayList<>();
         for (int i = (this.drawnLines.size() - 1); i >= 0; i--) {
             for (int j = (this.drawnLines.get(i).size() - 1); j >= 0; j--) {
-                if (mouseOnLine(this.remove, this.drawnLines.get(i).get(j).getP1(), this.drawnLines.get(i).get(j).getP2())) {
+                if (mouseOnLine(toRemove, this.drawnLines.get(i).get(j).getP1(), this.drawnLines.get(i).get(j).getP2())) {
                     removedLine = this.drawnLines.get(i);
                     this.drawnLines.remove(i);
                     i = this.drawnLines.size();
@@ -419,24 +409,34 @@ public class App extends PApplet {
             return;
         }
 
-        int removed = 0;
-        for (int i = this.allLines.size() - 1; i >= 0; i--) {
-            for (int j = removedLine.size() - 1; j >= 0; j--) {
-                if (this.allLines.get(i).equals(removedLine.get(j))) {
-                    //System.out.println("removed from all lines");
-                    this.allLines.remove(i);
-                    i = this.allLines.size();
-                    removed++;
-                    break;
-                }
+        System.out.println(removedLine);
+        //int removed = 0;
+        for (int i = 0; i < this.allLines.size(); i++) {
+            if (removedLine.get(0).equals(this.allLines.get(i))) {
+                System.out.println("line segment found!");
+                this.allLines.subList(i, removedLine.size() + 1).clear(); //removedLine.size() + 1, because upper bound exclusive
+                return;
             }
-
         }
+        this.numDrawnLines--;
 
-        if (removed == removedLine.size()) {
+//        int removed = 0;
+//        for (int i = this.allLines.size() - 1; i >= 0; i--) {
+//            for (int j = removedLine.size() - 1; j >= 0; j--) {
+//                if (this.allLines.get(i).equals(removedLine.get(j))) {
+//                    this.allLines.remove(i);
+//                    i = this.allLines.size();
+//                    removed++;
+//                    break;
+//                }
+//            }
+//
+//        }
+
+        /*if (removed == removedLine.size()) {
             System.out.println("deleted line"); //not passing
             this.numDrawnLines--;
-        }
+        }*/
     }
 
     public static boolean mouseOnLine(float[] mouseXY, float[] lineP1, float[] lineP2) {
@@ -475,9 +475,10 @@ public class App extends PApplet {
         int mouseY = e.getY();
 
         if (mouseButton == LEFT) {
-            if (!this.isDrawing) {
+            if (!isDrawing) {
                 this.start = new float[] {mouseX, mouseY};
-                this.isDrawing = true;
+                this.numDrawnLines++;
+                isDrawing = true;
             }
 
             else if (this.lastLine == 0 || frameCount - this.lastLine == 1) {
@@ -502,7 +503,7 @@ public class App extends PApplet {
 	@Override
     public void mouseDragged(MouseEvent e) {
 
-		// remove player-drawn line object if right mouse button is held 
+		// remove player-drawn line object if right mouse button is held
 		// and mouse position collides with the line
         int mouseX = e.getX();
         int mouseY = e.getY();
@@ -512,7 +513,7 @@ public class App extends PApplet {
                 return;
             }
 
-            else if (this.isDrawing) {
+            else if (isDrawing) {
                 //note handle null
                 this.end = new float[] {mouseX, mouseY};
 
@@ -528,8 +529,8 @@ public class App extends PApplet {
                 }
             }
 
-            else if (!this.isDrawing) {
-                this.isDrawing = true;
+            else {
+                isDrawing = true;
                 this.lastLine = frameCount;
                 this.start = new float[] {mouseX, mouseY};
             }
@@ -542,27 +543,33 @@ public class App extends PApplet {
         int mouseY = e.getY();
 
         if (mouseButton == LEFT) {
-            if (this.isDrawing) {
+            if (isDrawing) {
                 this.end = new float[] {mouseX, mouseY};
                 this.addDrawnLine(new Line(this.start, this.end, 0, true), numDrawnLines);
 
                 this.lastLine = frameCount;
                 this.drawnLines.add(new ArrayList<Line>());
-                this.numDrawnLines++; // Only considered 1 line segment when mouse is lifted
-                this.isDrawing = false;
+                isDrawing = false;
+                System.out.println("line " + this.numDrawnLines + " drawn!");
+                //this.numDrawnLines++;
             }
+            /*else {
+                System.out.println("not drawing"); //not passing: good
+            }*/
             //this.end = new float[] {-1, -1};
         }
 
-        else if (mouseButton == RIGHT) {
-            this.remove = new float[] {mouseX, mouseY};
-            this.isDrawing = false;
-
-            if (numDrawnLines == 0) {
-                return;
-            }
-            this.removeLine(this.remove);
-        }
+//        else if (mouseButton == RIGHT) {
+//            this.remove = new float[] {mouseX, mouseY};
+//            isDrawing = false;
+//
+//            if (numDrawnLines == 0) {
+//                return;
+//            }
+//            this.removeLine(this.remove);
+//            //this.numDrawnLines--;
+//            System.out.println("line removed!");
+//        }
     }
 
     /**
@@ -576,21 +583,12 @@ public class App extends PApplet {
         //display Board for current level:
         //----------------------------------
         //TODO
-        if (gameState == GameState.PAUSED) {
-            return;
-        }
 
         for (int i = 0; i < this.board.length; i++) {
             for (int j = 0; j < this.board[i].length; j++) {
                 this.board[i][j].draw(this);
             }
         }
-
-        /*for (int i = this.drawnLines.size() - 1; i >= 0; i--) {
-            for (int j = this.drawnLines.get(i).size() - 1; j >= 0; j--) {
-                this.drawnLines.get(i).get(j).draw(this);
-            }
-        }*/
 
         for (Ball ball : this.balls) {
             ball.draw(this);
