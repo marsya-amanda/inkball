@@ -159,7 +159,7 @@ public class Ball {
         float shrinkFactor = (float) (App.getDistance(holeCenter, ballCenter) / 32);
         this.ballRadius = 12 * shrinkFactor; //make ball increase/decrease proportionally to its original radius
 
-        if (this.ballRadius < 1 || App.getDistance(ballCenter, holeCenter) < 2) {
+        if (this.ballRadius < 2 || App.getDistance(ballCenter, holeCenter) < 4) {
             //System.out.println("ball suitable to absorb"); //does not pass
             this.ballRadius = 0;
             this.isAbsorbed = true;
