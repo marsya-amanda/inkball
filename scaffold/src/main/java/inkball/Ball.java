@@ -8,7 +8,7 @@ public class Ball {
     float y;
     int colour;
     private float[] vector;
-    private float ballRadius;
+    private float ballRadius = 12;
     private static final int ARTIFICIAL_RADIUS = 10;
     private static final int MAX_SPEED = 12;
 
@@ -26,7 +26,6 @@ public class Ball {
         else {
             this.vector = new float[] {-2, 2};
         }
-        this.ballRadius = 12;
         this.isAbsorbed = false;
         this.points = 0;
     }

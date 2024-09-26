@@ -508,6 +508,10 @@ public class App extends PApplet {
             setup();
         }
         if (event.getKeyCode() == 32) {
+            if (gameState == GameState.PAUSED) {
+                gameState = GameState.PLAYING;
+                return;
+            }
             gameState = GameState.PAUSED;
         }
     }
@@ -523,6 +527,10 @@ public class App extends PApplet {
     @Override
     public void mousePressed(MouseEvent e) {
         // create a new player-drawn line object
+        if (gameState == GameState.PAUSED) {
+            return;
+        }
+
         int mouseX = e.getX();
         int mouseY = e.getY();
 
@@ -554,6 +562,9 @@ public class App extends PApplet {
 	
 	@Override
     public void mouseDragged(MouseEvent e) {
+        if (gameState == GameState.PAUSED) {
+            return;
+        }
 
 		// remove player-drawn line object if right mouse button is held
 		// and mouse position collides with the line
@@ -592,6 +603,10 @@ public class App extends PApplet {
 
     @Override
     public void mouseReleased(MouseEvent e) {
+        if (gameState == GameState.PAUSED) {
+            return;
+        }
+
         int mouseX = e.getX();
         int mouseY = e.getY();
 
@@ -625,7 +640,6 @@ public class App extends PApplet {
                 this.board[i][j].draw(this);
             }
         }
-
 //        for (Hole hole : this.holes) {
 //            for (Ball ball : this.balls) {
 //                if (getDistance(ball.getBallCenter(), hole.getHoleCenter()) < 32) {
@@ -655,6 +669,48 @@ public class App extends PApplet {
 //            }
 //        }
 
+        //----------------------------------
+        //display score
+        //----------------------------------
+        //TODO
+
+        //----------------------------------
+        // display timer & score
+        //----------------------------------
+        // 1) Timer
+        if (frameCount - (timeLimit - lastSecond) * 30 == FPS && gameState == GameState.PLAYING) {
+            lastSecond--;
+        }
+        if (gameState == GameState.PAUSED) {
+            frameCount = (timeLimit - lastSecond) * 30;
+        }
+        textSize(22);
+        fill(0);
+        textAlign(CENTER, CENTER);
+        text("Time: " + lastSecond, WIDTH-80, App.TOPBAR-22);
+
+        // 2) Score
+        textSize(22);
+        fill(0);
+        textAlign(CENTER, CENTER);
+        text("Score: " + 6, WIDTH-80, App.TOPBAR-44);
+
+
+        if (gameState == GameState.PAUSED) {
+            textSize(22);
+            fill(0);
+            textAlign(CENTER, CENTER);
+            text("==PAUSED==", WIDTH / 2, TOPBAR - 25);
+
+            for (Ball ball : this.balls) {
+                ball.draw(this);
+            }
+            for (Line line : this.allLines) {
+                line.draw(this);
+            }
+            return;
+        }
+
         for (Ball ball : this.balls) {
             ball.draw(this);
             for (Hole hole : this.holes) {
@@ -680,29 +736,6 @@ public class App extends PApplet {
                 ball.moveOne();
             }
         }
-
-        //----------------------------------
-        //display score
-        //----------------------------------
-        //TODO
-
-        //----------------------------------
-        // display timer & score
-        //----------------------------------
-        // 1) Timer
-        if (frameCount - (timeLimit - lastSecond) * 30 == FPS && gameState == GameState.PLAYING) {
-            lastSecond--;
-        }
-        textSize(22);
-        fill(0);
-        textAlign(CENTER, CENTER);
-        text("Time: " + lastSecond, WIDTH-80, App.TOPBAR-22);
-
-        // 2) Score
-        textSize(22);
-        fill(0);
-        textAlign(CENTER, CENTER);
-        text("Score: " + 6, WIDTH-80, App.TOPBAR-44);
         
 		//----------------------------------
         //----------------------------------
