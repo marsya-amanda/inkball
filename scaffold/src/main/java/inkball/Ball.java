@@ -69,9 +69,6 @@ public class Ball {
             this.setNewColour(line);
             this.setNewDirection(line);
             this.moveOne();
-//            if (line.isDrawn) {
-//                app.removeLine(new float[] {this.x, this.y}); // only removed by one ball
-//            }
         }
     }
 

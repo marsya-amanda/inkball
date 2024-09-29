@@ -1,6 +1,7 @@
 package inkball;
 
 import java.util.Arrays;
+import java.util.Random;
 
 public class Line {
     private float[] P1;
@@ -55,7 +56,15 @@ public class Line {
 
         if (this.isDrawn) {
             app.line(this.P1[0], this.P1[1], this.P2[0], this.P2[1]);
-            app.stroke(0);
+
+            Random rand = new Random();
+            if (rand.nextBoolean()) {
+                app.stroke(colourTo);
+            }
+            else {
+                app.stroke(colourTo);
+            }
+            //app.stroke(0);
             app.strokeWeight(10);
         }
 
