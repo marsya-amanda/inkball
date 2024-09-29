@@ -382,47 +382,27 @@ public class App extends PApplet {
         if (P1 == null || P2 == null || P1.length != 2 || P2.length != 2) {
             throw new IllegalArgumentException("Wrong points!");
         }
-        double distance = Math.sqrt(Math.pow((P2[1] - P1[1]), 2) + Math.pow((P2[0] - P1[0]), 2));
-        return distance;
-        /*Class<?> componentType = P1.getClass().getComponentType();
-        if (Number.class.isAssignableFrom(componentType)) {
-            float distance = Math.sqrt(Math.pow((P2[1].floatvalue() - P1[1].floatvalue()), 2) + Math.pow((P2[0].floatvalue() - P1[0].floatvalue()), 2));
-            return distance;
-        }
-        if (componentType == int.class || componentType == double.class || componentType == float.class) {
-            float distance = Math.sqrt(Math.pow((P2[1] - P1[1]), 2) + Math.pow((P2[0] - P1[0]), 2));
-            return distance;
-        }*/
-
-        //return null;
+        return Math.sqrt(Math.pow((P2[1] - P1[1]), 2) + Math.pow((P2[0] - P1[0]), 2));
     }
 
     public static double getDistance(double[] P1, float[] P2) {
         if (P1 == null || P2 == null || P1.length != 2 || P2.length != 2) {
             throw new IllegalArgumentException("Wrong points!");
         }
-        double distance = Math.sqrt(Math.pow((P2[1] - P1[1]), 2) + Math.pow((P2[0] - P1[0]), 2));
-        return distance;
+        return Math.sqrt(Math.pow((P2[1] - P1[1]), 2) + Math.pow((P2[0] - P1[0]), 2));
     }
 
     public static double getDistance(double[] P1, double[] P2) {
         if (P1 == null || P2 == null || P1.length != 2 || P2.length != 2) {
             throw new IllegalArgumentException("Wrong points!");
         }
-        double distance = Math.sqrt(Math.pow((P2[1] - P1[1]), 2) + Math.pow((P2[0] - P1[0]), 2));
-        return distance;
+        return Math.sqrt(Math.pow((P2[1] - P1[1]), 2) + Math.pow((P2[0] - P1[0]), 2));
     }
 
     public void addDrawnLine(Line line) {
         if (line.getP1()[1] < TOPBAR || line.getP2()[1] < TOPBAR) {
             return;
         }
-
-//        if (this.drawnLines.isEmpty()) {
-//            this.drawnLines.add(new ArrayList<>());
-//        }
-
-        //this.drawnLines.get(this.drawnLines.size() - 1).add(line);
 
         if  (this.tempLines.isEmpty()) {
             this.tempLines.add(new ArrayList<>());
@@ -473,34 +453,6 @@ public class App extends PApplet {
 
         this.tempLines.remove(removedLine);
         this.drawnLines.remove(removedLine);
-
-//        if (this.removeFromAllLines(removedLine) != -1) {
-//            //int removeInd = this.removeFromAllLines(removedLine);
-//            //this.allLines.subList(removeInd, removeInd + removedLine.size()).clear();
-//            this.drawnLines.remove(removedLine);
-//        }
-    }
-
-    public int removeFromAllLines(ArrayList<Line> removedLine) {
-        ArrayList<Integer> foundLineInd = new ArrayList<>();
-
-        for (Line line : this.allLines) {
-            if (line.equals(removedLine.get(0))) {
-                foundLineInd.add(this.allLines.indexOf(line)); //find all line segments that will be potential candidates for the same line in drawnLines
-            }
-        }
-
-        if (foundLineInd.isEmpty()) {
-            return -1;
-        }
-
-        for (int i : foundLineInd) {
-            if (this.allLines.subList(i, i + removedLine.size()).equals(removedLine)) {
-                //this.allLines.subList(i, i + removedLine.size()).clear();
-                return i;
-            }
-        }
-            return -1;
     }
 
     public static boolean mouseOnLine(float[] mouseXY, float[] lineP1, float[] lineP2) {
