@@ -143,7 +143,7 @@ public class Ball {
         }
     }
 
-    public /*boolean*/ void meetHole(Hole hole, App app) {
+    public void meetHole(Hole hole, App app) {
         if (this.isAbsorbed) {
             return;
         }
@@ -163,20 +163,28 @@ public class Ball {
         this.ballRadius = 12 * shrinkFactor; //make ball increase/decrease proportionally to its original radius
 
         if (this.ballRadius < 2 || App.getDistance(ballCenter, holeCenter) < 4) {
-            //System.out.println("ball suitable to absorb"); //does not pass
             this.ballRadius = 0;
             this.isAbsorbed = true;
 
             if (this.colourToString().equals(hole.colourToString())) {
                 App.score += App.scoreIncrease.get(hole.colourToString()) * app.modScoreIncrease;
+                app.getBalls().remove(this);
             }
 
             else if (this.colour == 0 || hole.getColour() == 0) {
                 App.score += App.scoreIncrease.get("grey") * app.modScoreIncrease;
+                app.getBalls().remove(this);
             }
 
             else {
                 App.score -= App.scoreDecrease.get(hole.colourToString()) * app.modScoreDecrease;
+                app.getBalls().remove(this);
+                for (int i = 0; i < app.ballQueue.length; i++) {
+                    if (app.ballQueue[i] == null) {
+                        app.ballQueue[i] = this;
+                        break;
+                    }
+                }
             }
 
         }

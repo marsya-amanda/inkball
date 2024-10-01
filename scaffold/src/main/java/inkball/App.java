@@ -54,7 +54,7 @@ public class App extends PApplet {
     public static HashMap<String, Integer> scoreDecrease = new HashMap<>();
     public float modScoreIncrease = 1;
     public float modScoreDecrease = 1;
-    public int spawnInterval = 0;
+    private int spawnInterval = 0;
     public Ball[] ballQueue;
     public int maxBallQueue;
 
