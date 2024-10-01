@@ -55,7 +55,8 @@ public class App extends PApplet {
     public float modScoreIncrease = 1;
     public float modScoreDecrease = 1;
     public int spawnInterval = 0;
-    public ArrayList<String> ballQueue = new ArrayList<>();
+    public Ball[] ballQueue;
+    public int maxBallQueue;
 
     public static boolean isDrawing = false;
     public float[] start = new float[2];
@@ -124,12 +125,6 @@ public class App extends PApplet {
 
         this.spawnInterval = this.json.getJSONArray("levels").getJSONObject(gameLevel - 1).getInt("spawn_interval");
 
-        JSONArray ballsJSON = this.json.getJSONArray("levels").getJSONObject(gameLevel - 1).getJSONArray("balls");
-
-        for (int i = 0; i < ballsJSON.size(); i++) {
-            this.ballQueue.add(ballsJSON.getString(i));
-        }
-
         this.modScoreIncrease = this.json.getJSONArray("levels").getJSONObject(gameLevel - 1).getFloat("score_increase_from_hole_capture_modifier");
         this.modScoreDecrease = this.json.getJSONArray("levels").getJSONObject(gameLevel - 1).getFloat("score_decrease_from_wrong_hole_modifier");
 
@@ -167,6 +162,17 @@ public class App extends PApplet {
 
         // Get layout
         this.setLayout();
+
+        // ADD BALL QUEUE
+        JSONArray ballsJSON = this.json.getJSONArray("levels").getJSONObject(gameLevel - 1).getJSONArray("balls");
+        this.maxBallQueue = ballsJSON.size() + this.balls.size();
+
+        this.ballQueue = new Ball[this.maxBallQueue];
+
+        for (int i = 0; i < ballsJSON.size(); i++) {
+            int colour = colourToInt(ballsJSON.getString(i));
+            this.ballQueue[i] = new Ball(19 + 28 * i, 21, colour);
+        }
 
         //this.drawnLines.add(new ArrayList<Line>());
 
@@ -329,18 +335,29 @@ public class App extends PApplet {
     }
 
     public void spawnBalls() {
-        if (this.ballQueue.isEmpty()) {
-            return;
+        for (int i = 0; i < this.ballQueue.length; i++) {
+            if (this.ballQueue[0] == null) {
+                return;
+            }
         }
 
         if (frameCount % (this.spawnInterval * FPS) == 0) {
-            String colourString = this.ballQueue.get(0);
-            int colour = colourToInt(colourString);
+            int colour = this.ballQueue[0].getColour();
             Random rand = new Random();
             int i = rand.nextInt(this.spawners.size());
             Spawner spawner = this.spawners.get(i);
             this.balls.add(new Ball(spawner.getX() * CELLSIZE + 4, spawner.getY() * CELLSIZE + TOPBAR + 4, colour));
-            this.ballQueue.remove(0);
+
+            if (this.ballQueue.length > 1) {
+                System.arraycopy(this.ballQueue, 1, this.ballQueue, 0, this.ballQueue.length - 1);
+                for (int j = 0; j < this.ballQueue.length - 1; j++) {
+                    if (this.ballQueue[j] == null) {
+                        return;
+                    }
+                    int c = this.ballQueue[j].getColour();
+                    this.ballQueue[j] = new Ball(19 + 28 * j, 21, c);
+                }
+            }
         }
     }
 
@@ -670,12 +687,7 @@ public class App extends PApplet {
         }
 
         //----------------------------------
-        //display score
-        //----------------------------------
-        //TODO
-
-        //----------------------------------
-        // display timer & score
+        // display top bar
         //----------------------------------
         // 1) Timer
         if (frameCount - (timeLimit - lastSecond) * 30 == FPS && gameState == GameState.PLAYING) {
@@ -695,7 +707,7 @@ public class App extends PApplet {
         textAlign(CENTER, CENTER);
         text("Score: " + (int) score, WIDTH-80, App.TOPBAR-44);
 
-
+        // if PAUSED
         if (gameState == GameState.PAUSED) {
             textSize(22);
             fill(0);
@@ -711,6 +723,21 @@ public class App extends PApplet {
             return;
         }
 
+        // 3) Ball queue
+        strokeWeight(0);
+        rect(14, 16, this.ballQueue.length * 28 + 4, 34);
+        fill(0);
+        for (Ball ball : this.ballQueue) {
+            if (ball == null) {
+                continue;
+            }
+            ball.draw(this);
+        }
+
+        //----------------------------------
+        // draw lines in real time
+        //----------------------------------
+        strokeWeight(10);
         for (ArrayList<Line> lineList : this.tempLines) {
             for (Line line : lineList) {
                 line.draw(this);

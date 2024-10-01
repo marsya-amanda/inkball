@@ -4,8 +4,8 @@ import processing.core.PImage;
 import java.util.*;
 
 public class Ball {
-    float x;
-    float y;
+    private float x;
+    private float y;
     int colour;
     private float[] vector;
     private float ballRadius = 12;
@@ -36,6 +36,18 @@ public class Ball {
         }
         PImage ball = app.getSprite("ball"+colour);
         app.image(ball, this.x, this.y, this.ballRadius * 2, this.ballRadius * 2);
+    }
+
+    public float getX() {
+        return x;
+    }
+
+    public float getY() {
+        return y;
+    }
+
+    public int getColour() {
+        return colour;
     }
 
     public float[] getVector() {
