@@ -335,10 +335,12 @@ public class App extends PApplet {
     }
 
     public void spawnBalls() {
-        for (int i = 0; i < this.ballQueue.length; i++) {
-            if (this.ballQueue[0] == null) {
-                return;
-            }
+        if (this.ballQueue.length == 0) {
+            return;
+        }
+
+        if (this.ballQueue[0] == null) {
+            return;
         }
 
         if (frameCount % (this.spawnInterval * FPS) == 0) {
