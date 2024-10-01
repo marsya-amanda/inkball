@@ -3,6 +3,7 @@ package inkball;
 import processing.core.PApplet;
 import processing.core.PImage;
 import processing.data.JSONObject;
+import processing.data.JSONArray;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 
@@ -53,6 +54,8 @@ public class App extends PApplet {
     public static HashMap<String, Integer> scoreDecrease = new HashMap<>();
     public float modScoreIncrease = 1;
     public float modScoreDecrease = 1;
+    public int spawnInterval = 0;
+    public String[] ballsOrder;
 
     public static boolean isDrawing = false;
     public float[] start = new float[2];
@@ -118,6 +121,16 @@ public class App extends PApplet {
         //get information from config
         timeLimit = this.json.getJSONArray("levels").getJSONObject(gameLevel - 1).getInt("time");
         lastSecond = timeLimit; //in seconds
+
+        this.spawnInterval = this.json.getJSONArray("levels").getJSONObject(gameLevel - 1).getInt("spawn_interval");
+        
+        JSONArray ballsJSON = this.json.getJSONArray("levels").getJSONObject(gameLevel - 1).getJSONArray("balls");
+        this.ballsOrder = new String[ballsJSON.size()];
+
+        for (int i = 0; i < ballsJSON.size(); i++) {
+            this.ballsOrder[i] = ballsJSON.getString(i);
+        }
+
         this.modScoreIncrease = this.json.getJSONArray("levels").getJSONObject(gameLevel - 1).getFloat("score_increase_from_hole_capture_modifier");
         this.modScoreDecrease = this.json.getJSONArray("levels").getJSONObject(gameLevel - 1).getFloat("score_decrease_from_wrong_hole_modifier");
 
