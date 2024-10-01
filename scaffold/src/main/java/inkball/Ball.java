@@ -89,8 +89,6 @@ public class Ball {
         float[] P2 = line.getP2();
         float[] ballXY = new float[] {this.getBallCenter()[0] + this.vector[0], this.getBallCenter()[1] + this.vector[1]};
 
-        //getDistance is good
-
         double distP1 = App.getDistance(ballXY, P1);
         double distP2 = App.getDistance(ballXY, P2);
         double distP1P2 = App.getDistance(P1, P2);
@@ -155,10 +153,7 @@ public class Ball {
         }
 
         float[] ballCenter = this.getBallCenter();
-        float[] holeCenter = hole.getHoleCenter(); // used to use getX/Y() method, which returned inaccurate calculations
-        //System.out.println(Arrays.equals(holeCenterGet, holeCenter));
-
-        //System.out.println("Distance between ball and hole " + App.getDistance(ballCenter, holeCenter));
+        float[] holeCenter = hole.getHoleCenter();
 
         float[] attractionVector = this.getAttractionVector(hole);
         this.vector[0] += attractionVector[0];
@@ -184,10 +179,8 @@ public class Ball {
                 App.score -= App.scoreDecrease.get(hole.colourToString()) * app.modScoreDecrease;
             }
 
-            /* false*/;
         }
 
-        return/* true*/;
     }
 
     public float[] getBallCenter() {
@@ -210,10 +203,6 @@ public class Ball {
         float speed = (float) (Math.min(MAX_SPEED, (App.getDistance(ballCenter, holeCenter) * 0.005f)));
         float attractionX = attractionVec[0] / mag * speed;
         float attractionY = attractionVec[1] / mag * speed;
-
-//        System.out.println("Normalised attraction vector is " + Arrays.toString(new float[] {attractionX, attractionY}));
-//        System.out.println("Magnitude of attraction vector is " + mag);
-//        System.out.println("Vector is " + Arrays.toString(this.vector));
 
         return new float[] {attractionX, attractionY};
     }
