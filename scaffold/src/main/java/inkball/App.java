@@ -57,10 +57,8 @@ public class App extends PApplet {
     public static boolean isDrawing = false;
     public float[] start = new float[2];
     public float[] end = new float[2];
-    //public float [] remove = new float[2];
     public static int mouseRadius = 5;
     public int lastLine = 0;
-    //public int numDrawnLines = 0;
 
     private Tile[][] board;
     private ArrayList<Ball> balls = new ArrayList<Ball>();
@@ -454,7 +452,7 @@ public class App extends PApplet {
 
         this.tempLines.remove(removedLine);
         this.drawnLines.remove(removedLine);
-        System.out.println("just removed a line! current number of lines: " + this.drawnLines.size());
+        //System.out.println("just removed a line! current number of lines: " + this.drawnLines.size());
 
     }
 
