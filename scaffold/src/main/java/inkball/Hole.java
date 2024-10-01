@@ -37,6 +37,25 @@ public class Hole extends Tile {
         return this.colour;
     }
 
+    public String colourToString() {
+        if (this.colour == 0) {
+            return "grey";
+        }
+        if (this.colour == 1) {
+            return "orange";
+        }
+        if (this.colour == 2) {
+            return "blue";
+        }
+        if (this.colour == 3) {
+            return "green";
+        }
+        if (this.colour == 4) {
+            return "yellow";
+        }
+        return "grey";
+    }
+
     public float[] getHoleCenter() {
         if (this.gridPosition == GridPosition.TL) {
             return new float[] {(this.getX()+1)*App.CELLSIZE, (this.getY()+1)*App.CELLSIZE+App.TOPBAR};

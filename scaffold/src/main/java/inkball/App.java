@@ -47,6 +47,13 @@ public class App extends PApplet {
 
     public static int timeLimit = 0;
     public static int lastSecond = 0;
+
+    public static double score = 0.0d;
+    public static HashMap<String, Integer> scoreIncrease = new HashMap<>();
+    public static HashMap<String, Integer> scoreDecrease = new HashMap<>();
+    public float modScoreIncrease = 1;
+    public float modScoreDecrease = 1;
+
     public static boolean isDrawing = false;
     public float[] start = new float[2];
     public float[] end = new float[2];
@@ -110,9 +117,26 @@ public class App extends PApplet {
         }*/
         this.json = loadJSONObject(configPath);
 
-        //get time limit
+        //get information from config
         timeLimit = this.json.getJSONArray("levels").getJSONObject(gameLevel - 1).getInt("time");
         lastSecond = timeLimit; //in seconds
+        this.modScoreIncrease = this.json.getJSONArray("levels").getJSONObject(gameLevel - 1).getFloat("score_increase_from_hole_capture_modifier");
+        this.modScoreDecrease = this.json.getJSONArray("levels").getJSONObject(gameLevel - 1).getFloat("score_decrease_from_wrong_hole_modifier");
+
+        JSONObject scoreIncJSON = this.json.getJSONObject("score_increase_from_hole_capture");
+        for (Object key : scoreIncJSON.keys()) {
+            String keyStr = (String) key;
+            Integer scoreInc = scoreIncJSON.getInt(keyStr);
+            scoreIncrease.put(keyStr, scoreInc);
+        }
+
+        JSONObject scoreDecJSON = this.json.getJSONObject("score_decrease_from_wrong_hole");
+        for (Object key : scoreIncJSON.keys()) {
+            String keyStr = (String) key;
+            Integer scoreInc = scoreDecJSON.getInt(keyStr);
+            scoreDecrease.put(keyStr, scoreInc);
+        }
+
         
         // Get all sprites
         String[] sprites = new String[] {
@@ -570,7 +594,7 @@ public class App extends PApplet {
             if (isDrawing) {
                 this.end = new float[]{mouseX, mouseY};
                 this.addDrawnLine(new Line(this.start, this.end, 0, true));
-                System.out.println("just drew a line! current number of lines: " + this.drawnLines.size());
+                //System.out.println("just drew a line! current number of lines: " + this.drawnLines.size());
                 //this.allLines.addAll(this.drawnLines.get(this.drawnLines.size() - 1)); //other way
                 if (!this.tempLines.isEmpty()) {
                     this.drawnLines.add(this.tempLines.get(this.tempLines.size() - 1));
@@ -623,7 +647,7 @@ public class App extends PApplet {
         textSize(22);
         fill(0);
         textAlign(CENTER, CENTER);
-        text("Score: " + 6, WIDTH-80, App.TOPBAR-44);
+        text("Score: " + (int) score, WIDTH-80, App.TOPBAR-44);
 
 
         if (gameState == GameState.PAUSED) {
@@ -681,7 +705,7 @@ public class App extends PApplet {
             //Interact with line first
             for (Hole hole : this.holes) {
                 if (getDistance(ball.getBallCenter(), hole.getHoleCenter()) < 32) {
-                    ball.meetHole(hole);
+                    ball.meetHole(hole, this);
                     break;
                 }
                 else {

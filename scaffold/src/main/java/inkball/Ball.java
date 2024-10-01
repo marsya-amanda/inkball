@@ -133,7 +133,7 @@ public class Ball {
         }
     }
 
-    public /*boolean*/ void meetHole(Hole hole) {
+    public /*boolean*/ void meetHole(Hole hole, App app) {
         if (this.isAbsorbed) {
             return;
         }
@@ -159,7 +159,20 @@ public class Ball {
             //System.out.println("ball suitable to absorb"); //does not pass
             this.ballRadius = 0;
             this.isAbsorbed = true;
-            return/* false*/;
+
+            if (this.colourToString().equals(hole.colourToString())) {
+                App.score += App.scoreIncrease.get(hole.colourToString()) * app.modScoreIncrease;
+            }
+
+            else if (this.colour == 0 || hole.getColour() == 0) {
+                App.score += App.scoreIncrease.get("grey") * app.modScoreIncrease;
+            }
+
+            else {
+                App.score -= App.scoreDecrease.get(hole.colourToString()) * app.modScoreDecrease;
+            }
+
+            /* false*/;
         }
 
         return/* true*/;
@@ -192,4 +205,24 @@ public class Ball {
 
         return new float[] {attractionX, attractionY};
     }
+
+    public String colourToString() {
+        if (this.colour == 0) {
+            return "grey";
+        }
+        if (this.colour == 1) {
+            return "orange";
+        }
+        if (this.colour == 2) {
+            return "blue";
+        }
+        if (this.colour == 3) {
+            return "green";
+        }
+        if (this.colour == 4) {
+            return "yellow";
+        }
+        return "grey";
+    }
+
 }
