@@ -55,7 +55,7 @@ public class App extends PApplet {
     public float modScoreIncrease = 1;
     public float modScoreDecrease = 1;
     public int spawnInterval = 0;
-    public ArrayList<String> ballsToSpawn = new ArrayList<>();
+    public ArrayList<String> ballQueue = new ArrayList<>();
 
     public static boolean isDrawing = false;
     public float[] start = new float[2];
@@ -127,7 +127,7 @@ public class App extends PApplet {
         JSONArray ballsJSON = this.json.getJSONArray("levels").getJSONObject(gameLevel - 1).getJSONArray("balls");
 
         for (int i = 0; i < ballsJSON.size(); i++) {
-            this.ballsToSpawn.add(ballsJSON.getString(i));
+            this.ballQueue.add(ballsJSON.getString(i));
         }
 
         this.modScoreIncrease = this.json.getJSONArray("levels").getJSONObject(gameLevel - 1).getFloat("score_increase_from_hole_capture_modifier");
@@ -329,18 +329,18 @@ public class App extends PApplet {
     }
 
     public void spawnBalls() {
-        if (this.ballsToSpawn.isEmpty()) {
+        if (this.ballQueue.isEmpty()) {
             return;
         }
 
         if (frameCount % (this.spawnInterval * FPS) == 0) {
-            String colourString = this.ballsToSpawn.get(0);
+            String colourString = this.ballQueue.get(0);
             int colour = colourToInt(colourString);
             Random rand = new Random();
             int i = rand.nextInt(this.spawners.size());
             Spawner spawner = this.spawners.get(i);
             this.balls.add(new Ball(spawner.getX() * CELLSIZE + 4, spawner.getY() * CELLSIZE + TOPBAR + 4, colour));
-            this.ballsToSpawn.remove(0);
+            this.ballQueue.remove(0);
         }
     }
 
