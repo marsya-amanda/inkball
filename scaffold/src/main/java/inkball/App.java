@@ -120,7 +120,17 @@ public class App extends PApplet {
         this.json = loadJSONObject(configPath);
 
         //get information from config
-        timeLimit = this.json.getJSONArray("levels").getJSONObject(gameLevel - 1).getInt("time");
+        try {
+            timeLimit = this.json.getJSONArray("levels").getJSONObject(gameLevel - 1).getInt("time");
+        }
+        catch (Exception e) {
+            timeLimit = 0;
+        }
+
+        if (timeLimit <= 0) {
+            timeLimit = 0;
+        }
+
         lastSecond = timeLimit; //in seconds
 
         this.spawnInterval = this.json.getJSONArray("levels").getJSONObject(gameLevel - 1).getInt("spawn_interval");
@@ -551,6 +561,15 @@ public class App extends PApplet {
         return distP1 + distP2 < mouseRadius + distP1P2; //mouse radius is 5
     }
 
+    public boolean getBallsStatus() {
+        for (Ball ball : this.balls) {
+            if (!ball.getIsAbsorbed()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     /**
      * Receive key pressed signal from the keyboard.
      */
@@ -692,16 +711,18 @@ public class App extends PApplet {
         // display top bar
         //----------------------------------
         // 1) Timer
-        if (frameCount - (timeLimit - lastSecond) * 30 == FPS && gameState == GameState.PLAYING) {
-            lastSecond--;
+        if (timeLimit != 0) {
+            if (frameCount - (timeLimit - lastSecond) * 30 == FPS && gameState == GameState.PLAYING) {
+                lastSecond--;
+            }
+            if (gameState == GameState.PAUSED) {
+                frameCount = (timeLimit - lastSecond) * 30;
+            }
+            textSize(22);
+            fill(0);
+            textAlign(CENTER, CENTER);
+            text("Time: " + lastSecond, WIDTH-80, App.TOPBAR-22);
         }
-        if (gameState == GameState.PAUSED) {
-            frameCount = (timeLimit - lastSecond) * 30;
-        }
-        textSize(22);
-        fill(0);
-        textAlign(CENTER, CENTER);
-        text("Time: " + lastSecond, WIDTH-80, App.TOPBAR-22);
 
         // 2) Score
         textSize(22);
@@ -790,15 +811,20 @@ public class App extends PApplet {
         }
         
 		//----------------------------------
+        // game end
         //----------------------------------
-		//display game end message
-        /*if (timeLimit <= 0) {
+        if (this.ballQueue.length == 0 && this.getBallsStatus()) {
+            gameState = GameState.WIN;
+        }
+
+        else if (frameCount >= timeLimit * FPS) {
             gameState = GameState.OVER;
             textSize(30);
             fill(0);
             textAlign(CENTER, CENTER);
             text("== GAME OVER ==", 20, 20);
             setup();
+            return;
         }
         if (gameState == GameState.WIN) {
             textSize(30);
@@ -806,7 +832,7 @@ public class App extends PApplet {
             textAlign(CENTER, CENTER);
             text("== YOU WON ==", 20, 20);
             setup();
-        }*/
+        }
     }
 
 

@@ -13,7 +13,6 @@ public class Ball {
     private static final int MAX_SPEED = 12;
 
     private boolean isAbsorbed;
-    private int points;
     private static Random rand = new Random();
 
     public Ball(float x, float y, int colour) {
@@ -27,7 +26,6 @@ public class Ball {
             this.vector = new float[] {-2, 2};
         }
         this.isAbsorbed = false;
-        this.points = 0;
     }
 
     public void draw(App app) {
@@ -164,21 +162,23 @@ public class Ball {
 
         if (this.ballRadius < 2 || App.getDistance(ballCenter, holeCenter) < 4) {
             this.ballRadius = 0;
-            this.isAbsorbed = true;
+            //this.isAbsorbed = true;
 
             if (this.colourToString().equals(hole.colourToString())) {
                 App.score += App.scoreIncrease.get(hole.colourToString()) * app.modScoreIncrease;
                 app.getBalls().remove(this);
+                this.isAbsorbed = true;
             }
 
             else if (this.colour == 0 || hole.getColour() == 0) {
                 App.score += App.scoreIncrease.get("grey") * app.modScoreIncrease;
                 app.getBalls().remove(this);
+                this.isAbsorbed = true;
             }
 
             else {
                 App.score -= App.scoreDecrease.get(hole.colourToString()) * app.modScoreDecrease;
-                app.getBalls().remove(this);
+                //app.getBalls().remove(this); // avoid concurrent modification
                 for (int i = 0; i < app.ballQueue.length; i++) {
                     if (app.ballQueue[i] == null) {
                         app.ballQueue[i] = this;
