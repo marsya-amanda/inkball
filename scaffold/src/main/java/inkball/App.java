@@ -55,7 +55,7 @@ public class App extends PApplet {
     public float modScoreIncrease = 1;
     public float modScoreDecrease = 1;
     public int spawnInterval = 0;
-    public String[] ballsOrder;
+    public ArrayList<String> ballsToSpawn = new ArrayList<>();
 
     public static boolean isDrawing = false;
     public float[] start = new float[2];
@@ -123,12 +123,11 @@ public class App extends PApplet {
         lastSecond = timeLimit; //in seconds
 
         this.spawnInterval = this.json.getJSONArray("levels").getJSONObject(gameLevel - 1).getInt("spawn_interval");
-        
+
         JSONArray ballsJSON = this.json.getJSONArray("levels").getJSONObject(gameLevel - 1).getJSONArray("balls");
-        this.ballsOrder = new String[ballsJSON.size()];
 
         for (int i = 0; i < ballsJSON.size(); i++) {
-            this.ballsOrder[i] = ballsJSON.getString(i);
+            this.ballsToSpawn.add(ballsJSON.getString(i));
         }
 
         this.modScoreIncrease = this.json.getJSONArray("levels").getJSONObject(gameLevel - 1).getFloat("score_increase_from_hole_capture_modifier");
@@ -297,7 +296,7 @@ public class App extends PApplet {
                 //SPAWNER
                 else if (lines.get(i).get(j).equals("S")) {
                     this.board[i][j] = new Spawner(j, i);
-                    this.balls.add(new Ball(j*CELLSIZE, i*CELLSIZE+TOPBAR, 0));
+                    //this.balls.add(new Ball(j*CELLSIZE, i*CELLSIZE+TOPBAR, 0));
                     this.spawners.add(new Spawner(j, i));
                 }
 
@@ -327,6 +326,41 @@ public class App extends PApplet {
         // ADD LINES FROM WALLS
         this.addBorders();
 
+    }
+
+    public void spawnBalls() {
+        if (this.ballsToSpawn.isEmpty()) {
+            return;
+        }
+
+        if (frameCount % (this.spawnInterval * FPS) == 0) {
+            String colourString = this.ballsToSpawn.get(0);
+            int colour = colourToInt(colourString);
+            Random rand = new Random();
+            int i = rand.nextInt(this.spawners.size());
+            Spawner spawner = this.spawners.get(i);
+            this.balls.add(new Ball(spawner.getX() * CELLSIZE + 4, spawner.getY() * CELLSIZE + TOPBAR + 4, colour));
+            this.ballsToSpawn.remove(0);
+        }
+    }
+
+    public static int colourToInt(String colourStr) {
+        if (colourStr.equals("grey")) {
+            return 0;
+        }
+        if (colourStr.equals("orange")) {
+            return 1;
+        }
+        if (colourStr.equals("blue")) {
+            return 2;
+        }
+        if (colourStr.equals("green")) {
+            return 3;
+        }
+        if (colourStr.equals("yellow")) {
+            return 4;
+        }
+        return 0;
     }
 
     public void addBorders() {
@@ -622,6 +656,7 @@ public class App extends PApplet {
 	@Override
     public void draw() {
         background(206);
+        this.spawnBalls();
 
         //----------------------------------
         //display Board for current level:
