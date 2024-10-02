@@ -171,6 +171,7 @@ public class App extends PApplet {
             this.getSprite("ball"+String.valueOf(i));
             this.getSprite("hole"+String.valueOf(i));
             this.getSprite("wall"+String.valueOf(i));
+            this.getSprite("wall"+String.valueOf(i)+"-damaged");
         }
         //
 
