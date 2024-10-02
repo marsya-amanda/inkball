@@ -178,10 +178,11 @@ public class Ball {
 
             else {
                 App.score -= App.scoreDecrease.get(hole.colourToString()) * app.modScoreDecrease;
-                //app.getBalls().remove(this); // avoid concurrent modification
+                app.getBalls().remove(this); // avoid concurrent modification
                 for (int i = 0; i < app.ballQueue.length; i++) {
                     if (app.ballQueue[i] == null) {
-                        app.ballQueue[i] = this;
+                        int c = this.getColour();
+                        app.ballQueue[i] = new Ball(19 + 28 * i, 21, c); // add back to queue
                         break;
                     }
                 }

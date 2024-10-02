@@ -396,15 +396,27 @@ public class App extends PApplet {
             int i = rand.nextInt(this.spawners.size());
             Spawner spawner = this.spawners.get(i);
             this.balls.add(new Ball(spawner.getX() * CELLSIZE + 4, spawner.getY() * CELLSIZE + TOPBAR + 4, colour));
+            this.ballQueue[0] = null;
 
             if (this.ballQueue.length > 1) {
-                System.arraycopy(this.ballQueue, 1, this.ballQueue, 0, this.ballQueue.length - 1);
+                ArrayList<Ball> tempQueue = new ArrayList<>();
+                for (Ball ball : this.ballQueue) {
+                    if (ball != null) {
+                        tempQueue.add(ball);
+                    }
+                }
+
+                this.ballQueue = new Ball[this.maxBallQueue]; // make queue null
+                for (int j = 0; j < tempQueue.size(); j++) {
+                    this.ballQueue[j] = tempQueue.get(j);
+                }
+
                 for (int j = 0; j < this.ballQueue.length - 1; j++) {
                     if (this.ballQueue[j] == null) {
                         return;
                     }
                     int c = this.ballQueue[j].getColour();
-                    this.ballQueue[j] = new Ball(19 + 28 * j, 21, c);
+                    this.ballQueue[j] = new Ball(19 + 28 * j, 21, c); // move ball coordinates
                 }
             }
         }
@@ -821,13 +833,16 @@ public class App extends PApplet {
 
         // 3) Ball queue
         strokeWeight(0);
-        rect(14, 16, this.ballQueue.length * 28 + 4, 34);
+        rect(14, 16, 5 * 28 + 4, 34); // max 5 balls in queue
         fill(0);
-        for (Ball ball : this.ballQueue) {
-            if (ball == null) {
+        for (int i = 0; i < this.ballQueue.length; i++) {
+            if (i > 4) {
+                break;
+            }
+            if (this.ballQueue[i] == null) {
                 continue;
             }
-            ball.draw(this);
+            this.ballQueue[i].draw(this);
         }
 
         if (gameState == GameState.PAUSED) { // looks ugly
