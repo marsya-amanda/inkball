@@ -4,10 +4,12 @@ import processing.core.PImage;
 
 public class Wall extends Tile {
     private final int colour;
+    private int hp;
 
     public Wall(int x, int y, int colour) {
         super(x, y);
         this.colour = colour;
+        this.hp = 3;
     }
 
     @Override
@@ -18,6 +20,16 @@ public class Wall extends Tile {
 
     public int getColour() {
         return this.colour;
+    }
+
+    public void damage(Ball ball) {
+        if (this.colour == 0) {
+            this.hp--;
+            return;
+        }
+        if (this.colour == ball.getColour()) {
+            this.hp--;
+        }
     }
 
     public String colourToString() {
