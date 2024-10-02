@@ -353,6 +353,7 @@ public class App extends PApplet {
 
     public void restart() {
         frameCount = 0;
+        ballTimer = 1;
         this.balls = new ArrayList<>();
         this.allLines = new ArrayList<>();
         this.drawnLines = new ArrayList<>();
@@ -635,9 +636,10 @@ public class App extends PApplet {
         if (event.getKeyCode() == 32) {
             if (gameState == GameState.PAUSED) {
                 gameState = GameState.PLAYING;
-                return;
             }
-            gameState = GameState.PAUSED;
+            else if (gameState == GameState.PLAYING) {
+                gameState = GameState.PAUSED;
+            }
         }
     }
 
@@ -791,20 +793,24 @@ public class App extends PApplet {
                     ballTimer = 1.1f;
                 }
             }
-            if (gameState != GameState.PLAYING) {
+            if (gameState == GameState.PAUSED) {
                 frameCount = (timeLimit - lastSecond) * 30;
             }
-            textSize(22);
-            fill(0);
-            textAlign(CENTER, CENTER);
-            text("Time: " + lastSecond, WIDTH-80, App.TOPBAR-22);
+            if (gameState == GameState.PLAYING || gameState == GameState.PAUSED) {
+                textSize(22);
+                fill(0);
+                textAlign(CENTER, CENTER);
+                text("Time: " + lastSecond, WIDTH-80, App.TOPBAR-22);
+            }
         }
 
         // 2) Score
-        textSize(22);
-        fill(0);
-        textAlign(CENTER, CENTER);
-        text("Score: " + (int) score, WIDTH-80, App.TOPBAR-44);
+        if (gameState == GameState.PLAYING || gameState == GameState.PAUSED) {
+            textSize(22);
+            fill(0);
+            textAlign(CENTER, CENTER);
+            text("Score: " + (int) score, WIDTH - 80, App.TOPBAR - 44);
+        }
 
         // if PAUSED
         if (gameState != GameState.PLAYING) {
@@ -828,7 +834,7 @@ public class App extends PApplet {
                 line.draw(this);
             }
 
-            if (gameState == GameState.WIN && gameLevel < this.json.getJSONArray("levels").size()) {
+            if (gameState == GameState.WIN && gameLevel <= this.json.getJSONArray("levels").size()) {
                 if (Arrays.equals(this.firstSpiral, new int[]{this.board[0].length - 1, this.board.length - 1}) && Arrays.equals(this.secondSpiral, new int[]{0, 0})) {
                     restart();
                 }
@@ -922,7 +928,7 @@ public class App extends PApplet {
 		//----------------------------------
         // game end
         //----------------------------------
-        if (this.ballQueue.length == 0 && this.balls.isEmpty()) {
+        if (this.ballQueue[0] == null && this.balls.isEmpty() && gameState != GameState.WIN) {
             gameState = GameState.WIN;
             gameLevel++;
             score += (int) (lastSecond / 0.067);
