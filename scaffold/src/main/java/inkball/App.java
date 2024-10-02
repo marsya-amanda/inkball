@@ -824,7 +824,7 @@ public class App extends PApplet {
             if (gameState == GameState.PAUSED) {
                 text("*** PAUSED ***", WIDTH / 2, TOPBAR / 2);
             }
-            else if (gameState == GameState.WIN && gameLevel < this.json.getJSONArray("levels").size()) {
+            else if (gameState == GameState.WIN && gameLevel > this.json.getJSONArray("levels").size()) {
                 text("=== ENDED ===", WIDTH / 2, TOPBAR / 2);
             }
             else if (gameState == GameState.OVER) {
