@@ -57,6 +57,7 @@ public class App extends PApplet {
     private int spawnInterval = 0;
     public Ball[] ballQueue;
     public int maxBallQueue;
+    public static float ballTimer = 1.0f;
 
     public static boolean isDrawing = false;
     public float[] start = new float[2];
@@ -391,6 +392,7 @@ public class App extends PApplet {
         }
 
         if (frameCount % (this.spawnInterval * FPS) == 0) {
+            ballTimer = 1.1f;
             int colour = this.ballQueue[0].getColour();
             Random rand = new Random();
             int i = rand.nextInt(this.spawners.size());
@@ -782,6 +784,7 @@ public class App extends PApplet {
         if (timeLimit != 0) {
             if (frameCount - (timeLimit - lastSecond) * 30 == FPS && gameState == GameState.PLAYING) {
                 lastSecond--;
+                ballTimer -= 0.1f;
             }
             if (gameState != GameState.PLAYING) {
                 frameCount = (timeLimit - lastSecond) * 30;
@@ -844,6 +847,13 @@ public class App extends PApplet {
             }
             this.ballQueue[i].draw(this);
         }
+
+        // 3b) Ball timer
+        textSize(18);
+        fill(0);
+        textAlign(LEFT, TOP);
+        String s = String.format("%.1f", ballTimer);
+        text(s, 164, 22);
 
         if (gameState == GameState.PAUSED) { // looks ugly
             return;
