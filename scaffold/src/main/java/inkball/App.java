@@ -136,6 +136,8 @@ public class App extends PApplet {
 
         timeLimit += lastSecond; // add any remaining time
         lastSecond = timeLimit; //in seconds
+        System.out.println("Last second: " + lastSecond);
+        System.out.println("timeLimit: " + timeLimit);
 
         this.spawnInterval = this.json.getJSONArray("levels").getJSONObject(gameLevel - 1).getInt("spawn_interval");
 
@@ -349,7 +351,7 @@ public class App extends PApplet {
     }
 
     public void restart() {
-        gameState = GameState.PLAYING;
+        frameCount = 0;
         this.balls = new ArrayList<>();
         this.allLines = new ArrayList<>();
         this.drawnLines = new ArrayList<>();
@@ -610,7 +612,10 @@ public class App extends PApplet {
      */
 	@Override
     public void keyPressed(KeyEvent event){
-        if (event.getKeyCode() == 114) { //is "r"
+        if (event.getKeyCode() == 82) { //is "r"
+            lastSecond = 0;
+            gameState = GameState.PLAYING;
+            score = 0;
             restart();
         }
         if (event.getKeyCode() == 32) {
@@ -825,7 +830,7 @@ public class App extends PApplet {
             ball.draw(this);
         }
 
-        if (gameState == GameState.PAUSED) {
+        if (gameState == GameState.PAUSED) { // looks ugly
             return;
         }
 
