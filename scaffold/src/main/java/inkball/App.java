@@ -73,6 +73,9 @@ public class App extends PApplet {
     private ArrayList<Hole> holes = new ArrayList<Hole>();
     private HashMap<String, PImage> sprites = new HashMap();
 
+    public int[] firstSpiral = new int[] {0, 0};
+    public int[] secondSpiral = new int[] {WIDTH/CELLSIZE - 1, (HEIGHT-TOPBAR)/CELLSIZE - 1};
+
     public PImage getSprite(String s) {
         PImage result = sprites.get(s);
         if (result == null) {
@@ -131,6 +134,7 @@ public class App extends PApplet {
             timeLimit = 0;
         }
 
+        timeLimit += lastSecond; // add any remaining time
         lastSecond = timeLimit; //in seconds
 
         this.spawnInterval = this.json.getJSONArray("levels").getJSONObject(gameLevel - 1).getInt("spawn_interval");
@@ -342,6 +346,37 @@ public class App extends PApplet {
         // ADD LINES FROM WALLS
         this.addBorders();
 
+    }
+
+    public void restart() {
+        gameState = GameState.PLAYING;
+        this.balls = new ArrayList<>();
+        this.allLines = new ArrayList<>();
+        this.drawnLines = new ArrayList<>();
+        this.tempLines = new ArrayList<>();
+        this.spawners = new ArrayList<>();
+        this.holes = new ArrayList<>();
+        this.lastLine = 0;
+        isDrawing = false;
+        this.ballQueue = new Ball[0];
+
+        setup();
+    }
+
+    public int[] moveSpiral(int[] spiral) {
+        if (spiral[1] == 0 && spiral[0] < this.board[0].length - 1) {
+            spiral[0]++;
+        }
+        else if (spiral[0] == this.board[0].length - 1 && spiral[1] < this.board.length - 1) {
+            spiral[1]++;
+        }
+        else if (spiral[1] == this.board.length - 1 && spiral[0] <= this.board[0].length - 1 && spiral[0] > 0) {
+            spiral[0]--;
+        }
+        else if (spiral[0] == 0 && spiral[1] <= this.board.length - 1 && spiral[1] > 0) {
+            spiral[1]--;
+        }
+        return spiral;
     }
 
     public void spawnBalls() {
@@ -707,6 +742,29 @@ public class App extends PApplet {
             }
         }
 
+
+        if (gameState == GameState.WIN || gameState == GameState.OVER) {
+            textSize(30);
+            fill(0);
+            textAlign(CENTER, CENTER);
+            text("== YOU WON ==", WIDTH / 2, 20);
+            frameCount = (timeLimit - lastSecond) * 30;
+            if ((frameCount - lastSecond * FPS) % 2 == 0) {
+                Wall firstSpiral = new Wall(this.firstSpiral[0], this.firstSpiral[1], 4);
+                Wall secondSpiral = new Wall(this.secondSpiral[0], this.secondSpiral[1], 4);
+                firstSpiral.draw(this);
+                secondSpiral.draw(this);
+//                this.board[this.firstSpiral[1]][this.firstSpiral[0]] = new Wall(this.firstSpiral[0], this.firstSpiral[1], 4);
+//                this.board[this.secondSpiral[1]][this.secondSpiral[0]] = new Wall(this.secondSpiral[0], this.secondSpiral[1], 4);
+                this.moveSpiral(this.firstSpiral);
+                this.moveSpiral(this.secondSpiral);
+            }
+        }
+
+        if (gameState == GameState.WIN || gameState == GameState.OVER) {
+            return;
+        }
+
         //----------------------------------
         // display top bar
         //----------------------------------
@@ -715,7 +773,7 @@ public class App extends PApplet {
             if (frameCount - (timeLimit - lastSecond) * 30 == FPS && gameState == GameState.PLAYING) {
                 lastSecond--;
             }
-            if (gameState == GameState.PAUSED) {
+            if (gameState != GameState.PLAYING) {
                 frameCount = (timeLimit - lastSecond) * 30;
             }
             textSize(22);
@@ -745,6 +803,7 @@ public class App extends PApplet {
             }
             return;
         }
+
 
         // 3) Ball queue
         strokeWeight(0);
@@ -815,6 +874,8 @@ public class App extends PApplet {
         //----------------------------------
         if (this.ballQueue.length == 0 && this.getBallsStatus()) {
             gameState = GameState.WIN;
+            gameLevel++;
+            score += (int) (lastSecond / 0.067);
         }
 
         else if (frameCount >= timeLimit * FPS) {
@@ -822,17 +883,19 @@ public class App extends PApplet {
             textSize(30);
             fill(0);
             textAlign(CENTER, CENTER);
-            text("== GAME OVER ==", 20, 20);
-            setup();
+            text("=== TIME'S UP ===", 20, 20);
+            //this.restart();
             return;
         }
-        if (gameState == GameState.WIN) {
-            textSize(30);
-            fill(0);
-            textAlign(CENTER, CENTER);
-            text("== YOU WON ==", 20, 20);
-            setup();
-        }
+//        if (gameState == GameState.WIN) {
+//            textSize(30);
+//            fill(0);
+//            textAlign(CENTER, CENTER);
+//            text("== YOU WON ==", 20, 20);
+//            gameLevel++;
+//            score += (int) (lastSecond / 0.067);
+//            //this.restart();
+//        }
     }
 
 
