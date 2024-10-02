@@ -784,7 +784,12 @@ public class App extends PApplet {
         if (timeLimit != 0) {
             if (frameCount - (timeLimit - lastSecond) * 30 == FPS && gameState == GameState.PLAYING) {
                 lastSecond--;
-                ballTimer -= 0.1f;
+                if (this.ballQueue[0] != null) {
+                    ballTimer -= 0.1f;
+                }
+                else {
+                    ballTimer = 1.1f;
+                }
             }
             if (gameState != GameState.PLAYING) {
                 frameCount = (timeLimit - lastSecond) * 30;
@@ -849,11 +854,13 @@ public class App extends PApplet {
         }
 
         // 3b) Ball timer
-        textSize(18);
-        fill(0);
-        textAlign(LEFT, TOP);
-        String s = String.format("%.1f", ballTimer);
-        text(s, 164, 22);
+        if (this.ballQueue[0] != null) {
+            textSize(18);
+            fill(0);
+            textAlign(LEFT, TOP);
+            String s = String.format("%.1f", ballTimer);
+            text(s, 164, 22);
+        }
 
         if (gameState == GameState.PAUSED) { // looks ugly
             return;
@@ -915,7 +922,7 @@ public class App extends PApplet {
 		//----------------------------------
         // game end
         //----------------------------------
-        if (this.ballQueue.length == 0 && this.getBallsStatus()) {
+        if (this.ballQueue.length == 0 && this.balls.isEmpty()) {
             gameState = GameState.WIN;
             gameLevel++;
             score += (int) (lastSecond / 0.067);
