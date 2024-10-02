@@ -167,6 +167,10 @@ public class App extends PApplet {
                 "tile"
         };
 
+        for (String sprite : sprites) {
+            this.getSprite(sprite);
+        }
+
         for (int i = 0; i <= 4; i++) {
             this.getSprite("ball"+String.valueOf(i));
             this.getSprite("hole"+String.valueOf(i));
