@@ -611,7 +611,7 @@ public class App extends PApplet {
 	@Override
     public void keyPressed(KeyEvent event){
         if (event.getKeyCode() == 114) { //is "r"
-            setup();
+            restart();
         }
         if (event.getKeyCode() == 32) {
             if (gameState == GameState.PAUSED) {
@@ -743,26 +743,19 @@ public class App extends PApplet {
         }
 
 
-        if (gameState == GameState.WIN || gameState == GameState.OVER) {
+        if (gameState == GameState.WIN) {
             textSize(30);
             fill(0);
             textAlign(CENTER, CENTER);
-            text("== YOU WON ==", WIDTH / 2, 20);
-            frameCount = (timeLimit - lastSecond) * 30;
+            //frameCount = (timeLimit - lastSecond) * 30;
+            Wall firstSpiral = new Wall(this.firstSpiral[0], this.firstSpiral[1], 4);
+            Wall secondSpiral = new Wall(this.secondSpiral[0], this.secondSpiral[1], 4);
+            firstSpiral.draw(this);
+            secondSpiral.draw(this);
             if ((frameCount - lastSecond * FPS) % 2 == 0) {
-                Wall firstSpiral = new Wall(this.firstSpiral[0], this.firstSpiral[1], 4);
-                Wall secondSpiral = new Wall(this.secondSpiral[0], this.secondSpiral[1], 4);
-                firstSpiral.draw(this);
-                secondSpiral.draw(this);
-//                this.board[this.firstSpiral[1]][this.firstSpiral[0]] = new Wall(this.firstSpiral[0], this.firstSpiral[1], 4);
-//                this.board[this.secondSpiral[1]][this.secondSpiral[0]] = new Wall(this.secondSpiral[0], this.secondSpiral[1], 4);
                 this.moveSpiral(this.firstSpiral);
                 this.moveSpiral(this.secondSpiral);
             }
-        }
-
-        if (gameState == GameState.WIN || gameState == GameState.OVER) {
-            return;
         }
 
         //----------------------------------
@@ -789,11 +782,19 @@ public class App extends PApplet {
         text("Score: " + (int) score, WIDTH-80, App.TOPBAR-44);
 
         // if PAUSED
-        if (gameState == GameState.PAUSED) {
+        if (gameState != GameState.PLAYING) {
             textSize(22);
             fill(0);
             textAlign(CENTER, CENTER);
-            text("==PAUSED==", WIDTH / 2, TOPBAR - 25);
+            if (gameState == GameState.PAUSED) {
+                text("*** PAUSED ***", WIDTH / 2, TOPBAR / 2);
+            }
+            else if (gameState == GameState.WIN && gameLevel < this.json.getJSONArray("levels").size()) {
+                text("=== ENDED ===", WIDTH / 2, TOPBAR / 2);
+            }
+            else if (gameState == GameState.OVER) {
+                text("=== TIME'S UP ===", WIDTH / 2, TOPBAR / 2);
+            }
 
             for (Ball ball : this.balls) {
                 ball.draw(this);
@@ -801,9 +802,17 @@ public class App extends PApplet {
             for (Line line : this.allLines) {
                 line.draw(this);
             }
-            return;
+
+            if (gameState == GameState.WIN && gameLevel < this.json.getJSONArray("levels").size()) {
+                if (Arrays.equals(this.firstSpiral, new int[]{this.board[0].length - 1, this.board.length - 1}) && Arrays.equals(this.secondSpiral, new int[]{0, 0})) {
+                    restart();
+                }
+            }
         }
 
+        if (gameState == GameState.WIN || gameState == GameState.OVER) {
+            return;
+        }
 
         // 3) Ball queue
         strokeWeight(0);
@@ -814,6 +823,10 @@ public class App extends PApplet {
                 continue;
             }
             ball.draw(this);
+        }
+
+        if (gameState == GameState.PAUSED) {
+            return;
         }
 
         //----------------------------------
@@ -880,22 +893,7 @@ public class App extends PApplet {
 
         else if (frameCount >= timeLimit * FPS) {
             gameState = GameState.OVER;
-            textSize(30);
-            fill(0);
-            textAlign(CENTER, CENTER);
-            text("=== TIME'S UP ===", 20, 20);
-            //this.restart();
-            return;
         }
-//        if (gameState == GameState.WIN) {
-//            textSize(30);
-//            fill(0);
-//            textAlign(CENTER, CENTER);
-//            text("== YOU WON ==", 20, 20);
-//            gameLevel++;
-//            score += (int) (lastSecond / 0.067);
-//            //this.restart();
-//        }
     }
 
 
