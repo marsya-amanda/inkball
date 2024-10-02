@@ -160,7 +160,7 @@ public class Ball {
         float shrinkFactor = (float) (App.getDistance(holeCenter, ballCenter) / 32);
         this.ballRadius = 12 * shrinkFactor; //make ball increase/decrease proportionally to its original radius
 
-        if (this.ballRadius < 2 || App.getDistance(ballCenter, holeCenter) < 4) {
+        if (this.ballRadius < 4 || App.getDistance(ballCenter, holeCenter) < 8) {
             this.ballRadius = 0;
             //this.isAbsorbed = true;
 
@@ -203,7 +203,7 @@ public class Ball {
 
         float mag = (float) (Math.sqrt(Math.pow(attractionVec[0], 2) + Math.pow(attractionVec[1], 2)));
 
-        if (mag == 0) { //prevent zero division error
+        if (mag < 3) { //prevent zero division error
             this.isAbsorbed = true;
             this.ballRadius = 0;
             return new float[] {0, 0};
