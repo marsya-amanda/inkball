@@ -364,6 +364,10 @@ public class App extends PApplet {
         isDrawing = false;
         this.ballQueue = new Ball[0];
 
+        if (gameLevel > this.json.getJSONArray("levels").size()) {
+            gameLevel = 1;
+        }
+
         setup();
     }
 
