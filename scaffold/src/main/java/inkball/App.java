@@ -651,7 +651,6 @@ public class App extends PApplet {
         }
 
         //System.out.println("collision point found"); //here now
-        float[] ballXY = new float[] {ball.getX() + ball.getVector()[0], ball.getY() + ball.getVector()[1]};
         Wall[] wallsAssociated = new Wall[2];
         Wall closestWall = null;
         float minDistance = Float.MAX_VALUE;
@@ -841,12 +840,6 @@ public class App extends PApplet {
 
         for (int i = 0; i < this.board.length; i++) {
             for (int j = 0; j < this.board[i].length; j++) {
-//                if (this.board[i][j] instanceof Wall) { // always false bc is a tile
-//                    if (((Wall) this.board[i][j]).getHP() == 0) {
-//                        System.out.println("removed wall");
-//                        this.removeWall((Wall) this.board[i][j]); // not passing
-//                    }
-//                }
                 this.board[i][j].draw(this);
             }
         }
