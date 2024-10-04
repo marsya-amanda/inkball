@@ -59,6 +59,7 @@ public class App extends PApplet {
     public int maxBallQueue;
     public static float ballTimer = 1.0f;
 
+    public static boolean ctrlPressed = false;
     public static boolean isDrawing = false;
     public float[] start = new float[2];
     public float[] end = new float[2];
@@ -722,6 +723,10 @@ public class App extends PApplet {
                 gameState = GameState.PAUSED;
             }
         }
+
+        if (event.getKeyCode() == 17) { // if control
+            ctrlPressed = true;
+        }
     }
 
     /**
@@ -729,7 +734,9 @@ public class App extends PApplet {
      */
 	@Override
     public void keyReleased(){
-        
+        if (keyCode == 17) {
+            ctrlPressed = false;
+        }
     }
 
     @Override
@@ -743,6 +750,13 @@ public class App extends PApplet {
         int mouseY = e.getY();
 
         if (mouseButton == LEFT) {
+            if (ctrlPressed) {
+                float[] toRemove = new float[] {mouseX, mouseY};
+
+                this.removeLine(toRemove);
+                return;
+            }
+
             if (!isDrawing) {
                 this.start = new float[] {mouseX, mouseY};
                 //this.drawnLines.add(new ArrayList<>());
