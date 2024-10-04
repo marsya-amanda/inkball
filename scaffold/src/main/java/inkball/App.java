@@ -67,6 +67,7 @@ public class App extends PApplet {
 
     private Tile[][] board;
     private ArrayList<Ball> balls = new ArrayList<Ball>();
+    private ArrayList<Wall> walls = new ArrayList<>();
     private ArrayList<Line> allLines = new ArrayList<Line>();
     private ArrayList<ArrayList<Line>> drawnLines = new ArrayList<>();
     private ArrayList<ArrayList<Line>> tempLines = new ArrayList<>();
@@ -286,6 +287,7 @@ public class App extends PApplet {
                 //WALL 0
                 else if (lines.get(i).get(j).equals("X")) {
                     this.board[i][j] = new Wall(j, i, 0);
+                    this.walls.add(new Wall(j, i, 0));
                 }
 
                 //WALL 1-4
@@ -293,6 +295,7 @@ public class App extends PApplet {
                     //make above more succinct
                     int colour = Integer.parseInt(lines.get(i).get(j));
                     this.board[i][j] = new Wall(j, i, colour);
+                    this.walls.add(new Wall(j, i, colour));
                 }
 
                 //HOLE
@@ -493,6 +496,24 @@ public class App extends PApplet {
         this.allLines.add(new Line(bottomRightCorner, topRightCorner, colour, isDrawn));
     }
 
+    public static Line[] getWallLineSegments(Wall wall) {
+        Line[] lines = new Line[4];
+
+        float[] topLeftCorner = new float[] {wall.getX()*CELLSIZE, wall.getY() * CELLSIZE + TOPBAR}; // H0, V0
+        float[] topRightCorner = new float[] {(wall.getX()+1)*CELLSIZE, wall.getY() * CELLSIZE + TOPBAR}; // H1, V0
+        float[] bottomLeftCorner = new float[] {wall.getX()*CELLSIZE, (wall.getY()+1) * CELLSIZE + TOPBAR}; // H0, V1
+        float[] bottomRightCorner = new float[] {(wall.getX()+1)*CELLSIZE, (wall.getY()+1)*CELLSIZE + TOPBAR};
+
+        int colour = wall.getColour();
+        boolean isDrawn = false;
+        lines[0] = new Line(topLeftCorner, topRightCorner, colour, isDrawn); //TOP
+        lines[1] = new Line(topLeftCorner, bottomLeftCorner, colour, isDrawn); //LEFT
+        lines[2] = new Line(bottomLeftCorner, bottomRightCorner, colour, isDrawn); // BOTTOM
+        lines[3] = new Line(bottomRightCorner, topRightCorner, colour, isDrawn);
+
+        return lines;
+    }
+
     public static int getColourCode (ArrayList<ArrayList<String>> lines, int i, int j) {
         String colour = " ";
         try {
@@ -629,6 +650,104 @@ public class App extends PApplet {
             }
         }
         return true;
+    }
+
+    public Wall[] getWallAssociated(Ball ball, Line line) {
+        float[] collisionPoint = ball.willCollide(line);
+        //System.out.println(collisionPoint);
+        if (collisionPoint == null) {
+            // System.out.println("collision point null"); // not passing, good
+            return null;
+        }
+
+        //System.out.println("collision point found"); //here now
+        float[] ballXY = new float[] {ball.getX() + ball.getVector()[0], ball.getY() + ball.getVector()[1]};
+        Wall[] wallsAssociated = new Wall[2];
+        Wall closestWall = null;
+        float minDistance = Float.MAX_VALUE;
+
+        for (Wall wall : this.walls) {
+            float wallCenterX = wall.getX() * CELLSIZE + CELLSIZE / 2;
+            float wallCenterY = wall.getY() * CELLSIZE + TOPBAR + CELLSIZE / 2;
+            float distance = (float) App.getDistance(collisionPoint, new float[]{wallCenterX, wallCenterY});
+
+            if (distance < minDistance) {
+                minDistance = distance; //find wall that is closest
+                closestWall = wall;
+            }
+        }
+
+        if (closestWall == null) {
+            //System.out.println("Cannot find closest wall"); // did find closest wall
+            return null;
+        }
+
+        wallsAssociated[0] = closestWall;
+        //System.out.println("found closest wall at " + closestWall.getX() + " " + closestWall.getY()); // here now
+
+        // Find the corresponding wall in the board
+//        for (int i = 0; i < this.board.length; i++) {
+//            for (int j = 0; j < this.board[0].length; j++) {
+//                if (this.board[i][j] instanceof Wall && this.board[i][j].equals(closestWall)) {
+//                    wallsAssociated[1] = (Wall) this.board[i][j];
+//                    System.out.println("found wall!"); // did not find wall
+//                    return wallsAssociated;
+//                }
+//            }
+//        }
+        try {
+            wallsAssociated[1] = (Wall) (this.board[wallsAssociated[0].getY()][wallsAssociated[0].getX()]);
+            return wallsAssociated;
+        }
+        catch (Exception e) {
+            return null;
+        }
+
+        //System.out.println("did not find second wall");
+
+        //return null;
+
+//        for (Wall wall : this.walls) {
+//            float[] wallXY = new float[]{wall.getX() * CELLSIZE + CELLSIZE / 2, wall.getY() * CELLSIZE + TOPBAR + CELLSIZE / 2};
+//            if (getDistance(wallXY, ballXY) < 20) {
+//                wallsAssociated[0] = wall;
+//                closestWall = wall;
+//                break;
+//            }
+//        }
+//
+//        if (closestWall == null) {
+//            return null;
+//        }
+//
+//        System.out.println("first wall found!"); // not found
+//        outerLoop:
+//        for (int i = this.board.length - 1; i >= 0; i--) {
+//            for (int j = this.board[0].length - 1; j >= 0; j--) {
+//                if (!(this.board[i][j] instanceof Wall)) {
+//                    break;
+//                }
+//                if (this.board[i][j].equals(closestWall)) {
+//                    wallsAssociated[1] = (Wall) this.board[i][j];
+//                    System.out.println("found wall in board!"); // not passing
+//                    break outerLoop;
+//                }
+//            }
+//        }
+//
+//        if (wallsAssociated[1] == null) {
+//            return null;
+//        }
+//        return wallsAssociated;
+    }
+
+    public void removeWall (Wall wall) {
+        Line[] linesToRemove = getWallLineSegments(wall);
+        for (Line line : linesToRemove) {
+            this.allLines.remove(line);
+        }
+        this.walls.remove(wall);
+        this.board[wall.getY()][wall.getX()] = new Blank (wall.getX(), wall.getY());
     }
 
     /**
@@ -768,6 +887,12 @@ public class App extends PApplet {
 
         for (int i = 0; i < this.board.length; i++) {
             for (int j = 0; j < this.board[i].length; j++) {
+//                if (this.board[i][j] instanceof Wall) { // always false bc is a tile
+//                    if (((Wall) this.board[i][j]).getHP() == 0) {
+//                        System.out.println("removed wall");
+//                        this.removeWall((Wall) this.board[i][j]); // not passing
+//                    }
+//                }
                 this.board[i][j].draw(this);
             }
         }
@@ -898,9 +1023,18 @@ public class App extends PApplet {
             boolean hasCollided = false;
             for (int j = this.allLines.size() - 1; j >= 0; j--) {
                 Line line = this.allLines.get(j);
-                if (ball.willCollide(line)) {
-                    ball.interact(line, this);
+                if (ball.willCollide(line) != null) {
                     hasCollided = true;
+                    if (this.getWallAssociated(ball, line) != null) {
+                        Wall[] wallsAssociated = this.getWallAssociated(ball, line);
+                        (wallsAssociated[0]).damage(ball);
+                        (wallsAssociated[1]).damage(ball);
+                        if (wallsAssociated[0].getHP() == 0) {
+                            //System.out.println("removed wall");
+                            this.removeWall(wallsAssociated[0]); // not REMOVING LINES, removing wrong walls
+                        }
+                        ball.interact(line, this);
+                    }
                     break;
                 }
 
@@ -909,7 +1043,7 @@ public class App extends PApplet {
             outerLoop:
             for (int j = this.drawnLines.size() - 1; j >= 0; j--) {
                 for (int k = this.drawnLines.get(j).size() - 1; k >= 0; k--) {
-                    if (ball.willCollide(this.drawnLines.get(j).get(k))) {
+                    if (ball.willCollide(this.drawnLines.get(j).get(k)) != null) {
                         ball.interact(this.drawnLines.get(j).get(k), this);
                         hasCollided = true;
                         this.removeLine(this.drawnLines.get(j).get(k));

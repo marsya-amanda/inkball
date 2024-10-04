@@ -14,12 +14,22 @@ public class Wall extends Tile {
 
     @Override
     public void draw(App app) {
-        PImage tile = app.getSprite("wall"+colour);
+        PImage tile = app.getSprite("wall"+this.colour);
+        if (this.hp <= 3 && this.hp > 1) {
+            tile = app.getSprite("wall"+this.colour);
+        }
+        else if (this.hp < 2) {
+            tile = app.getSprite("wall"+this.colour+"-damaged");
+        }
         app.image(tile, x*App.CELLSIZE, y*App.CELLSIZE+App.TOPBAR, App.CELLSIZE, App.CELLSIZE);
     }
 
     public int getColour() {
         return this.colour;
+    }
+
+    public int getHP() {
+        return this.hp;
     }
 
     public void damage(Ball ball) {

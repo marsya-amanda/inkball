@@ -74,7 +74,7 @@ public class Ball {
     }
 
     public void interact(Line line, App app) {
-        if (this.willCollide(line)) {
+        if (this.willCollide(line) != null) {
             //System.out.println("Collided!");
             this.setNewColour(line);
             this.setNewDirection(line);
@@ -82,7 +82,7 @@ public class Ball {
         }
     }
 
-    public boolean willCollide(Line line) {
+    public float[] willCollide(Line line) {
         float[] P1 = line.getP1();
         float[] P2 = line.getP2();
         float[] ballXY = new float[] {this.getBallCenter()[0] + this.vector[0], this.getBallCenter()[1] + this.vector[1]};
@@ -91,7 +91,16 @@ public class Ball {
         double distP2 = App.getDistance(ballXY, P2);
         double distP1P2 = App.getDistance(P1, P2);
 
-        return distP1 + distP2 < ARTIFICIAL_RADIUS + distP1P2;
+        if (distP1 + distP2 < ARTIFICIAL_RADIUS + distP1P2) {
+            // Calculate the collision point
+            float t = (float) ((distP1 - ARTIFICIAL_RADIUS) / distP1P2);
+            float collisionX = P1[0] + t * (P2[0] - P1[0]);
+            float collisionY = P1[1] + t * (P2[1] - P1[1]);
+            return new float[] {collisionX, collisionY};
+        }
+        return null;
+
+        //return distP1 + distP2 < ARTIFICIAL_RADIUS + distP1P2;
     }
 
     public void setNewDirection(Line line) {
