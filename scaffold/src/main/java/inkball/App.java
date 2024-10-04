@@ -235,41 +235,31 @@ public class App extends PApplet {
             lines.add(lineChars);
         }
 
-        //VALIDATE DIMENSIONS OF LAYOUT FILE VS BOARD
-        int tempWidth = 0;
-        int tempHeight = 0;
-        if (lines.size() >= this.board.length) {
-            tempHeight = this.board.length;
-        }
-        if (lines.size() < this.board.length) {
-            tempHeight = lines.size();
-        }
-        if (lines.get(0).size() >= this.board[0].length) {
-            tempWidth = this.board[0].length;
-        }
-        if (lines.get(0).size() < this.board[0].length) {
-            tempWidth = lines.get(0).size();
-        }
-
         //CREATE OBJECTS BASED ON FILE
         for (int i = 0; i < this.board.length; i++) {
 
             // Handle insufficient number of lines in file
             if (i + 1 > lines.size()) {
-                for (int k = i + 1; k < this.board.length; k++) {
+                for (int k = i; k < this.board.length; k++) {
                     for (int l = 0; l < this.board[0].length; l++) {
+                        if (this.board[k][l] != null) {
+                            continue;
+                        }
                         this.board[k][l] = new Blank(l, k);
                     }
                 }
-                break;
+                continue;
             }
 
-            for (int j = 0; j < this.board[0].length; j++) { //not using length of file bc file might be too long
+            for (int j = 0; j < this.board[0].length; j++) {
 
                 // HANDLE insufficient number of characters in a line
                 if (j + 1 > lines.get(i).size()) {
-                    for (int k = j + 1; k < this.board[i].length; k++) {
-                        this.board[i][k] = new Blank(k, i);
+                    for (int k = j; k < this.board[i].length; k++) {
+                        if (this.board[i][k] != null) {
+                            continue;
+                        }
+                        this.board[i][k] = new Blank(k, i); //skips the first box
                     }
                     break;
                 }
