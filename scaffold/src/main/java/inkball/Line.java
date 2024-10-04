@@ -30,23 +30,15 @@ public class Line {
         return "P1 is " + Arrays.toString(line.getP1()) + ", P2 is " + Arrays.toString(line.getP2());
     }
 
-    public boolean equals(Line line) {
-        if (this.getP1()[0] - line.getP1()[0] > 1) {
-            return false; // not equal if x1 are different
-        }
-        if (this.getP1()[1] - line.getP1()[1] > 1) {
-            return false; // not equal if y1 are different
-        }
-        if (this.getP2()[0] - line.getP2()[0] > 1) {
-            return false; // not equal if x2 are different
-        }
-        if (this.getP2()[1] - line.getP2()[1] > 1) {
-            return false; // not equal if y2 are different
-        }
-        if (!this.isDrawn || !line.isDrawn) {
-            return false; // not equal if either is not a drawn line
-        }
-        return true;
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Line line = (Line) obj;
+        return this.isDrawn == line.isDrawn &&
+                this.colourTo == line.colourTo &&
+                Arrays.equals(this.getP1(), line.getP1()) &&
+                Arrays.equals(this.getP2(), line.getP2());
     }
 
     public void draw(App app) {
@@ -86,6 +78,10 @@ public class Line {
 
     public int getColourTo() {
         return this.colourTo;
+    }
+
+    public String toString() {
+        return "P1 is " + Arrays.toString(this.P1) + ", P2 is " + Arrays.toString(this.P2) + ", drawn is " + this.isDrawn;
     }
 
     /*public float[] getSlopeIntercept(float x) {

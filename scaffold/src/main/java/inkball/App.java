@@ -683,18 +683,7 @@ public class App extends PApplet {
         }
 
         wallsAssociated[0] = closestWall;
-        //System.out.println("found closest wall at " + closestWall.getX() + " " + closestWall.getY()); // here now
 
-        // Find the corresponding wall in the board
-//        for (int i = 0; i < this.board.length; i++) {
-//            for (int j = 0; j < this.board[0].length; j++) {
-//                if (this.board[i][j] instanceof Wall && this.board[i][j].equals(closestWall)) {
-//                    wallsAssociated[1] = (Wall) this.board[i][j];
-//                    System.out.println("found wall!"); // did not find wall
-//                    return wallsAssociated;
-//                }
-//            }
-//        }
         try {
             wallsAssociated[1] = (Wall) (this.board[wallsAssociated[0].getY()][wallsAssociated[0].getX()]);
             return wallsAssociated;
@@ -742,12 +731,24 @@ public class App extends PApplet {
     }
 
     public void removeWall (Wall wall) {
-        Line[] linesToRemove = getWallLineSegments(wall);
-        for (Line line : linesToRemove) {
-            this.allLines.remove(line);
+        List<Line> linesToRemove = Arrays.asList(getWallLineSegments(wall));
+        int removeInd = -1;
+        System.out.println(linesToRemove);
+        boolean removed = false;
+        for (int i = 0; i < this.allLines.size() - 4; i++) { // starts at 3 because of window border line segments
+            System.out.println(this.allLines.subList(i, i + 4));
+            if (this.allLines.subList(i, i + 4).equals(linesToRemove)) { // +4 because upper bound exclusive
+                //System.out.println("removed Lines!"); // UPDATE: PASSING
+                removeInd = i;
+                removed = true;
+                break;
+            }
         }
-        this.walls.remove(wall);
-        this.board[wall.getY()][wall.getX()] = new Blank (wall.getX(), wall.getY());
+        if (removed && removeInd != -1) {
+            this.allLines.subList(removeInd, removeInd + 4).clear();
+            this.walls.remove(wall);
+            this.board[wall.getY()][wall.getX()] = new Blank(wall.getX(), wall.getY());
+        }
     }
 
     /**
