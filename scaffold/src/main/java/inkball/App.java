@@ -681,52 +681,15 @@ public class App extends PApplet {
         catch (Exception e) {
             return null;
         }
-
-        //System.out.println("did not find second wall");
-
-        //return null;
-
-//        for (Wall wall : this.walls) {
-//            float[] wallXY = new float[]{wall.getX() * CELLSIZE + CELLSIZE / 2, wall.getY() * CELLSIZE + TOPBAR + CELLSIZE / 2};
-//            if (getDistance(wallXY, ballXY) < 20) {
-//                wallsAssociated[0] = wall;
-//                closestWall = wall;
-//                break;
-//            }
-//        }
-//
-//        if (closestWall == null) {
-//            return null;
-//        }
-//
-//        System.out.println("first wall found!"); // not found
-//        outerLoop:
-//        for (int i = this.board.length - 1; i >= 0; i--) {
-//            for (int j = this.board[0].length - 1; j >= 0; j--) {
-//                if (!(this.board[i][j] instanceof Wall)) {
-//                    break;
-//                }
-//                if (this.board[i][j].equals(closestWall)) {
-//                    wallsAssociated[1] = (Wall) this.board[i][j];
-//                    System.out.println("found wall in board!"); // not passing
-//                    break outerLoop;
-//                }
-//            }
-//        }
-//
-//        if (wallsAssociated[1] == null) {
-//            return null;
-//        }
-//        return wallsAssociated;
     }
 
     public void removeWall (Wall wall) {
         List<Line> linesToRemove = Arrays.asList(getWallLineSegments(wall));
         int removeInd = -1;
-        System.out.println(linesToRemove);
+        //System.out.println(linesToRemove);
         boolean removed = false;
         for (int i = 0; i < this.allLines.size() - 4; i++) { // starts at 3 because of window border line segments
-            System.out.println(this.allLines.subList(i, i + 4));
+            //System.out.println(this.allLines.subList(i, i + 4));
             if (this.allLines.subList(i, i + 4).equals(linesToRemove)) { // +4 because upper bound exclusive
                 //System.out.println("removed Lines!"); // UPDATE: PASSING
                 removeInd = i;
