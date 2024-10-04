@@ -994,8 +994,9 @@ public class App extends PApplet {
                             //System.out.println("removed wall");
                             this.removeWall(wallsAssociated[0]); // not REMOVING LINES, removing wrong walls
                         }
-                        ball.interact(line, this);
+                        //ball.interact(line, this);
                     }
+                    ball.interact(line, this);
                     break;
                 }
 
