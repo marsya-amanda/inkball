@@ -397,6 +397,7 @@ public class App extends PApplet {
 
         if (frameCount % (this.spawnInterval * FPS) == 0) {
             ballTimer = 1.1f;
+
             int colour = this.ballQueue[0].getColour();
             Random rand = new Random();
             int i = rand.nextInt(this.spawners.size());
@@ -959,8 +960,10 @@ public class App extends PApplet {
             textSize(18);
             fill(0);
             textAlign(LEFT, TOP);
-            String s = String.format("%.1f", ballTimer);
-            text(s, 164, 22);
+            if (ballTimer != 1.1f) {
+                String s = String.format("%.1f", ballTimer);
+                text(s, 164, 22);
+            }
         }
 
         if (gameState == GameState.PAUSED) { // looks ugly
