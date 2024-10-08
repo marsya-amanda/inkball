@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="inkball.TileTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2024-10-08T09:23:14" hostname="LAPTOP-T9CSJGT7" time="0.031">
+  <properties/>
+  <testcase name="testGetX()" classname="inkball.TileTest" time="0.029"/>
+  <testcase name="testGetY()" classname="inkball.TileTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
