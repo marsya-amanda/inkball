@@ -9,8 +9,8 @@ public class Ball {
     int colour;
     private float[] vector;
     private float ballRadius = 12;
-    private static final int ARTIFICIAL_RADIUS = 10;
-    private static final int MAX_SPEED = 12;
+    public static final int ARTIFICIAL_RADIUS = 10;
+    public static final int MAX_SPEED = 12;
 
     private boolean isAbsorbed;
     private static Random rand = new Random();
@@ -102,18 +102,17 @@ public class Ball {
         double distP1P2 = App.getDistance(P1, P2);
 
         if (distP1 + distP2 < ARTIFICIAL_RADIUS + distP1P2) {
-            if (distP1P2 < 0.0001) {
+            if (distP1P2 < 0.001f) {
                 return P1;
             }
             // Calculate the collision point
-            float t = (float) ((distP1 - ARTIFICIAL_RADIUS) / distP1P2); // zeroDivisionError not handled
+            float t = (float) ((distP1 - ARTIFICIAL_RADIUS) / distP1P2);
             float collisionX = P1[0] + t * (P2[0] - P1[0]);
             float collisionY = P1[1] + t * (P2[1] - P1[1]);
             return new float[] {collisionX, collisionY};
         }
         return null;
 
-        //return distP1 + distP2 < ARTIFICIAL_RADIUS + distP1P2;
     }
 
     public float[] setNewDirection(Line line) {
@@ -124,7 +123,7 @@ public class Ball {
         // Handle zeroDivisionError and when ball is directly on a dot
         if (Arrays.equals(this.willCollide(line), line.getP1())) {
             this.vector = new float[] {-1*this.getVector()[0], -1*this.getVector()[1]};
-            return this.vector;
+            return new float[] {-1*this.getVector()[0], -1*this.getVector()[1]};
         }
 
         float[] P1 = line.getP1();

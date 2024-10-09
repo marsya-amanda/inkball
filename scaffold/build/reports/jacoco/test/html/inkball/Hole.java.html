@@ -5,16 +5,16 @@ import java.util.Arrays;
 
 public class Hole extends Tile {
     public int colour;
-<span class="nc" id="L8">    public enum GridPosition {</span>
-<span class="nc" id="L9">        TL, BL, TR, BR</span>
+<span class="fc" id="L8">    public enum GridPosition {</span>
+<span class="fc" id="L9">        TL, BL, TR, BR</span>
     }
     public GridPosition gridPosition;
 
     public Hole(int x, int y, int colour, GridPosition gridPosition) {
-<span class="nc" id="L14">        super(x, y);</span>
-<span class="nc" id="L15">        this.colour = colour;</span>
-<span class="nc" id="L16">        this.gridPosition = gridPosition;</span>
-<span class="nc" id="L17">    }</span>
+<span class="fc" id="L14">        super(x, y);</span>
+<span class="fc" id="L15">        this.colour = colour;</span>
+<span class="fc" id="L16">        this.gridPosition = gridPosition;</span>
+<span class="fc" id="L17">    }</span>
 
     public static String toString(Hole hole) {
 <span class="nc" id="L20">        String s = &quot;Hole at %s, colour %d&quot;;</span>
@@ -57,17 +57,17 @@ public class Hole extends Tile {
     }
 
     public float[] getHoleCenter() {
-<span class="nc bnc" id="L60" title="All 2 branches missed.">        if (this.gridPosition == GridPosition.TL) {</span>
+<span class="pc bpc" id="L60" title="1 of 2 branches missed.">        if (this.gridPosition == GridPosition.TL) {</span>
 <span class="nc" id="L61">            return new float[] {(this.getX()+1)*App.CELLSIZE, (this.getY()+1)*App.CELLSIZE+App.TOPBAR};</span>
         }
-<span class="nc bnc" id="L63" title="All 2 branches missed.">        else if (this.gridPosition == GridPosition.BL) {</span>
+<span class="pc bpc" id="L63" title="1 of 2 branches missed.">        else if (this.gridPosition == GridPosition.BL) {</span>
 <span class="nc" id="L64">            return new float[] {(this.getX()+1)*App.CELLSIZE, this.getY()*App.CELLSIZE+App.TOPBAR};</span>
         }
-<span class="nc bnc" id="L66" title="All 2 branches missed.">        else if (this.gridPosition == GridPosition.TR) {</span>
+<span class="pc bpc" id="L66" title="1 of 2 branches missed.">        else if (this.gridPosition == GridPosition.TR) {</span>
 <span class="nc" id="L67">            return new float[] {this.getX()*App.CELLSIZE, (this.getY()+1)*App.CELLSIZE+App.TOPBAR};</span>
         }
-<span class="nc bnc" id="L69" title="All 2 branches missed.">        else if (this.gridPosition == GridPosition.BR) { //BR</span>
-<span class="nc" id="L70">            return new float[] {this.getX()*App.CELLSIZE, this.getY()*App.CELLSIZE+App.TOPBAR};</span>
+<span class="pc bpc" id="L69" title="1 of 2 branches missed.">        else if (this.gridPosition == GridPosition.BR) { //BR</span>
+<span class="fc" id="L70">            return new float[] {this.getX()*App.CELLSIZE, this.getY()*App.CELLSIZE+App.TOPBAR};</span>
         }
 <span class="nc" id="L72">        return null;</span>
     }

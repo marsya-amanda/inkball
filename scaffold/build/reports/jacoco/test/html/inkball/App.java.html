@@ -551,17 +551,17 @@ public class App extends PApplet {
     }
 
     public static double getDistance(float[] P1, float[] P2) {
-<span class="nc bnc" id="L554" title="All 8 branches missed.">        if (P1 == null || P2 == null || P1.length != 2 || P2.length != 2) {</span>
+<span class="pc bpc" id="L554" title="4 of 8 branches missed.">        if (P1 == null || P2 == null || P1.length != 2 || P2.length != 2) {</span>
 <span class="nc" id="L555">            throw new IllegalArgumentException(&quot;Wrong points!&quot;);</span>
         }
-<span class="nc" id="L557">        return Math.sqrt(Math.pow((P2[1] - P1[1]), 2) + Math.pow((P2[0] - P1[0]), 2));</span>
+<span class="fc" id="L557">        return Math.sqrt(Math.pow((P2[1] - P1[1]), 2) + Math.pow((P2[0] - P1[0]), 2));</span>
     }
 
     public static double getDistance(double[] P1, float[] P2) {
-<span class="nc bnc" id="L561" title="All 8 branches missed.">        if (P1 == null || P2 == null || P1.length != 2 || P2.length != 2) {</span>
+<span class="pc bpc" id="L561" title="4 of 8 branches missed.">        if (P1 == null || P2 == null || P1.length != 2 || P2.length != 2) {</span>
 <span class="nc" id="L562">            throw new IllegalArgumentException(&quot;Wrong points!&quot;);</span>
         }
-<span class="nc" id="L564">        return Math.sqrt(Math.pow((P2[1] - P1[1]), 2) + Math.pow((P2[0] - P1[0]), 2));</span>
+<span class="fc" id="L564">        return Math.sqrt(Math.pow((P2[1] - P1[1]), 2) + Math.pow((P2[0] - P1[0]), 2));</span>
     }
 
     public static double getDistance(double[] P1, double[] P2) {
