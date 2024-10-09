@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Hole.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">scaffold</a> &gt; <a href="index.source.html" class="el_package">inkball</a> &gt; <span class="el_source">Hole.java</span></div><h1>Hole.java</h1><pre class="source lang-java linenums">package inkball;
+
+import processing.core.PImage;
+import java.util.Arrays;
+
+public class Hole extends Tile {
+    public int colour;
+<span class="nc" id="L8">    public enum GridPosition {</span>
+<span class="nc" id="L9">        TL, BL, TR, BR</span>
+    }
+    public GridPosition gridPosition;
+
+    public Hole(int x, int y, int colour, GridPosition gridPosition) {
+<span class="nc" id="L14">        super(x, y);</span>
+<span class="nc" id="L15">        this.colour = colour;</span>
+<span class="nc" id="L16">        this.gridPosition = gridPosition;</span>
+<span class="nc" id="L17">    }</span>
+
+    public static String toString(Hole hole) {
+<span class="nc" id="L20">        String s = &quot;Hole at %s, colour %d&quot;;</span>
+<span class="nc" id="L21">        return String.format(s, Arrays.toString(new float[] {hole.getX(), hole.getY()}), hole.colour);</span>
+    }
+
+    @Override
+    public void draw(App app) {
+        PImage tile;
+<span class="nc bnc" id="L27" title="All 2 branches missed.">        if (this.gridPosition == GridPosition.TL) {</span>
+<span class="nc" id="L28">            tile = app.getSprite(&quot;hole&quot;+colour);</span>
+        }
+        else {
+<span class="nc" id="L31">            return;</span>
+        }
+<span class="nc" id="L33">        app.image(tile, x*App.CELLSIZE, y*App.CELLSIZE+App.TOPBAR, App.CELLSIZE * 2, App.CELLSIZE * 2);</span>
+<span class="nc" id="L34">    }</span>
+
+    public int getColour() {
+<span class="nc" id="L37">        return this.colour;</span>
+    }
+
+    public String colourToString() {
+<span class="nc bnc" id="L41" title="All 2 branches missed.">        if (this.colour == 0) {</span>
+<span class="nc" id="L42">            return &quot;grey&quot;;</span>
+        }
+<span class="nc bnc" id="L44" title="All 2 branches missed.">        if (this.colour == 1) {</span>
+<span class="nc" id="L45">            return &quot;orange&quot;;</span>
+        }
+<span class="nc bnc" id="L47" title="All 2 branches missed.">        if (this.colour == 2) {</span>
+<span class="nc" id="L48">            return &quot;blue&quot;;</span>
+        }
+<span class="nc bnc" id="L50" title="All 2 branches missed.">        if (this.colour == 3) {</span>
+<span class="nc" id="L51">            return &quot;green&quot;;</span>
+        }
+<span class="nc bnc" id="L53" title="All 2 branches missed.">        if (this.colour == 4) {</span>
+<span class="nc" id="L54">            return &quot;yellow&quot;;</span>
+        }
+<span class="nc" id="L56">        return &quot;grey&quot;;</span>
+    }
+
+    public float[] getHoleCenter() {
+<span class="nc bnc" id="L60" title="All 2 branches missed.">        if (this.gridPosition == GridPosition.TL) {</span>
+<span class="nc" id="L61">            return new float[] {(this.getX()+1)*App.CELLSIZE, (this.getY()+1)*App.CELLSIZE+App.TOPBAR};</span>
+        }
+<span class="nc bnc" id="L63" title="All 2 branches missed.">        else if (this.gridPosition == GridPosition.BL) {</span>
+<span class="nc" id="L64">            return new float[] {(this.getX()+1)*App.CELLSIZE, this.getY()*App.CELLSIZE+App.TOPBAR};</span>
+        }
+<span class="nc bnc" id="L66" title="All 2 branches missed.">        else if (this.gridPosition == GridPosition.TR) {</span>
+<span class="nc" id="L67">            return new float[] {this.getX()*App.CELLSIZE, (this.getY()+1)*App.CELLSIZE+App.TOPBAR};</span>
+        }
+<span class="nc bnc" id="L69" title="All 2 branches missed.">        else if (this.gridPosition == GridPosition.BR) { //BR</span>
+<span class="nc" id="L70">            return new float[] {this.getX()*App.CELLSIZE, this.getY()*App.CELLSIZE+App.TOPBAR};</span>
+        }
+<span class="nc" id="L72">        return null;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

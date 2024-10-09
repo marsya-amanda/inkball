@@ -1,0 +1,1204 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > App</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">inkball</a>
+</div>
+
+<h1>Coverage Summary for Class: App (inkball)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">App</td>
+<td class="coverageStat">
+  <span class="percent">
+    68.6%
+  </span>
+  <span class="absValue">
+    (24/35)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    50.6%
+  </span>
+  <span class="absValue">
+    (182/360)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    68.2%
+  </span>
+  <span class="absValue">
+    (328/481)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">App$GameState</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    69.4%
+  </span>
+  <span class="absValue">
+    (25/36)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    50.6%
+  </span>
+  <span class="absValue">
+    (182/360)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    68.3%
+  </span>
+  <span class="absValue">
+    (330/483)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package inkball;
+&nbsp;
+&nbsp;import processing.core.PApplet;
+&nbsp;import processing.core.PImage;
+&nbsp;import processing.data.JSONObject;
+&nbsp;import processing.data.JSONArray;
+&nbsp;import processing.event.KeyEvent;
+&nbsp;import processing.event.MouseEvent;
+&nbsp;
+&nbsp;import java.util.*;
+&nbsp;import java.lang.*;
+&nbsp;import java.io.*;
+&nbsp;
+&nbsp;public class App extends PApplet {
+&nbsp;
+&nbsp;    public static final int CELLSIZE = 32; //8;
+&nbsp;    public static final int CELLHEIGHT = 32;
+&nbsp;
+&nbsp;    public static final int CELLAVG = 32;
+&nbsp;    public static final int TOPBAR = 64;
+<b class="fc">&nbsp;    public static int WIDTH = 576; //CELLSIZE*BOARD_WIDTH;</b>
+<b class="fc">&nbsp;    public static int HEIGHT = 640; //BOARD_HEIGHT*CELLSIZE+TOPBAR;</b>
+<b class="fc">&nbsp;    public static final int BOARD_WIDTH = WIDTH/CELLSIZE;</b>
+&nbsp;    public static final int BOARD_HEIGHT = 20;
+&nbsp;
+&nbsp;    public static final int INITIAL_PARACHUTES = 1;
+&nbsp;
+&nbsp;    public static final int FPS = 30;
+&nbsp;
+&nbsp;    public String configPath;
+&nbsp;    public JSONObject json;
+&nbsp;
+<b class="fc">&nbsp;    public static Random random = new Random();</b>
+&nbsp;	
+&nbsp;	// Feel free to add any additional methods or attributes you want. Please put classes in different files.
+&nbsp;
+<b class="fc">&nbsp;    public App() {</b>
+<b class="fc">&nbsp;        this.configPath = &quot;config.json&quot;;</b>
+&nbsp;    }
+&nbsp;
+<b class="fc">&nbsp;    public enum GameState {</b>
+<b class="fc">&nbsp;        PLAYING, PAUSED, WIN, OVER;</b>
+&nbsp;    }
+&nbsp;
+<b class="fc">&nbsp;    public static int gameLevel = 1;</b>
+&nbsp;
+<b class="fc">&nbsp;    public GameState gameState = GameState.PLAYING;</b>
+&nbsp;
+<b class="fc">&nbsp;    public static int timeLimit = 0;</b>
+<b class="fc">&nbsp;    public static int lastSecond = 0;</b>
+&nbsp;
+<b class="fc">&nbsp;    public static double score = 0.0d;</b>
+<b class="fc">&nbsp;    public static HashMap&lt;String, Integer&gt; scoreIncrease = new HashMap&lt;&gt;();</b>
+<b class="fc">&nbsp;    public static HashMap&lt;String, Integer&gt; scoreDecrease = new HashMap&lt;&gt;();</b>
+<b class="fc">&nbsp;    public float modScoreIncrease = 1;</b>
+<b class="fc">&nbsp;    public float modScoreDecrease = 1;</b>
+<b class="fc">&nbsp;    private int spawnInterval = 0;</b>
+&nbsp;    public Ball[] ballQueue;
+&nbsp;    public int maxBallQueue;
+<b class="fc">&nbsp;    public static float ballTimer = 1.0f;</b>
+&nbsp;
+<b class="fc">&nbsp;    public static boolean ctrlPressed = false;</b>
+<b class="fc">&nbsp;    public static boolean isDrawing = false;</b>
+<b class="fc">&nbsp;    public float[] start = new float[2];</b>
+<b class="fc">&nbsp;    public float[] end = new float[2];</b>
+<b class="fc">&nbsp;    public static int mouseRadius = 5;</b>
+<b class="fc">&nbsp;    public int lastLine = 0;</b>
+&nbsp;
+&nbsp;    private Tile[][] board;
+<b class="fc">&nbsp;    private ArrayList&lt;Ball&gt; balls = new ArrayList&lt;Ball&gt;();</b>
+<b class="fc">&nbsp;    private ArrayList&lt;Wall&gt; walls = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;    private ArrayList&lt;Line&gt; allLines = new ArrayList&lt;Line&gt;();</b>
+<b class="fc">&nbsp;    private ArrayList&lt;ArrayList&lt;Line&gt;&gt; drawnLines = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;    private ArrayList&lt;ArrayList&lt;Line&gt;&gt; tempLines = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;    private ArrayList&lt;Spawner&gt; spawners = new ArrayList&lt;Spawner&gt;();</b>
+<b class="fc">&nbsp;    private ArrayList&lt;Hole&gt; holes = new ArrayList&lt;Hole&gt;();</b>
+<b class="fc">&nbsp;    private HashMap&lt;String, PImage&gt; sprites = new HashMap();</b>
+&nbsp;
+<b class="fc">&nbsp;    public int[] firstSpiral = new int[] {0, 0};</b>
+<b class="fc">&nbsp;    public int[] secondSpiral = new int[] {WIDTH/CELLSIZE - 1, (HEIGHT-TOPBAR)/CELLSIZE - 1};</b>
+&nbsp;
+&nbsp;    public PImage getSprite(String s) {
+<b class="fc">&nbsp;        PImage result = sprites.get(s);</b>
+<b class="fc">&nbsp;        if (result == null) {</b>
+<b class="fc">&nbsp;            result = loadImage(this.getClass().getResource(s+&quot;.png&quot;).getPath().toLowerCase(Locale.ROOT).replace(&quot;%20&quot;, &quot; &quot;));</b>
+<b class="fc">&nbsp;            sprites.put(s, result);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        return result;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Tile[][] getBoard() {
+<b class="fc">&nbsp;        return this.board;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public ArrayList&lt;Line&gt; getLineSegments() {
+<b class="nc">&nbsp;        return this.allLines;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public ArrayList&lt;Ball&gt; getBalls() {
+<b class="fc">&nbsp;        return this.balls;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Initialise the setting of the window size.
+&nbsp;     */
+&nbsp;	@Override
+&nbsp;    public void settings() {
+<b class="fc">&nbsp;        size(WIDTH, HEIGHT);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Load all resources such as images. Initialise the elements such as the player and map elements.
+&nbsp;     */
+&nbsp;	@Override
+&nbsp;    public void setup() {
+<b class="fc">&nbsp;        frameRate(FPS);</b>
+<b class="fc">&nbsp;        this.gameState = GameState.PLAYING;</b>
+&nbsp;        //See PApplet javadoc:
+&nbsp;        //loadJSONObject(configPath)
+&nbsp;        // the image is loaded from relative path: &quot;src/main/resources/inkball/...&quot;
+&nbsp;		/*try {
+&nbsp;            result = loadImage(URLDecoder.decode(this.getClass().getResource(filename+&quot;.png&quot;).getPath(), StandardCharsets.UTF_8.name()));
+&nbsp;        } catch (UnsupportedEncodingException e) {
+&nbsp;            throw new RuntimeException(e);
+&nbsp;        }*/
+<b class="fc">&nbsp;        this.json = loadJSONObject(configPath);</b>
+&nbsp;
+&nbsp;        //get information from config
+&nbsp;        try {
+<b class="fc">&nbsp;            timeLimit = this.json.getJSONArray(&quot;levels&quot;).getJSONObject(gameLevel - 1).getInt(&quot;time&quot;);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        catch (Exception e) {</b>
+<b class="nc">&nbsp;            timeLimit = 0;</b>
+&nbsp;        }
+&nbsp;
+<b class="pc">&nbsp;        if (timeLimit &lt;= 0) {</b>
+<b class="nc">&nbsp;            timeLimit = 0;</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        timeLimit += lastSecond; // add any remaining time</b>
+<b class="fc">&nbsp;        lastSecond = timeLimit; //in seconds</b>
+<b class="fc">&nbsp;        System.out.println(&quot;Last second: &quot; + lastSecond);</b>
+<b class="fc">&nbsp;        System.out.println(&quot;timeLimit: &quot; + timeLimit);</b>
+&nbsp;
+<b class="fc">&nbsp;        this.spawnInterval = this.json.getJSONArray(&quot;levels&quot;).getJSONObject(gameLevel - 1).getInt(&quot;spawn_interval&quot;);</b>
+&nbsp;
+<b class="fc">&nbsp;        this.modScoreIncrease = this.json.getJSONArray(&quot;levels&quot;).getJSONObject(gameLevel - 1).getFloat(&quot;score_increase_from_hole_capture_modifier&quot;);</b>
+<b class="fc">&nbsp;        this.modScoreDecrease = this.json.getJSONArray(&quot;levels&quot;).getJSONObject(gameLevel - 1).getFloat(&quot;score_decrease_from_wrong_hole_modifier&quot;);</b>
+&nbsp;
+<b class="fc">&nbsp;        JSONObject scoreIncJSON = this.json.getJSONObject(&quot;score_increase_from_hole_capture&quot;);</b>
+<b class="fc">&nbsp;        for (Object key : scoreIncJSON.keys()) {</b>
+<b class="fc">&nbsp;            String keyStr = (String) key;</b>
+<b class="fc">&nbsp;            Integer scoreInc = scoreIncJSON.getInt(keyStr);</b>
+<b class="fc">&nbsp;            scoreIncrease.put(keyStr, scoreInc);</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        JSONObject scoreDecJSON = this.json.getJSONObject(&quot;score_decrease_from_wrong_hole&quot;);</b>
+<b class="fc">&nbsp;        for (Object key : scoreIncJSON.keys()) {</b>
+<b class="fc">&nbsp;            String keyStr = (String) key;</b>
+<b class="fc">&nbsp;            Integer scoreInc = scoreDecJSON.getInt(keyStr);</b>
+<b class="fc">&nbsp;            scoreDecrease.put(keyStr, scoreInc);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        
+&nbsp;        // Get all sprites
+<b class="fc">&nbsp;        String[] sprites = new String[] {</b>
+&nbsp;                &quot;entrypoint&quot;,
+&nbsp;                &quot;inkball_spritesheet&quot;,
+&nbsp;                &quot;tile&quot;
+&nbsp;        };
+&nbsp;
+<b class="fc">&nbsp;        for (String sprite : sprites) {</b>
+<b class="fc">&nbsp;            this.getSprite(sprite);</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        for (int i = 0; i &lt;= 4; i++) {</b>
+<b class="fc">&nbsp;            this.getSprite(&quot;ball&quot;+String.valueOf(i));</b>
+<b class="fc">&nbsp;            this.getSprite(&quot;hole&quot;+String.valueOf(i));</b>
+<b class="fc">&nbsp;            this.getSprite(&quot;wall&quot;+String.valueOf(i));</b>
+<b class="fc">&nbsp;            this.getSprite(&quot;wall&quot;+String.valueOf(i)+&quot;-damaged&quot;);</b>
+&nbsp;        }
+&nbsp;        //
+&nbsp;
+&nbsp;        // Create board
+<b class="fc">&nbsp;        this.board = new Tile[(HEIGHT - TOPBAR)/CELLHEIGHT][WIDTH/CELLSIZE];</b>
+&nbsp;
+&nbsp;        // Get layout
+<b class="fc">&nbsp;        this.setLayout();</b>
+&nbsp;
+&nbsp;        // ADD BALL QUEUE
+<b class="fc">&nbsp;        JSONArray ballsJSON = this.json.getJSONArray(&quot;levels&quot;).getJSONObject(gameLevel - 1).getJSONArray(&quot;balls&quot;);</b>
+<b class="fc">&nbsp;        this.maxBallQueue = ballsJSON.size() + this.balls.size();</b>
+&nbsp;
+<b class="fc">&nbsp;        this.ballQueue = new Ball[this.maxBallQueue];</b>
+&nbsp;
+<b class="fc">&nbsp;        for (int i = 0; i &lt; ballsJSON.size(); i++) {</b>
+<b class="fc">&nbsp;            int colour = colourToInt(ballsJSON.getString(i));</b>
+<b class="fc">&nbsp;            this.ballQueue[i] = new Ball(19 + 28 * i, 21, colour);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        //this.drawnLines.add(new ArrayList&lt;Line&gt;());
+&nbsp;
+&nbsp;        //FOR CHECKING
+&nbsp;        /*for (int i = 0; i &lt; this.lineSegments.size(); i++) {
+&nbsp;            Line line = this.lineSegments.get(i);
+&nbsp;            System.out.println(Line.toString(line));
+&nbsp;        }*/
+&nbsp;
+&nbsp;        //TESTING WALL COORDS
+&nbsp;        /*for (int i = 0; i &lt; this.board.length; i++) {
+&nbsp;            System.out.println(Arrays.toString(this.board[i]));
+&nbsp;        }*/
+&nbsp;        //System.out.println(Arrays.deepToString(this.board)); //some are null
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setLayout() {
+<b class="fc">&nbsp;        File JSONfile = new File(this.json.getJSONArray(&quot;levels&quot;).getJSONObject(gameLevel - 1).getString(&quot;layout&quot;));</b>
+<b class="fc">&nbsp;        Scanner scan = null;</b>
+&nbsp;        try {
+<b class="fc">&nbsp;             scan = new Scanner(JSONfile);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        catch (FileNotFoundException e) {</b>
+<b class="nc">&nbsp;            System.exit(1);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        //READ TXT LAYOUT FILE
+<b class="fc">&nbsp;        ArrayList&lt;ArrayList&lt;String&gt;&gt; lines = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;        while (scan.hasNextLine()) {</b>
+<b class="fc">&nbsp;            String line = scan.nextLine();</b>
+<b class="fc">&nbsp;            ArrayList&lt;String&gt; lineChars = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;            for (int i = 0; i &lt; line.length(); i++) {</b>
+<b class="fc">&nbsp;                String c = Character.toString(line.charAt(i));</b>
+<b class="fc">&nbsp;                lineChars.add(c);</b>
+&nbsp;            }
+<b class="fc">&nbsp;            lines.add(lineChars);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        //CREATE OBJECTS BASED ON FILE
+<b class="fc">&nbsp;        for (int i = 0; i &lt; this.board.length; i++) {</b>
+&nbsp;
+&nbsp;            // Handle insufficient number of lines in file
+<b class="pc">&nbsp;            if (i + 1 &gt; lines.size()) {</b>
+<b class="nc">&nbsp;                for (int k = i; k &lt; this.board.length; k++) {</b>
+<b class="nc">&nbsp;                    for (int l = 0; l &lt; this.board[0].length; l++) {</b>
+<b class="nc">&nbsp;                        if (this.board[k][l] != null) {</b>
+&nbsp;                            continue;
+&nbsp;                        }
+<b class="nc">&nbsp;                        this.board[k][l] = new Blank(l, k);</b>
+&nbsp;                    }
+&nbsp;                }
+&nbsp;                continue;
+&nbsp;            }
+&nbsp;
+<b class="fc">&nbsp;            for (int j = 0; j &lt; this.board[0].length; j++) {</b>
+&nbsp;
+&nbsp;                // HANDLE insufficient number of characters in a line
+<b class="pc">&nbsp;                if (j + 1 &gt; lines.get(i).size()) {</b>
+<b class="nc">&nbsp;                    for (int k = j; k &lt; this.board[i].length; k++) {</b>
+<b class="nc">&nbsp;                        if (this.board[i][k] != null) {</b>
+&nbsp;                            continue;
+&nbsp;                        }
+<b class="nc">&nbsp;                        this.board[i][k] = new Blank(k, i); //skips the first box</b>
+&nbsp;                    }
+&nbsp;                    break;
+&nbsp;                }
+&nbsp;
+<b class="fc">&nbsp;                if (this.board[i][j] != null) { //if board has something in it, skip</b>
+&nbsp;                    continue;
+&nbsp;                }
+&nbsp;
+&nbsp;                //BLANK
+&nbsp;
+<b class="fc">&nbsp;                else if (lines.get(i).get(j).equals(&quot; &quot;)) {</b>
+<b class="fc">&nbsp;                    this.board[i][j] = new Blank(j, i);</b>
+&nbsp;                }
+&nbsp;
+&nbsp;                //WALL 0
+<b class="fc">&nbsp;                else if (lines.get(i).get(j).equals(&quot;X&quot;)) {</b>
+<b class="fc">&nbsp;                    this.board[i][j] = new Wall(j, i, 0);</b>
+<b class="fc">&nbsp;                    this.walls.add(new Wall(j, i, 0));</b>
+&nbsp;                }
+&nbsp;
+&nbsp;                //WALL 1-4
+<b class="pc">&nbsp;                else if (lines.get(i).get(j).equals(&quot;1&quot;) || lines.get(i).get(j).equals(&quot;2&quot;) || lines.get(i).get(j).equals(&quot;3&quot;) || lines.get(i).get(j).equals(&quot;4&quot;)) {</b>
+&nbsp;                    //make above more succinct
+<b class="fc">&nbsp;                    int colour = Integer.parseInt(lines.get(i).get(j));</b>
+<b class="fc">&nbsp;                    this.board[i][j] = new Wall(j, i, colour);</b>
+<b class="fc">&nbsp;                    this.walls.add(new Wall(j, i, colour));</b>
+&nbsp;                }
+&nbsp;
+&nbsp;                //HOLE
+<b class="fc">&nbsp;                else if (lines.get(i).get(j).equals(&quot;H&quot;)) {</b>
+<b class="pc">&nbsp;                    if (getColourCode(lines, i, j) == -1) {</b>
+<b class="nc">&nbsp;                        this.board[i][j] = new Blank(j, i);</b>
+<b class="nc">&nbsp;                        this.board[i][j+1] = new Blank(j+1, i); //handle out of bounds</b>
+&nbsp;                    }
+&nbsp;                    else {
+<b class="fc">&nbsp;                        int colour = getColourCode(lines, i, j);</b>
+<b class="fc">&nbsp;                        for (int k = 0; k &lt;= 1; k++) {</b>
+<b class="fc">&nbsp;                            for (int l = 0; l &lt;= 1; l++) {</b>
+<b class="fc">&nbsp;                                Hole.GridPosition gp = this.getPosition(l, k);</b>
+&nbsp;                                /*if (gp == null) {
+&nbsp;                                    this.board[i][j] = new Blank(j, i);
+&nbsp;                                    break;
+&nbsp;                                }*/
+<b class="fc">&nbsp;                                if (k == 1 &amp;&amp; l == 1) {</b>
+<b class="fc">&nbsp;                                    this.holes.add(new Hole (j+l, i+k, colour, gp)); // add the one w center coords</b>
+&nbsp;                                    //System.out.println(&quot;Added hole with center coords at &quot; + gp + &quot; &quot; + Integer.toString(j+l) + &quot;, &quot; + (i+k));
+&nbsp;                                    //System.out.println(Hole.toString(new Hole (j+l, i+k, colour, gp)));
+&nbsp;                                }
+<b class="fc">&nbsp;                                this.board[i+k][j+l] = new Hole(j+l, i+k, colour, gp);</b>
+&nbsp;                            }
+&nbsp;                        }
+&nbsp;                    }
+&nbsp;                }
+&nbsp;
+&nbsp;                //SPAWNER
+<b class="fc">&nbsp;                else if (lines.get(i).get(j).equals(&quot;S&quot;)) {</b>
+<b class="fc">&nbsp;                    this.board[i][j] = new Spawner(j, i);</b>
+&nbsp;                    //this.balls.add(new Ball(j*CELLSIZE, i*CELLSIZE+TOPBAR, 0));
+<b class="fc">&nbsp;                    this.spawners.add(new Spawner(j, i));</b>
+&nbsp;                }
+&nbsp;
+&nbsp;                //BALL
+<b class="pc">&nbsp;                else if (lines.get(i).get(j).equals(&quot;B&quot;)) {</b>
+<b class="fc">&nbsp;                    this.board[i][j] = new Blank(j, i);</b>
+<b class="pc">&nbsp;                    if (App.getColourCode(lines, i, j) != -1) {</b>
+<b class="fc">&nbsp;                        int colour = getColourCode(lines, i, j);</b>
+<b class="fc">&nbsp;                        this.balls.add(new Ball(j*CELLSIZE + 4, i*CELLSIZE+TOPBAR + 4, colour)); //add 4 so spawns in the middle</b>
+&nbsp;                    }
+&nbsp;                }
+&nbsp;
+&nbsp;                else {
+<b class="nc">&nbsp;                    this.board[i][j] = new Blank(j, i);</b>
+&nbsp;                }
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+&nbsp;//        for (int i = 0; i &lt; this.board.length; i++) {
+&nbsp;//            for (int j = 0; j &lt; this.board[0].length; j++) {
+&nbsp;//                if (this.board[i][j] == null) {
+&nbsp;//                    this.board[i][j] = new Blank(j, i);
+&nbsp;//                }
+&nbsp;//            }
+&nbsp;//        }
+&nbsp;
+&nbsp;        // ADD LINES FROM WALLS
+<b class="fc">&nbsp;        this.addBorders();</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    public void restart() {
+<b class="nc">&nbsp;        frameCount = 0;</b>
+<b class="nc">&nbsp;        ballTimer = 1;</b>
+<b class="nc">&nbsp;        this.balls = new ArrayList&lt;&gt;();</b>
+<b class="nc">&nbsp;        this.allLines = new ArrayList&lt;&gt;();</b>
+<b class="nc">&nbsp;        this.drawnLines = new ArrayList&lt;&gt;();</b>
+<b class="nc">&nbsp;        this.tempLines = new ArrayList&lt;&gt;();</b>
+<b class="nc">&nbsp;        this.spawners = new ArrayList&lt;&gt;();</b>
+<b class="nc">&nbsp;        this.holes = new ArrayList&lt;&gt;();</b>
+<b class="nc">&nbsp;        this.lastLine = 0;</b>
+<b class="nc">&nbsp;        isDrawing = false;</b>
+<b class="nc">&nbsp;        this.ballQueue = new Ball[0];</b>
+&nbsp;
+<b class="nc">&nbsp;        if (gameLevel &gt; this.json.getJSONArray(&quot;levels&quot;).size()) {</b>
+<b class="nc">&nbsp;            gameLevel = 1;</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        setup();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public int[] moveSpiral(int[] spiral) {
+<b class="nc">&nbsp;        if (spiral[1] == 0 &amp;&amp; spiral[0] &lt; this.board[0].length - 1) {</b>
+<b class="nc">&nbsp;            spiral[0]++;</b>
+&nbsp;        }
+<b class="nc">&nbsp;        else if (spiral[0] == this.board[0].length - 1 &amp;&amp; spiral[1] &lt; this.board.length - 1) {</b>
+<b class="nc">&nbsp;            spiral[1]++;</b>
+&nbsp;        }
+<b class="nc">&nbsp;        else if (spiral[1] == this.board.length - 1 &amp;&amp; spiral[0] &lt;= this.board[0].length - 1 &amp;&amp; spiral[0] &gt; 0) {</b>
+<b class="nc">&nbsp;            spiral[0]--;</b>
+&nbsp;        }
+<b class="nc">&nbsp;        else if (spiral[0] == 0 &amp;&amp; spiral[1] &lt;= this.board.length - 1 &amp;&amp; spiral[1] &gt; 0) {</b>
+<b class="nc">&nbsp;            spiral[1]--;</b>
+&nbsp;        }
+<b class="nc">&nbsp;        return spiral;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void spawnBalls() {
+<b class="pc">&nbsp;        if (this.ballQueue.length == 0) {</b>
+&nbsp;            return;
+&nbsp;        }
+&nbsp;
+<b class="pc">&nbsp;        if (this.ballQueue[0] == null) {</b>
+&nbsp;            return;
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        if (frameCount % (this.spawnInterval * FPS) == 0) {</b>
+<b class="fc">&nbsp;            ballTimer = 1.1f;</b>
+&nbsp;
+<b class="fc">&nbsp;            int colour = this.ballQueue[0].getColour();</b>
+<b class="fc">&nbsp;            Random rand = new Random();</b>
+<b class="fc">&nbsp;            int i = rand.nextInt(this.spawners.size());</b>
+<b class="fc">&nbsp;            Spawner spawner = this.spawners.get(i);</b>
+<b class="fc">&nbsp;            this.balls.add(new Ball(spawner.getX() * CELLSIZE + 4, spawner.getY() * CELLSIZE + TOPBAR + 4, colour));</b>
+<b class="fc">&nbsp;            this.ballQueue[0] = null;</b>
+&nbsp;
+<b class="pc">&nbsp;            if (this.ballQueue.length &gt; 1) {</b>
+<b class="fc">&nbsp;                ArrayList&lt;Ball&gt; tempQueue = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;                for (Ball ball : this.ballQueue) {</b>
+<b class="fc">&nbsp;                    if (ball != null) {</b>
+<b class="fc">&nbsp;                        tempQueue.add(ball);</b>
+&nbsp;                    }
+&nbsp;                }
+&nbsp;
+<b class="fc">&nbsp;                this.ballQueue = new Ball[this.maxBallQueue]; // make queue null</b>
+<b class="fc">&nbsp;                for (int j = 0; j &lt; tempQueue.size(); j++) {</b>
+<b class="fc">&nbsp;                    this.ballQueue[j] = tempQueue.get(j);</b>
+&nbsp;                }
+&nbsp;
+<b class="pc">&nbsp;                for (int j = 0; j &lt; this.ballQueue.length - 1; j++) {</b>
+<b class="fc">&nbsp;                    if (this.ballQueue[j] == null) {</b>
+&nbsp;                        return;
+&nbsp;                    }
+<b class="fc">&nbsp;                    int c = this.ballQueue[j].getColour();</b>
+<b class="fc">&nbsp;                    this.ballQueue[j] = new Ball(19 + 28 * j, 21, c); // move ball coordinates</b>
+&nbsp;                }
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    public static int colourToInt(String colourStr) {
+<b class="fc">&nbsp;        if (colourStr.equals(&quot;grey&quot;)) {</b>
+<b class="fc">&nbsp;            return 0;</b>
+&nbsp;        }
+<b class="fc">&nbsp;        if (colourStr.equals(&quot;orange&quot;)) {</b>
+<b class="fc">&nbsp;            return 1;</b>
+&nbsp;        }
+<b class="fc">&nbsp;        if (colourStr.equals(&quot;blue&quot;)) {</b>
+<b class="fc">&nbsp;            return 2;</b>
+&nbsp;        }
+<b class="fc">&nbsp;        if (colourStr.equals(&quot;green&quot;)) {</b>
+<b class="fc">&nbsp;            return 3;</b>
+&nbsp;        }
+<b class="pc">&nbsp;        if (colourStr.equals(&quot;yellow&quot;)) {</b>
+<b class="fc">&nbsp;            return 4;</b>
+&nbsp;        }
+<b class="nc">&nbsp;        return 0;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void addBorders() {
+&nbsp;
+<b class="fc">&nbsp;        float[] topLeftCorner = new float[] {-32, TOPBAR-32}; // H0, V0</b>
+<b class="fc">&nbsp;        float[] topRightCorner = new float[] {WIDTH+32, TOPBAR-32}; // H1, V0</b>
+<b class="fc">&nbsp;        float[] bottomLeftCorner = new float[] {-32, HEIGHT+32}; // H0, V1</b>
+<b class="fc">&nbsp;        float[] bottomRightCorner = new float[] {WIDTH+32, HEIGHT+32}; // H1, V1</b>
+&nbsp;
+<b class="fc">&nbsp;        boolean isDrawn = false;</b>
+<b class="fc">&nbsp;        this.allLines.add(new Line(topLeftCorner, topRightCorner, 0, isDrawn)); //TOP</b>
+<b class="fc">&nbsp;        this.allLines.add(new Line(topLeftCorner, bottomLeftCorner, 0, isDrawn)); //LEFT</b>
+<b class="fc">&nbsp;        this.allLines.add(new Line(bottomLeftCorner, bottomRightCorner, 0, isDrawn)); // BOTTOM</b>
+<b class="fc">&nbsp;        this.allLines.add(new Line(bottomRightCorner, topRightCorner, 0, isDrawn)); //RIGHT</b>
+&nbsp;
+&nbsp;        // line for non-border tiles
+<b class="fc">&nbsp;        for (int i = 0; i &lt; this.board.length; i++) {</b>
+<b class="fc">&nbsp;            for (int j = 0; j &lt; this.board[0].length; j++) {</b>
+<b class="fc">&nbsp;                if (this.getBoard()[i][j].getClass() == Wall.class) { //null pointer?</b>
+<b class="fc">&nbsp;                    Wall wall = (Wall) this.getBoard()[i][j];</b>
+<b class="fc">&nbsp;                    this.addWallLineSegment(wall);</b>
+&nbsp;                }
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    public void addWallLineSegment(Wall wall) {
+&nbsp;
+<b class="fc">&nbsp;        float[] topLeftCorner = new float[] {wall.getX()*CELLSIZE, wall.getY() * CELLSIZE + TOPBAR}; // H0, V0</b>
+<b class="fc">&nbsp;        float[] topRightCorner = new float[] {(wall.getX()+1)*CELLSIZE, wall.getY() * CELLSIZE + TOPBAR}; // H1, V0</b>
+<b class="fc">&nbsp;        float[] bottomLeftCorner = new float[] {wall.getX()*CELLSIZE, (wall.getY()+1) * CELLSIZE + TOPBAR}; // H0, V1</b>
+<b class="fc">&nbsp;        float[] bottomRightCorner = new float[] {(wall.getX()+1)*CELLSIZE, (wall.getY()+1)*CELLSIZE + TOPBAR};</b>
+&nbsp;
+<b class="fc">&nbsp;        int colour = wall.getColour();</b>
+<b class="fc">&nbsp;        boolean isDrawn = false;</b>
+<b class="fc">&nbsp;        this.allLines.add(new Line(topLeftCorner, topRightCorner, colour, isDrawn)); //TOP</b>
+<b class="fc">&nbsp;        this.allLines.add(new Line(topLeftCorner, bottomLeftCorner, colour, isDrawn)); //LEFT</b>
+<b class="fc">&nbsp;        this.allLines.add(new Line(bottomLeftCorner, bottomRightCorner, colour, isDrawn)); // BOTTOM</b>
+<b class="fc">&nbsp;        this.allLines.add(new Line(bottomRightCorner, topRightCorner, colour, isDrawn));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static Line[] getWallLineSegments(Wall wall) {
+<b class="nc">&nbsp;        Line[] lines = new Line[4];</b>
+&nbsp;
+<b class="nc">&nbsp;        float[] topLeftCorner = new float[] {wall.getX()*CELLSIZE, wall.getY() * CELLSIZE + TOPBAR}; // H0, V0</b>
+<b class="nc">&nbsp;        float[] topRightCorner = new float[] {(wall.getX()+1)*CELLSIZE, wall.getY() * CELLSIZE + TOPBAR}; // H1, V0</b>
+<b class="nc">&nbsp;        float[] bottomLeftCorner = new float[] {wall.getX()*CELLSIZE, (wall.getY()+1) * CELLSIZE + TOPBAR}; // H0, V1</b>
+<b class="nc">&nbsp;        float[] bottomRightCorner = new float[] {(wall.getX()+1)*CELLSIZE, (wall.getY()+1)*CELLSIZE + TOPBAR};</b>
+&nbsp;
+<b class="nc">&nbsp;        int colour = wall.getColour();</b>
+<b class="nc">&nbsp;        boolean isDrawn = false;</b>
+<b class="nc">&nbsp;        lines[0] = new Line(topLeftCorner, topRightCorner, colour, isDrawn); //TOP</b>
+<b class="nc">&nbsp;        lines[1] = new Line(topLeftCorner, bottomLeftCorner, colour, isDrawn); //LEFT</b>
+<b class="nc">&nbsp;        lines[2] = new Line(bottomLeftCorner, bottomRightCorner, colour, isDrawn); // BOTTOM</b>
+<b class="nc">&nbsp;        lines[3] = new Line(bottomRightCorner, topRightCorner, colour, isDrawn);</b>
+&nbsp;
+<b class="nc">&nbsp;        return lines;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static int getColourCode (ArrayList&lt;ArrayList&lt;String&gt;&gt; lines, int i, int j) {
+<b class="fc">&nbsp;        String colour = &quot; &quot;;</b>
+&nbsp;        try {
+<b class="fc">&nbsp;            colour = lines.get(i).get(j+1);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        catch (IndexOutOfBoundsException e) {</b>
+<b class="nc">&nbsp;            return -1;</b>
+&nbsp;        }
+&nbsp;
+<b class="pc">&nbsp;        if (colour.equals(&quot; &quot;)) {</b>
+<b class="nc">&nbsp;            return -1;</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        int colourCode = -1;</b>
+&nbsp;        try {
+<b class="fc">&nbsp;            colourCode = Integer.parseInt(colour);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        catch (NumberFormatException e) {</b>
+<b class="nc">&nbsp;            return -1;</b>
+&nbsp;        }
+<b class="pc">&nbsp;        if (colourCode &lt; 0 || colourCode &gt; 4) {</b>
+<b class="nc">&nbsp;            return -1;</b>
+&nbsp;        }
+<b class="fc">&nbsp;        return colourCode;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Hole.GridPosition getPosition(int k, int l) {
+<b class="fc">&nbsp;        if (k == 0 &amp;&amp; l == 0) {</b>
+<b class="fc">&nbsp;            return Hole.GridPosition.TL;</b>
+&nbsp;        }
+<b class="pc">&nbsp;        else if (k == 0 &amp;&amp; l == 1) {</b>
+<b class="fc">&nbsp;            return Hole.GridPosition.BL;</b>
+&nbsp;        }
+<b class="pc">&nbsp;        else if (k == 1 &amp;&amp; l == 0) {</b>
+<b class="fc">&nbsp;            return Hole.GridPosition.TR;</b>
+&nbsp;        }
+<b class="pc">&nbsp;        else if (k == 1 &amp;&amp; l == 1) {</b>
+<b class="fc">&nbsp;            return Hole.GridPosition.BR;</b>
+&nbsp;        }
+&nbsp;        else {
+<b class="nc">&nbsp;            return null;</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    public static double getDistance(float[] P1, float[] P2) {
+<b class="pc">&nbsp;        if (P1 == null || P2 == null || P1.length != 2 || P2.length != 2) {</b>
+<b class="nc">&nbsp;            throw new IllegalArgumentException(&quot;Wrong points!&quot;);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        return Math.sqrt(Math.pow((P2[1] - P1[1]), 2) + Math.pow((P2[0] - P1[0]), 2));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static double getDistance(double[] P1, float[] P2) {
+<b class="pc">&nbsp;        if (P1 == null || P2 == null || P1.length != 2 || P2.length != 2) {</b>
+<b class="nc">&nbsp;            throw new IllegalArgumentException(&quot;Wrong points!&quot;);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        return Math.sqrt(Math.pow((P2[1] - P1[1]), 2) + Math.pow((P2[0] - P1[0]), 2));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static double getDistance(double[] P1, double[] P2) {
+<b class="nc">&nbsp;        if (P1 == null || P2 == null || P1.length != 2 || P2.length != 2) {</b>
+<b class="nc">&nbsp;            throw new IllegalArgumentException(&quot;Wrong points!&quot;);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        return Math.sqrt(Math.pow((P2[1] - P1[1]), 2) + Math.pow((P2[0] - P1[0]), 2));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void addDrawnLine(Line line) {
+<b class="pc">&nbsp;        if (line.getP1()[1] &lt; TOPBAR || line.getP2()[1] &lt; TOPBAR) {</b>
+&nbsp;            return;
+&nbsp;        }
+&nbsp;
+<b class="pc">&nbsp;        if  (this.tempLines.isEmpty()) {</b>
+<b class="nc">&nbsp;            this.tempLines.add(new ArrayList&lt;&gt;());</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        this.tempLines.get(this.tempLines.size() - 1).add(line);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void removeLine(float[] toRemove) {
+<b class="nc">&nbsp;        ArrayList&lt;Line&gt; removedLine = new ArrayList&lt;&gt;();</b>
+&nbsp;
+&nbsp;        outerLoop:
+<b class="nc">&nbsp;        for (int i = (this.drawnLines.size() - 1); i &gt;= 0; i--) {</b>
+<b class="nc">&nbsp;            for (int j = (this.drawnLines.get(i).size() - 1); j &gt;= 0; j--) {</b>
+<b class="nc">&nbsp;                if (mouseOnLine(toRemove, this.drawnLines.get(i).get(j).getP1(), this.drawnLines.get(i).get(j).getP2())) {</b>
+<b class="nc">&nbsp;                    removedLine = this.drawnLines.get(i);</b>
+&nbsp;                    break outerLoop;
+&nbsp;                }
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        if (removedLine.isEmpty()) {</b>
+&nbsp;            return;
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        this.tempLines.remove(removedLine);</b>
+<b class="nc">&nbsp;        this.drawnLines.remove(removedLine);</b>
+&nbsp;        //System.out.println(&quot;just removed a line! current number of lines: &quot; + this.drawnLines.size());
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    public void removeLine(Line toRemove) {
+<b class="fc">&nbsp;        ArrayList&lt;Line&gt; removedLine = new ArrayList&lt;&gt;();</b>
+&nbsp;
+&nbsp;        outerLoop:
+<b class="pc">&nbsp;        for (int i = this.drawnLines.size() - 1; i &gt;= 0; i--) {</b>
+<b class="pc">&nbsp;            for (int j = (this.drawnLines.get(i).size() - 1); j &gt;= 0; j--) {</b>
+<b class="fc">&nbsp;                if (this.drawnLines.get(i).get(j).equals(toRemove)) {</b>
+<b class="fc">&nbsp;                    removedLine = this.drawnLines.get(i);</b>
+&nbsp;                    break outerLoop;
+&nbsp;                }
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+<b class="pc">&nbsp;        if (removedLine.isEmpty()) {</b>
+&nbsp;            return;
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        this.tempLines.remove(removedLine);</b>
+<b class="fc">&nbsp;        this.drawnLines.remove(removedLine);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static boolean mouseOnLine(float[] mouseXY, float[] lineP1, float[] lineP2) {
+<b class="nc">&nbsp;        double distP1 = App.getDistance(mouseXY, lineP1);</b>
+<b class="nc">&nbsp;        double distP2 = App.getDistance(mouseXY, lineP2);</b>
+<b class="nc">&nbsp;        double distP1P2 = App.getDistance(lineP1, lineP2);</b>
+&nbsp;
+<b class="nc">&nbsp;        return distP1 + distP2 &lt; mouseRadius + distP1P2; //mouse radius is 5</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public boolean getBallsStatus() {
+<b class="nc">&nbsp;        for (Ball ball : this.balls) {</b>
+<b class="nc">&nbsp;            if (!ball.getIsAbsorbed()) {</b>
+<b class="nc">&nbsp;                return false;</b>
+&nbsp;            }
+&nbsp;        }
+<b class="nc">&nbsp;        return true;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Wall[] getWallAssociated(Ball ball, Line line) {
+<b class="fc">&nbsp;        float[] collisionPoint = ball.willCollide(line);</b>
+&nbsp;        //System.out.println(collisionPoint);
+<b class="pc">&nbsp;        if (collisionPoint == null) {</b>
+&nbsp;            // System.out.println(&quot;collision point null&quot;); // not passing, good
+<b class="nc">&nbsp;            return null;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        //System.out.println(&quot;collision point found&quot;); //here now
+<b class="fc">&nbsp;        Wall[] wallsAssociated = new Wall[2];</b>
+<b class="fc">&nbsp;        Wall closestWall = null;</b>
+<b class="fc">&nbsp;        float minDistance = Float.MAX_VALUE;</b>
+&nbsp;
+<b class="fc">&nbsp;        for (Wall wall : this.walls) {</b>
+<b class="fc">&nbsp;            float wallCenterX = wall.getX() * CELLSIZE + CELLSIZE / 2;</b>
+<b class="fc">&nbsp;            float wallCenterY = wall.getY() * CELLSIZE + TOPBAR + CELLSIZE / 2;</b>
+<b class="fc">&nbsp;            float distance = (float) App.getDistance(collisionPoint, new float[]{wallCenterX, wallCenterY});</b>
+&nbsp;
+<b class="fc">&nbsp;            if (distance &lt; minDistance) {</b>
+<b class="fc">&nbsp;                minDistance = distance; //find wall that is closest</b>
+<b class="fc">&nbsp;                closestWall = wall;</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+<b class="pc">&nbsp;        if (closestWall == null) {</b>
+&nbsp;            //System.out.println(&quot;Cannot find closest wall&quot;); // did find closest wall
+<b class="nc">&nbsp;            return null;</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        wallsAssociated[0] = closestWall;</b>
+&nbsp;
+&nbsp;        try {
+<b class="fc">&nbsp;            wallsAssociated[1] = (Wall) (this.board[wallsAssociated[0].getY()][wallsAssociated[0].getX()]);</b>
+<b class="fc">&nbsp;            return wallsAssociated;</b>
+&nbsp;        }
+<b class="nc">&nbsp;        catch (Exception e) {</b>
+<b class="nc">&nbsp;            return null;</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    public void removeWall (Wall wall) {
+<b class="nc">&nbsp;        List&lt;Line&gt; linesToRemove = Arrays.asList(getWallLineSegments(wall));</b>
+<b class="nc">&nbsp;        int removeInd = -1;</b>
+&nbsp;        //System.out.println(linesToRemove);
+<b class="nc">&nbsp;        boolean removed = false;</b>
+<b class="nc">&nbsp;        for (int i = 0; i &lt; this.allLines.size() - 4; i++) { // starts at 3 because of window border line segments</b>
+&nbsp;            //System.out.println(this.allLines.subList(i, i + 4));
+<b class="nc">&nbsp;            if (this.allLines.subList(i, i + 4).equals(linesToRemove)) { // +4 because upper bound exclusive</b>
+&nbsp;                //System.out.println(&quot;removed Lines!&quot;); // UPDATE: PASSING
+<b class="nc">&nbsp;                removeInd = i;</b>
+<b class="nc">&nbsp;                removed = true;</b>
+&nbsp;                break;
+&nbsp;            }
+&nbsp;        }
+<b class="nc">&nbsp;        if (removed &amp;&amp; removeInd != -1) {</b>
+<b class="nc">&nbsp;            this.allLines.subList(removeInd, removeInd + 4).clear();</b>
+<b class="nc">&nbsp;            this.walls.remove(wall);</b>
+<b class="nc">&nbsp;            this.board[wall.getY()][wall.getX()] = new Blank(wall.getX(), wall.getY());</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Receive key pressed signal from the keyboard.
+&nbsp;     */
+&nbsp;	@Override
+&nbsp;    public void keyPressed(KeyEvent event){
+<b class="nc">&nbsp;        if (event.getKeyCode() == 82) { //is &quot;r&quot;</b>
+<b class="nc">&nbsp;            lastSecond = 0;</b>
+<b class="nc">&nbsp;            gameState = GameState.PLAYING;</b>
+<b class="nc">&nbsp;            score = 0;</b>
+<b class="nc">&nbsp;            restart();</b>
+&nbsp;        }
+<b class="nc">&nbsp;        if (event.getKeyCode() == 32) {</b>
+<b class="nc">&nbsp;            if (gameState == GameState.PAUSED) {</b>
+<b class="nc">&nbsp;                gameState = GameState.PLAYING;</b>
+&nbsp;            }
+<b class="nc">&nbsp;            else if (gameState == GameState.PLAYING) {</b>
+<b class="nc">&nbsp;                gameState = GameState.PAUSED;</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        if (event.getKeyCode() == 17) { // if control</b>
+<b class="nc">&nbsp;            ctrlPressed = true;</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Receive key released signal from the keyboard.
+&nbsp;     */
+&nbsp;	@Override
+&nbsp;    public void keyReleased(){
+<b class="nc">&nbsp;        if (keyCode == 17) {</b>
+<b class="nc">&nbsp;            ctrlPressed = false;</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void mousePressed(MouseEvent e) {
+&nbsp;        // create a new player-drawn line object
+<b class="pc">&nbsp;        if (gameState == GameState.PAUSED) {</b>
+&nbsp;            return;
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        int mouseX = e.getX();</b>
+<b class="fc">&nbsp;        int mouseY = e.getY();</b>
+&nbsp;
+<b class="pc">&nbsp;        if (mouseButton == LEFT) {</b>
+<b class="pc">&nbsp;            if (ctrlPressed) {</b>
+<b class="nc">&nbsp;                float[] toRemove = new float[] {mouseX, mouseY};</b>
+&nbsp;
+<b class="nc">&nbsp;                this.removeLine(toRemove);</b>
+&nbsp;                return;
+&nbsp;            }
+&nbsp;
+<b class="pc">&nbsp;            if (!isDrawing) {</b>
+<b class="fc">&nbsp;                this.start = new float[] {mouseX, mouseY};</b>
+&nbsp;                //this.drawnLines.add(new ArrayList&lt;&gt;());
+<b class="fc">&nbsp;                this.tempLines.add(new ArrayList&lt;&gt;());</b>
+&nbsp;            }
+&nbsp;
+<b class="nc">&nbsp;            else if (this.lastLine == 0 || frameCount - this.lastLine == 1) {</b>
+<b class="nc">&nbsp;                this.end = new float[] {mouseX, mouseY};</b>
+&nbsp;            }
+&nbsp;
+<b class="fc">&nbsp;            isDrawing = true;</b>
+<b class="fc">&nbsp;            this.lastLine = frameCount;</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        else if (mouseButton == RIGHT) {</b>
+<b class="nc">&nbsp;            float[] toRemove = new float[] {mouseX, mouseY};</b>
+&nbsp;
+<b class="nc">&nbsp;            this.removeLine(toRemove);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;    }
+&nbsp;	
+&nbsp;	@Override
+&nbsp;    public void mouseDragged(MouseEvent e) {
+<b class="pc">&nbsp;        if (gameState == GameState.PAUSED) {</b>
+&nbsp;            return;
+&nbsp;        }
+&nbsp;
+&nbsp;		// remove player-drawn line object if right mouse button is held
+&nbsp;		// and mouse position collides with the line
+<b class="fc">&nbsp;        int mouseX = e.getX();</b>
+<b class="fc">&nbsp;        int mouseY = e.getY();</b>
+&nbsp;
+<b class="pc">&nbsp;        if (mouseButton == LEFT) {</b>
+<b class="pc">&nbsp;            if (mouseX == this.start[0] &amp;&amp; mouseY == this.start[1]) {</b>
+&nbsp;                return;
+&nbsp;            }
+&nbsp;
+<b class="pc">&nbsp;            else if (isDrawing) {</b>
+&nbsp;                //note handle null
+<b class="fc">&nbsp;                this.end = new float[] {mouseX, mouseY};</b>
+&nbsp;
+<b class="pc">&nbsp;                if (frameCount - this.lastLine == 1 || this.lastLine == 0) {</b>
+<b class="fc">&nbsp;                    this.lastLine = frameCount;</b>
+&nbsp;
+<b class="fc">&nbsp;                    this.addDrawnLine(new Line(start, end, 0, true));</b>
+<b class="fc">&nbsp;                    this.start = new float[] {mouseX, mouseY};</b>
+&nbsp;                }
+&nbsp;            }
+&nbsp;
+&nbsp;            else {
+<b class="nc">&nbsp;                isDrawing = true;</b>
+<b class="nc">&nbsp;                this.lastLine = frameCount;</b>
+<b class="nc">&nbsp;                this.start = new float[] {mouseX, mouseY};</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void mouseReleased(MouseEvent e) {
+<b class="pc">&nbsp;        if (gameState == GameState.PAUSED) {</b>
+&nbsp;            return;
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        int mouseX = e.getX();</b>
+<b class="fc">&nbsp;        int mouseY = e.getY();</b>
+&nbsp;
+<b class="pc">&nbsp;        if (mouseButton == LEFT) {</b>
+<b class="pc">&nbsp;            if (isDrawing) {</b>
+<b class="fc">&nbsp;                this.end = new float[]{mouseX, mouseY};</b>
+<b class="fc">&nbsp;                this.addDrawnLine(new Line(this.start, this.end, 0, true));</b>
+&nbsp;                //System.out.println(&quot;just drew a line! current number of lines: &quot; + this.drawnLines.size());
+&nbsp;                //this.allLines.addAll(this.drawnLines.get(this.drawnLines.size() - 1)); //other way
+<b class="pc">&nbsp;                if (!this.tempLines.isEmpty()) {</b>
+<b class="fc">&nbsp;                    this.drawnLines.add(this.tempLines.get(this.tempLines.size() - 1));</b>
+&nbsp;                }
+<b class="fc">&nbsp;                this.lastLine = frameCount;</b>
+<b class="fc">&nbsp;                isDrawing = false;</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Draw all elements in the game by current frame.
+&nbsp;     */
+&nbsp;	@Override
+&nbsp;    public void draw() {
+<b class="fc">&nbsp;        background(206);</b>
+<b class="fc">&nbsp;        this.spawnBalls();</b>
+&nbsp;
+&nbsp;        //----------------------------------
+&nbsp;        //display Board for current level:
+&nbsp;        //----------------------------------
+&nbsp;        //TODO
+&nbsp;
+<b class="fc">&nbsp;        for (int i = 0; i &lt; this.board.length; i++) {</b>
+<b class="fc">&nbsp;            for (int j = 0; j &lt; this.board[i].length; j++) {</b>
+<b class="fc">&nbsp;                this.board[i][j].draw(this);</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+&nbsp;
+<b class="pc">&nbsp;        if (gameState == GameState.WIN) {</b>
+<b class="nc">&nbsp;            textSize(30);</b>
+<b class="nc">&nbsp;            fill(0);</b>
+<b class="nc">&nbsp;            textAlign(CENTER, CENTER);</b>
+&nbsp;            //frameCount = (timeLimit - lastSecond) * 30;
+<b class="nc">&nbsp;            Wall firstSpiral = new Wall(this.firstSpiral[0], this.firstSpiral[1], 4);</b>
+<b class="nc">&nbsp;            Wall secondSpiral = new Wall(this.secondSpiral[0], this.secondSpiral[1], 4);</b>
+<b class="nc">&nbsp;            firstSpiral.draw(this);</b>
+<b class="nc">&nbsp;            secondSpiral.draw(this);</b>
+<b class="nc">&nbsp;            if ((frameCount - lastSecond * FPS) % 2 == 0) {</b>
+<b class="nc">&nbsp;                this.moveSpiral(this.firstSpiral);</b>
+<b class="nc">&nbsp;                this.moveSpiral(this.secondSpiral);</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+&nbsp;        //----------------------------------
+&nbsp;        // display top bar
+&nbsp;        //----------------------------------
+&nbsp;        // 1) Timer
+<b class="pc">&nbsp;        if (timeLimit != 0) {</b>
+<b class="pc">&nbsp;            if (frameCount - (timeLimit - lastSecond) * 30 == FPS &amp;&amp; gameState == GameState.PLAYING) {</b>
+<b class="fc">&nbsp;                lastSecond--;</b>
+<b class="pc">&nbsp;                if (this.ballQueue[0] != null) {</b>
+<b class="fc">&nbsp;                    ballTimer -= 0.1f;</b>
+&nbsp;                }
+&nbsp;                else {
+<b class="nc">&nbsp;                    ballTimer = 1.1f;</b>
+&nbsp;                }
+&nbsp;            }
+<b class="pc">&nbsp;            if (gameState == GameState.PAUSED) {</b>
+<b class="nc">&nbsp;                frameCount = (timeLimit - lastSecond) * 30;</b>
+&nbsp;            }
+<b class="pc">&nbsp;            if (gameState == GameState.PLAYING || gameState == GameState.PAUSED) {</b>
+<b class="fc">&nbsp;                textSize(22);</b>
+<b class="fc">&nbsp;                fill(0);</b>
+<b class="fc">&nbsp;                textAlign(CENTER, CENTER);</b>
+<b class="fc">&nbsp;                text(&quot;Time: &quot; + lastSecond, WIDTH-80, App.TOPBAR-22);</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+&nbsp;        // 2) Score
+<b class="pc">&nbsp;        if (gameState == GameState.PLAYING || gameState == GameState.PAUSED) {</b>
+<b class="fc">&nbsp;            textSize(22);</b>
+<b class="fc">&nbsp;            fill(0);</b>
+<b class="fc">&nbsp;            textAlign(CENTER, CENTER);</b>
+<b class="fc">&nbsp;            text(&quot;Score: &quot; + (int) score, WIDTH - 80, App.TOPBAR - 44);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        // if PAUSED
+<b class="pc">&nbsp;        if (gameState != GameState.PLAYING) {</b>
+<b class="nc">&nbsp;            textSize(22);</b>
+<b class="nc">&nbsp;            fill(0);</b>
+<b class="nc">&nbsp;            textAlign(CENTER, CENTER);</b>
+<b class="nc">&nbsp;            if (gameState == GameState.PAUSED) {</b>
+<b class="nc">&nbsp;                text(&quot;*** PAUSED ***&quot;, WIDTH / 2, TOPBAR / 2);</b>
+&nbsp;            }
+<b class="nc">&nbsp;            else if (gameState == GameState.WIN &amp;&amp; gameLevel &gt; this.json.getJSONArray(&quot;levels&quot;).size()) {</b>
+<b class="nc">&nbsp;                text(&quot;=== ENDED ===&quot;, WIDTH / 2, TOPBAR / 2);</b>
+&nbsp;            }
+<b class="nc">&nbsp;            else if (gameState == GameState.OVER) {</b>
+<b class="nc">&nbsp;                text(&quot;=== TIME&#39;S UP ===&quot;, WIDTH / 2, TOPBAR / 2);</b>
+&nbsp;            }
+&nbsp;
+<b class="nc">&nbsp;            for (Ball ball : this.balls) {</b>
+<b class="nc">&nbsp;                ball.draw(this);</b>
+&nbsp;            }
+<b class="nc">&nbsp;            for (Line line : this.allLines) {</b>
+<b class="nc">&nbsp;                line.draw(this);</b>
+&nbsp;            }
+&nbsp;
+<b class="nc">&nbsp;            if (gameState == GameState.WIN &amp;&amp; gameLevel &lt;= this.json.getJSONArray(&quot;levels&quot;).size()) {</b>
+<b class="nc">&nbsp;                if (Arrays.equals(this.firstSpiral, new int[]{this.board[0].length - 1, this.board.length - 1}) &amp;&amp; Arrays.equals(this.secondSpiral, new int[]{0, 0})) {</b>
+<b class="nc">&nbsp;                    restart();</b>
+&nbsp;                }
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+<b class="pc">&nbsp;        if (gameState == GameState.WIN || gameState == GameState.OVER) {</b>
+&nbsp;            return;
+&nbsp;        }
+&nbsp;
+&nbsp;        // 3) Ball queue
+<b class="fc">&nbsp;        strokeWeight(0);</b>
+<b class="fc">&nbsp;        rect(14, 16, 5 * 28 + 4, 34); // max 5 balls in queue</b>
+<b class="fc">&nbsp;        fill(0);</b>
+<b class="pc">&nbsp;        for (int i = 0; i &lt; this.ballQueue.length; i++) {</b>
+<b class="fc">&nbsp;            if (i &gt; 4) {</b>
+&nbsp;                break;
+&nbsp;            }
+<b class="pc">&nbsp;            if (this.ballQueue[i] == null) {</b>
+&nbsp;                continue;
+&nbsp;            }
+<b class="fc">&nbsp;            this.ballQueue[i].draw(this);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        // 3b) Ball timer
+<b class="pc">&nbsp;        if (this.ballQueue[0] != null) {</b>
+<b class="fc">&nbsp;            textSize(18);</b>
+<b class="fc">&nbsp;            fill(0);</b>
+<b class="fc">&nbsp;            textAlign(LEFT, TOP);</b>
+<b class="pc">&nbsp;            if (ballTimer != 1.1f) {</b>
+<b class="fc">&nbsp;                String s = String.format(&quot;%.1f&quot;, ballTimer);</b>
+<b class="fc">&nbsp;                text(s, 164, 22);</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+<b class="pc">&nbsp;        if (gameState == GameState.PAUSED) { // looks ugly</b>
+&nbsp;            return;
+&nbsp;        }
+&nbsp;
+&nbsp;        //----------------------------------
+&nbsp;        // draw lines in real time
+&nbsp;        //----------------------------------
+<b class="fc">&nbsp;        strokeWeight(10);</b>
+<b class="fc">&nbsp;        for (ArrayList&lt;Line&gt; lineList : this.tempLines) {</b>
+<b class="fc">&nbsp;            for (Line line : lineList) {</b>
+<b class="fc">&nbsp;                line.draw(this);</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        for (int i = this.balls.size() - 1; i &gt;= 0; i--) {</b>
+<b class="fc">&nbsp;            Ball ball = this.balls.get(i);</b>
+<b class="fc">&nbsp;            ball.draw(this);</b>
+&nbsp;
+<b class="fc">&nbsp;            boolean hasCollided = false;</b>
+<b class="fc">&nbsp;            for (int j = this.allLines.size() - 1; j &gt;= 0; j--) {</b>
+<b class="fc">&nbsp;                Line line = this.allLines.get(j);</b>
+<b class="fc">&nbsp;                if (ball.willCollide(line) != null) {</b>
+<b class="fc">&nbsp;                    hasCollided = true;</b>
+<b class="pc">&nbsp;                    if (this.getWallAssociated(ball, line) != null) {</b>
+<b class="fc">&nbsp;                        Wall[] wallsAssociated = this.getWallAssociated(ball, line);</b>
+<b class="fc">&nbsp;                        (wallsAssociated[0]).damage(ball);</b>
+<b class="fc">&nbsp;                        (wallsAssociated[1]).damage(ball);</b>
+<b class="pc">&nbsp;                        if (wallsAssociated[0].getHP() == 0) {</b>
+&nbsp;                            //System.out.println(&quot;removed wall&quot;);
+<b class="nc">&nbsp;                            this.removeWall(wallsAssociated[0]); // not REMOVING LINES, removing wrong walls</b>
+&nbsp;                        }
+&nbsp;                        //ball.interact(line, this);
+&nbsp;                    }
+<b class="fc">&nbsp;                    ball.interact(line);</b>
+&nbsp;                    break;
+&nbsp;                }
+&nbsp;
+&nbsp;            }
+&nbsp;
+&nbsp;            outerLoop:
+<b class="fc">&nbsp;            for (int j = this.drawnLines.size() - 1; j &gt;= 0; j--) {</b>
+<b class="fc">&nbsp;                for (int k = this.drawnLines.get(j).size() - 1; k &gt;= 0; k--) {</b>
+<b class="fc">&nbsp;                    if (ball.willCollide(this.drawnLines.get(j).get(k)) != null) {</b>
+<b class="fc">&nbsp;                        ball.interact(this.drawnLines.get(j).get(k));</b>
+<b class="fc">&nbsp;                        hasCollided = true;</b>
+<b class="fc">&nbsp;                        this.removeLine(this.drawnLines.get(j).get(k));</b>
+&nbsp;                        break outerLoop;
+&nbsp;                    }
+&nbsp;                }
+&nbsp;            }
+&nbsp;
+<b class="fc">&nbsp;            if (!hasCollided) {</b>
+<b class="fc">&nbsp;                ball.moveOne();</b>
+&nbsp;            }
+&nbsp;
+&nbsp;            //Interact with line first
+<b class="fc">&nbsp;            for (Hole hole : this.holes) {</b>
+<b class="fc">&nbsp;                if (getDistance(ball.getBallCenter(), hole.getHoleCenter()) &lt; 32) {</b>
+<b class="fc">&nbsp;                    ball.meetHole(hole, this);</b>
+&nbsp;                    break;
+&nbsp;                }
+&nbsp;                else {
+<b class="fc">&nbsp;                    ball.setBallRadius(12);</b>
+&nbsp;                }
+&nbsp;            }
+&nbsp;        }
+&nbsp;        
+&nbsp;		//----------------------------------
+&nbsp;        // game end
+&nbsp;        //----------------------------------
+<b class="pc">&nbsp;        if (this.ballQueue[0] == null &amp;&amp; this.balls.isEmpty() &amp;&amp; gameState != GameState.WIN) {</b>
+<b class="nc">&nbsp;            gameState = GameState.WIN;</b>
+<b class="nc">&nbsp;            gameLevel++;</b>
+<b class="nc">&nbsp;            score += (int) (lastSecond / 0.067);</b>
+&nbsp;        }
+&nbsp;
+<b class="pc">&nbsp;        else if (frameCount &gt;= timeLimit * FPS) {</b>
+<b class="nc">&nbsp;            gameState = GameState.OVER;</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    public static void main(String[] args) {
+<b class="fc">&nbsp;        PApplet.main(&quot;inkball.App&quot;);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-10-09 15:16</div>
+</div>
+</body>
+</html>

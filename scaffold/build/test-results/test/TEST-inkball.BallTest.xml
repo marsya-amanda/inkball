@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="inkball.BallTest" tests="9" skipped="0" failures="0" errors="0" timestamp="2024-10-08T10:50:28" hostname="LAPTOP-T9CSJGT7" time="0.024">
+  <properties/>
+  <testcase name="testGetAbsorbed()" classname="inkball.BallTest" time="0.005"/>
+  <testcase name="testGetX()" classname="inkball.BallTest" time="0.005"/>
+  <testcase name="testGetY()" classname="inkball.BallTest" time="0.0"/>
+  <testcase name="testGetSetBallRadius()" classname="inkball.BallTest" time="0.001"/>
+  <testcase name="testMoveOne()" classname="inkball.BallTest" time="0.003"/>
+  <testcase name="testGetColour()" classname="inkball.BallTest" time="0.001"/>
+  <testcase name="testWillCollide()" classname="inkball.BallTest" time="0.001"/>
+  <testcase name="testInteract()" classname="inkball.BallTest" time="0.001"/>
+  <testcase name="testGetSetVector()" classname="inkball.BallTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

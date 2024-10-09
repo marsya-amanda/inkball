@@ -1,0 +1,382 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > Ball</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">inkball</a>
+</div>
+
+<h1>Coverage Summary for Class: Ball (inkball)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Ball</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    70%
+  </span>
+  <span class="absValue">
+    (14/20)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    46.6%
+  </span>
+  <span class="absValue">
+    (27/58)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    73.4%
+  </span>
+  <span class="absValue">
+    (91/124)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package inkball;
+&nbsp;
+&nbsp;import processing.core.PImage;
+&nbsp;import java.util.*;
+&nbsp;
+&nbsp;public class Ball {
+&nbsp;    private float x;
+&nbsp;    private float y;
+&nbsp;    int colour;
+&nbsp;    private float[] vector;
+<b class="fc">&nbsp;    private float ballRadius = 12;</b>
+&nbsp;    private static final int ARTIFICIAL_RADIUS = 10;
+&nbsp;    private static final int MAX_SPEED = 12;
+&nbsp;
+&nbsp;    private boolean isAbsorbed;
+<b class="fc">&nbsp;    private static Random rand = new Random();</b>
+&nbsp;
+<b class="fc">&nbsp;    public Ball(float x, float y, int colour) {</b>
+<b class="fc">&nbsp;        this.x = x; // so it spawns in the middle of the tile/spawner</b>
+<b class="fc">&nbsp;        this.y = y;</b>
+<b class="pc">&nbsp;        if (colour &lt; 0 || colour &gt; 4) {</b>
+<b class="nc">&nbsp;            colour = 0;</b>
+&nbsp;        }
+<b class="fc">&nbsp;        this.colour = colour;</b>
+<b class="fc">&nbsp;        if (Ball.rand.nextBoolean()) {</b>
+<b class="fc">&nbsp;            this.vector = new float[] {2, -2};</b>
+&nbsp;        }
+&nbsp;        else {
+<b class="fc">&nbsp;            this.vector = new float[] {-2, 2};</b>
+&nbsp;        }
+<b class="fc">&nbsp;        this.isAbsorbed = false;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void draw(App app) {
+<b class="pc">&nbsp;        if (this.isAbsorbed) {</b>
+&nbsp;            return;
+&nbsp;        }
+<b class="fc">&nbsp;        PImage ball = app.getSprite(&quot;ball&quot;+colour);</b>
+<b class="fc">&nbsp;        app.image(ball, this.x, this.y, this.ballRadius * 2, this.ballRadius * 2);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public float getX() {
+<b class="nc">&nbsp;        return x;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public float getY() {
+<b class="nc">&nbsp;        return y;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public int getColour() {
+<b class="fc">&nbsp;        return colour;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public float[] getVector() {
+<b class="nc">&nbsp;        return this.vector;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public float getBallRadius() {
+<b class="nc">&nbsp;        return this.ballRadius;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setBallRadius(float ballRadius) {
+<b class="pc">&nbsp;        if (ballRadius &lt; 0) {</b>
+<b class="nc">&nbsp;            ballRadius = 0;</b>
+&nbsp;        }
+<b class="fc">&nbsp;        this.ballRadius = ballRadius;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setVector(float[] vector) {
+<b class="nc">&nbsp;        this.vector = vector;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public boolean getIsAbsorbed() {
+<b class="nc">&nbsp;        return this.isAbsorbed;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void moveOne() {
+<b class="fc">&nbsp;        this.x += vector[0];</b>
+<b class="fc">&nbsp;        this.y += vector[1];</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void interact(Line line) {
+<b class="pc">&nbsp;        if (this.willCollide(line) != null) {</b>
+&nbsp;            //System.out.println(&quot;Collided!&quot;);
+<b class="fc">&nbsp;            this.setNewColour(line);</b>
+<b class="fc">&nbsp;            this.setNewDirection(line); // removed app arg</b>
+<b class="fc">&nbsp;            this.moveOne();</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    public float[] willCollide(Line line) {
+<b class="fc">&nbsp;        float[] P1 = line.getP1();</b>
+<b class="fc">&nbsp;        float[] P2 = line.getP2();</b>
+<b class="fc">&nbsp;        float[] ballXY = new float[] {this.getBallCenter()[0] + this.vector[0], this.getBallCenter()[1] + this.vector[1]};</b>
+&nbsp;
+<b class="fc">&nbsp;        double distP1 = App.getDistance(ballXY, P1);</b>
+<b class="fc">&nbsp;        double distP2 = App.getDistance(ballXY, P2);</b>
+<b class="fc">&nbsp;        double distP1P2 = App.getDistance(P1, P2);</b>
+&nbsp;
+<b class="fc">&nbsp;        if (distP1 + distP2 &lt; ARTIFICIAL_RADIUS + distP1P2) {</b>
+<b class="pc">&nbsp;            if (distP1P2 &lt; 0.0001) {</b>
+<b class="nc">&nbsp;                return P1;</b>
+&nbsp;            }
+&nbsp;            // Calculate the collision point
+<b class="fc">&nbsp;            float t = (float) ((distP1 - ARTIFICIAL_RADIUS) / distP1P2); // zeroDivisionError not handled</b>
+<b class="fc">&nbsp;            float collisionX = P1[0] + t * (P2[0] - P1[0]);</b>
+<b class="fc">&nbsp;            float collisionY = P1[1] + t * (P2[1] - P1[1]);</b>
+<b class="fc">&nbsp;            return new float[] {collisionX, collisionY};</b>
+&nbsp;        }
+<b class="fc">&nbsp;        return null;</b>
+&nbsp;
+&nbsp;        //return distP1 + distP2 &lt; ARTIFICIAL_RADIUS + distP1P2;
+&nbsp;    }
+&nbsp;
+&nbsp;    public float[] setNewDirection(Line line) {
+<b class="pc">&nbsp;        if (this.willCollide(line) == null) {</b>
+<b class="nc">&nbsp;            return null;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        // Handle zeroDivisionError and when ball is directly on a dot
+<b class="pc">&nbsp;        if (Arrays.equals(this.willCollide(line), line.getP1())) {</b>
+<b class="nc">&nbsp;            this.vector = new float[] {-1*this.getVector()[0], -1*this.getVector()[1]};</b>
+<b class="nc">&nbsp;            return this.vector;</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        float[] P1 = line.getP1();</b>
+<b class="fc">&nbsp;        float[] P2 = line.getP2();</b>
+<b class="fc">&nbsp;        float dy = P2[1] - P1[1];</b>
+<b class="fc">&nbsp;        float dx = P2[0] - P1[0];</b>
+&nbsp;
+&nbsp;        //CALCULATE NORMALS OF LINE
+<b class="fc">&nbsp;        float[] norm1 = new float[] {-1*dy, dx};</b>
+<b class="fc">&nbsp;        float[] norm2 = new float[] {dy, -1*dx};</b>
+&nbsp;        ////normalise
+<b class="fc">&nbsp;        double mag1 = Math.sqrt(Math.pow(norm1[0], 2) + Math.pow(norm1[1], 2));</b>
+<b class="fc">&nbsp;        double mag2 = Math.sqrt(Math.pow(norm2[0], 2) + Math.pow(norm2[1], 2));</b>
+<b class="fc">&nbsp;        double[] normalised1 = new double[] {norm1[0] / mag1, norm1[1] / mag1}; // zeroDivisionError not handled</b>
+<b class="fc">&nbsp;        double[] normalised2 = new double[] {norm2[0] / mag2, norm2[1] / mag2};</b>
+&nbsp;
+&nbsp;        //GET CLOSEST NORMAL
+&nbsp;        double[] normUsed;
+<b class="fc">&nbsp;        float[] ballXY = new float[] {this.getBallCenter()[0], this.getBallCenter()[1]};</b>
+<b class="fc">&nbsp;        float[] midpoint = line.getMidPoint();</b>
+<b class="fc">&nbsp;        double[] n1Line = new double[] {midpoint[0] + normalised1[0], midpoint[1] + normalised1[1]};</b>
+<b class="fc">&nbsp;        double[] n2Line = new double[] {midpoint[0] + normalised2[0], midpoint[1] + normalised2[1]};</b>
+&nbsp;
+<b class="fc">&nbsp;        if (App.getDistance(n1Line, ballXY) &lt; App.getDistance(n2Line, ballXY)) {</b>
+<b class="fc">&nbsp;            normUsed = normalised1;</b>
+&nbsp;        }
+&nbsp;        else {
+<b class="fc">&nbsp;            normUsed = normalised2;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        //CALCULATE NEW DIRECTION VECTOR
+<b class="fc">&nbsp;        double vDotn = this.vector[0] * normUsed[0] + this.vector[1] * normUsed[1];</b>
+<b class="fc">&nbsp;        double newDirectionX = this.vector[0] - 2 * vDotn * normUsed[0];</b>
+<b class="fc">&nbsp;        double newDirectionY = this.vector[1] - 2 * vDotn * normUsed[1];</b>
+&nbsp;
+<b class="fc">&nbsp;        this.vector = new float[] {(float)newDirectionX, (float)newDirectionY};</b>
+<b class="fc">&nbsp;        return new float[] {(float)newDirectionX, (float)newDirectionY};</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setNewColour(Line line) {
+<b class="fc">&nbsp;        if (line.getColourTo() == 0) {</b>
+&nbsp;            return;
+&nbsp;        }
+<b class="pc">&nbsp;        if (1 &lt;= line.getColourTo() &amp;&amp; line.getColourTo() &lt;= 4) {</b>
+<b class="fc">&nbsp;            this.colour = line.getColourTo();</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    public void meetHole(Hole hole, App app) {
+<b class="pc">&nbsp;        if (this.isAbsorbed) {</b>
+&nbsp;            return;
+&nbsp;        }
+&nbsp;
+<b class="pc">&nbsp;        if (hole.getHoleCenter() == null) {</b>
+&nbsp;            return;
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        float[] ballCenter = this.getBallCenter();</b>
+<b class="fc">&nbsp;        float[] holeCenter = hole.getHoleCenter();</b>
+&nbsp;
+<b class="fc">&nbsp;        float[] attractionVector = this.getAttractionVector(hole);</b>
+<b class="fc">&nbsp;        this.vector[0] += attractionVector[0];</b>
+<b class="fc">&nbsp;        this.vector[1] += attractionVector[1];</b>
+&nbsp;
+<b class="fc">&nbsp;        float shrinkFactor = (float) (App.getDistance(holeCenter, ballCenter) / 32);</b>
+<b class="fc">&nbsp;        this.ballRadius = 12 * shrinkFactor; //make ball increase/decrease proportionally to its original radius</b>
+&nbsp;
+<b class="pc">&nbsp;        if (this.ballRadius &lt; 6 || App.getDistance(ballCenter, holeCenter) &lt; 8) {</b>
+<b class="fc">&nbsp;            this.ballRadius = 0;</b>
+&nbsp;            //this.isAbsorbed = true;
+&nbsp;
+<b class="pc">&nbsp;            if (this.colourToString().equals(hole.colourToString())) {</b>
+<b class="fc">&nbsp;                App.score += App.scoreIncrease.get(hole.colourToString()) * app.modScoreIncrease;</b>
+<b class="fc">&nbsp;                app.getBalls().remove(this);</b>
+<b class="fc">&nbsp;                this.isAbsorbed = true;</b>
+&nbsp;            }
+&nbsp;
+<b class="nc">&nbsp;            else if (this.colour == 0 || hole.getColour() == 0) {</b>
+<b class="nc">&nbsp;                App.score += App.scoreIncrease.get(&quot;grey&quot;) * app.modScoreIncrease;</b>
+<b class="nc">&nbsp;                app.getBalls().remove(this);</b>
+<b class="nc">&nbsp;                this.isAbsorbed = true;</b>
+&nbsp;            }
+&nbsp;
+&nbsp;            else {
+<b class="nc">&nbsp;                App.score -= App.scoreDecrease.get(hole.colourToString()) * app.modScoreDecrease;</b>
+<b class="nc">&nbsp;                app.getBalls().remove(this); // avoid concurrent modification</b>
+<b class="nc">&nbsp;                for (int i = 0; i &lt; app.ballQueue.length; i++) {</b>
+<b class="nc">&nbsp;                    if (app.ballQueue[i] == null) {</b>
+<b class="nc">&nbsp;                        int c = this.getColour();</b>
+<b class="nc">&nbsp;                        app.ballQueue[i] = new Ball(19 + 28 * i, 21, c); // add back to queue</b>
+&nbsp;                        break;
+&nbsp;                    }
+&nbsp;                }
+&nbsp;            }
+&nbsp;
+&nbsp;        }
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    public float[] getBallCenter() {
+<b class="fc">&nbsp;        return new float[] {this.x + this.ballRadius, this.y + this.ballRadius};</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public float[] getAttractionVector(Hole hole) {
+<b class="fc">&nbsp;        float[] ballCenter = this.getBallCenter();</b>
+<b class="fc">&nbsp;        float[] holeCenter = hole.getHoleCenter();</b>
+<b class="fc">&nbsp;        float[] attractionVec = new float[] {holeCenter[0] - ballCenter[0], holeCenter[1] - ballCenter[1]};</b>
+&nbsp;
+<b class="fc">&nbsp;        float mag = (float) (Math.sqrt(Math.pow(attractionVec[0], 2) + Math.pow(attractionVec[1], 2)));</b>
+&nbsp;
+<b class="pc">&nbsp;        if (mag &lt; 3) { //prevent zero division error</b>
+<b class="nc">&nbsp;            this.isAbsorbed = true;</b>
+<b class="nc">&nbsp;            this.ballRadius = 0;</b>
+<b class="nc">&nbsp;            return new float[] {0, 0};</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        float speed = (float) (Math.min(MAX_SPEED, (App.getDistance(ballCenter, holeCenter) * 0.005f)));</b>
+<b class="fc">&nbsp;        float attractionX = attractionVec[0] / mag * speed;</b>
+<b class="fc">&nbsp;        float attractionY = attractionVec[1] / mag * speed;</b>
+&nbsp;
+<b class="fc">&nbsp;        return new float[] {attractionX, attractionY};</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String colourToString() {
+<b class="pc">&nbsp;        if (this.colour == 0) {</b>
+<b class="nc">&nbsp;            return &quot;grey&quot;;</b>
+&nbsp;        }
+<b class="pc">&nbsp;        if (this.colour == 1) {</b>
+<b class="fc">&nbsp;            return &quot;orange&quot;;</b>
+&nbsp;        }
+<b class="nc">&nbsp;        if (this.colour == 2) {</b>
+<b class="nc">&nbsp;            return &quot;blue&quot;;</b>
+&nbsp;        }
+<b class="nc">&nbsp;        if (this.colour == 3) {</b>
+<b class="nc">&nbsp;            return &quot;green&quot;;</b>
+&nbsp;        }
+<b class="nc">&nbsp;        if (this.colour == 4) {</b>
+<b class="nc">&nbsp;            return &quot;yellow&quot;;</b>
+&nbsp;        }
+<b class="nc">&nbsp;        return &quot;grey&quot;;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-10-09 15:16</div>
+</div>
+</body>
+</html>
