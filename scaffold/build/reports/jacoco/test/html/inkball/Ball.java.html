@@ -19,251 +19,253 @@ public class Ball {
 <span class="fc" id="L19">        this.x = x; // so it spawns in the middle of the tile/spawner</span>
 <span class="fc" id="L20">        this.y = y;</span>
 <span class="fc bfc" id="L21" title="All 4 branches covered.">        if (colour &lt; 0 || colour &gt; 4) {</span>
-<span class="fc" id="L22">            colour = 0;</span>
-        }
-<span class="fc" id="L24">        this.colour = colour;</span>
-<span class="fc bfc" id="L25" title="All 2 branches covered.">        if (Ball.rand.nextBoolean()) {</span>
-<span class="fc" id="L26">            this.vector = new float[] {2, -2};</span>
+<span class="fc" id="L22">            this.colour = 0;</span>
         }
         else {
-<span class="fc" id="L29">            this.vector = new float[] {-2, 2};</span>
+<span class="fc" id="L25">            this.colour = colour;</span>
         }
-<span class="fc" id="L31">        this.isAbsorbed = false;</span>
-<span class="fc" id="L32">    }</span>
+<span class="fc bfc" id="L27" title="All 2 branches covered.">        if (Ball.rand.nextBoolean()) {</span>
+<span class="fc" id="L28">            this.vector = new float[] {2, -2};</span>
+        }
+        else {
+<span class="fc" id="L31">            this.vector = new float[] {-2, 2};</span>
+        }
+<span class="fc" id="L33">        this.isAbsorbed = false;</span>
+<span class="fc" id="L34">    }</span>
 
     public void draw(App app) {
-<span class="nc bnc" id="L35" title="All 2 branches missed.">        if (this.isAbsorbed) {</span>
-<span class="nc" id="L36">            return;</span>
+<span class="nc bnc" id="L37" title="All 2 branches missed.">        if (this.isAbsorbed) {</span>
+<span class="nc" id="L38">            return;</span>
         }
-<span class="nc" id="L38">        PImage ball = app.getSprite(&quot;ball&quot;+colour);</span>
-<span class="nc" id="L39">        app.image(ball, this.x, this.y, this.ballRadius * 2, this.ballRadius * 2);</span>
-<span class="nc" id="L40">    }</span>
+<span class="nc" id="L40">        PImage ball = app.getSprite(&quot;ball&quot;+colour);</span>
+<span class="nc" id="L41">        app.image(ball, this.x, this.y, this.ballRadius * 2, this.ballRadius * 2);</span>
+<span class="nc" id="L42">    }</span>
 
     public float getX() {
-<span class="fc" id="L43">        return x;</span>
+<span class="fc" id="L45">        return x;</span>
     }
 
     public float getY() {
-<span class="fc" id="L47">        return y;</span>
+<span class="fc" id="L49">        return y;</span>
     }
 
     public int getColour() {
-<span class="fc" id="L51">        return colour;</span>
+<span class="fc" id="L53">        return colour;</span>
     }
 
     public float[] getVector() {
-<span class="fc" id="L55">        return this.vector;</span>
+<span class="fc" id="L57">        return this.vector;</span>
     }
 
     public float getBallRadius() {
-<span class="fc" id="L59">        return this.ballRadius;</span>
+<span class="fc" id="L61">        return this.ballRadius;</span>
     }
 
     public void setBallRadius(float ballRadius) {
-<span class="fc bfc" id="L63" title="All 2 branches covered.">        if (ballRadius &lt; 0) {</span>
-<span class="fc" id="L64">            ballRadius = 0;</span>
+<span class="fc bfc" id="L65" title="All 2 branches covered.">        if (ballRadius &lt; 0) {</span>
+<span class="fc" id="L66">            ballRadius = 0;</span>
         }
-<span class="fc" id="L66">        this.ballRadius = ballRadius;</span>
-<span class="fc" id="L67">    }</span>
+<span class="fc" id="L68">        this.ballRadius = ballRadius;</span>
+<span class="fc" id="L69">    }</span>
 
     public void setVector(float[] vector) {
-<span class="fc" id="L70">        this.vector = vector;</span>
-<span class="fc" id="L71">    }</span>
+<span class="fc" id="L72">        this.vector = vector;</span>
+<span class="fc" id="L73">    }</span>
 
     public boolean getIsAbsorbed() {
-<span class="fc" id="L74">        return this.isAbsorbed;</span>
+<span class="fc" id="L76">        return this.isAbsorbed;</span>
     }
 
     public void absorb() {
-<span class="fc" id="L78">        this.isAbsorbed = true;</span>
-<span class="fc" id="L79">    }</span>
+<span class="fc" id="L80">        this.isAbsorbed = true;</span>
+<span class="fc" id="L81">    }</span>
 
     public void moveOne() {
-<span class="fc" id="L82">        this.x += vector[0];</span>
-<span class="fc" id="L83">        this.y += vector[1];</span>
-<span class="fc" id="L84">    }</span>
+<span class="fc" id="L84">        this.x += vector[0];</span>
+<span class="fc" id="L85">        this.y += vector[1];</span>
+<span class="fc" id="L86">    }</span>
 
     public void interact(Line line) {
-<span class="fc bfc" id="L87" title="All 2 branches covered.">        if (this.willCollide(line) != null) {</span>
+<span class="fc bfc" id="L89" title="All 2 branches covered.">        if (this.willCollide(line) != null) {</span>
             //System.out.println(&quot;Collided!&quot;);
-<span class="fc" id="L89">            this.setNewColour(line);</span>
-<span class="fc" id="L90">            this.setNewDirection(line); // removed app arg</span>
-<span class="fc" id="L91">            this.moveOne();</span>
+<span class="fc" id="L91">            this.setNewColour(line);</span>
+<span class="fc" id="L92">            this.setNewDirection(line); // removed app arg</span>
+<span class="fc" id="L93">            this.moveOne();</span>
         }
-<span class="fc" id="L93">    }</span>
+<span class="fc" id="L95">    }</span>
 
     public float[] willCollide(Line line) {
-<span class="fc" id="L96">        float[] P1 = line.getP1();</span>
-<span class="fc" id="L97">        float[] P2 = line.getP2();</span>
-<span class="fc" id="L98">        float[] ballXY = new float[] {this.getBallCenter()[0] + this.vector[0], this.getBallCenter()[1] + this.vector[1]};</span>
+<span class="fc" id="L98">        float[] P1 = line.getP1();</span>
+<span class="fc" id="L99">        float[] P2 = line.getP2();</span>
+<span class="fc" id="L100">        float[] ballXY = new float[] {this.getBallCenter()[0] + this.vector[0], this.getBallCenter()[1] + this.vector[1]};</span>
 
-<span class="fc" id="L100">        double distP1 = App.getDistance(ballXY, P1);</span>
-<span class="fc" id="L101">        double distP2 = App.getDistance(ballXY, P2);</span>
-<span class="fc" id="L102">        double distP1P2 = App.getDistance(P1, P2);</span>
+<span class="fc" id="L102">        double distP1 = App.getDistance(ballXY, P1);</span>
+<span class="fc" id="L103">        double distP2 = App.getDistance(ballXY, P2);</span>
+<span class="fc" id="L104">        double distP1P2 = App.getDistance(P1, P2);</span>
 
-<span class="fc bfc" id="L104" title="All 2 branches covered.">        if (distP1 + distP2 &lt; ARTIFICIAL_RADIUS + distP1P2) {</span>
-<span class="fc bfc" id="L105" title="All 2 branches covered.">            if (distP1P2 &lt; 0.001f) {</span>
-<span class="fc" id="L106">                return P1;</span>
+<span class="fc bfc" id="L106" title="All 2 branches covered.">        if (distP1 + distP2 &lt; ARTIFICIAL_RADIUS + distP1P2) {</span>
+<span class="fc bfc" id="L107" title="All 2 branches covered.">            if (distP1P2 &lt; 0.001f) {</span>
+<span class="fc" id="L108">                return P1;</span>
             }
             // Calculate the collision point
-<span class="fc" id="L109">            float t = (float) ((distP1 - ARTIFICIAL_RADIUS) / distP1P2);</span>
-<span class="fc" id="L110">            float collisionX = P1[0] + t * (P2[0] - P1[0]);</span>
-<span class="fc" id="L111">            float collisionY = P1[1] + t * (P2[1] - P1[1]);</span>
-<span class="fc" id="L112">            return new float[] {collisionX, collisionY};</span>
+<span class="fc" id="L111">            float t = (float) ((distP1 - ARTIFICIAL_RADIUS) / distP1P2);</span>
+<span class="fc" id="L112">            float collisionX = P1[0] + t * (P2[0] - P1[0]);</span>
+<span class="fc" id="L113">            float collisionY = P1[1] + t * (P2[1] - P1[1]);</span>
+<span class="fc" id="L114">            return new float[] {collisionX, collisionY};</span>
         }
-<span class="fc" id="L114">        return null;</span>
+<span class="fc" id="L116">        return null;</span>
 
     }
 
     public float[] setNewDirection(Line line) {
-<span class="fc bfc" id="L119" title="All 2 branches covered.">        if (this.willCollide(line) == null) {</span>
-<span class="fc" id="L120">            return null;</span>
+<span class="fc bfc" id="L121" title="All 2 branches covered.">        if (this.willCollide(line) == null) {</span>
+<span class="fc" id="L122">            return null;</span>
         }
 
         // Handle zeroDivisionError and when ball is directly on a dot
-<span class="fc bfc" id="L124" title="All 2 branches covered.">        if (Arrays.equals(this.willCollide(line), line.getP1())) {</span>
-<span class="fc" id="L125">            this.vector = new float[] {-1*this.getVector()[0], -1*this.getVector()[1]};</span>
-<span class="fc" id="L126">            return new float[] {-1*this.getVector()[0], -1*this.getVector()[1]};</span>
+<span class="fc bfc" id="L126" title="All 2 branches covered.">        if (Arrays.equals(this.willCollide(line), line.getP1())) {</span>
+<span class="fc" id="L127">            this.vector = new float[] {-1*this.getVector()[0], -1*this.getVector()[1]};</span>
+<span class="fc" id="L128">            return new float[] {-1*this.getVector()[0], -1*this.getVector()[1]};</span>
         }
 
-<span class="fc" id="L129">        float[] P1 = line.getP1();</span>
-<span class="fc" id="L130">        float[] P2 = line.getP2();</span>
-<span class="fc" id="L131">        float dy = P2[1] - P1[1];</span>
-<span class="fc" id="L132">        float dx = P2[0] - P1[0];</span>
+<span class="fc" id="L131">        float[] P1 = line.getP1();</span>
+<span class="fc" id="L132">        float[] P2 = line.getP2();</span>
+<span class="fc" id="L133">        float dy = P2[1] - P1[1];</span>
+<span class="fc" id="L134">        float dx = P2[0] - P1[0];</span>
 
         //CALCULATE NORMALS OF LINE
-<span class="fc" id="L135">        float[] norm1 = new float[] {-1*dy, dx};</span>
-<span class="fc" id="L136">        float[] norm2 = new float[] {dy, -1*dx};</span>
+<span class="fc" id="L137">        float[] norm1 = new float[] {-1*dy, dx};</span>
+<span class="fc" id="L138">        float[] norm2 = new float[] {dy, -1*dx};</span>
         ////normalise
-<span class="fc" id="L138">        double mag1 = Math.sqrt(Math.pow(norm1[0], 2) + Math.pow(norm1[1], 2));</span>
-<span class="fc" id="L139">        double mag2 = Math.sqrt(Math.pow(norm2[0], 2) + Math.pow(norm2[1], 2));</span>
-<span class="fc" id="L140">        double[] normalised1 = new double[] {norm1[0] / mag1, norm1[1] / mag1}; // zeroDivisionError not handled</span>
-<span class="fc" id="L141">        double[] normalised2 = new double[] {norm2[0] / mag2, norm2[1] / mag2};</span>
+<span class="fc" id="L140">        double mag1 = Math.sqrt(Math.pow(norm1[0], 2) + Math.pow(norm1[1], 2));</span>
+<span class="fc" id="L141">        double mag2 = Math.sqrt(Math.pow(norm2[0], 2) + Math.pow(norm2[1], 2));</span>
+<span class="fc" id="L142">        double[] normalised1 = new double[] {norm1[0] / mag1, norm1[1] / mag1}; // zeroDivisionError not handled</span>
+<span class="fc" id="L143">        double[] normalised2 = new double[] {norm2[0] / mag2, norm2[1] / mag2};</span>
 
         //GET CLOSEST NORMAL
         double[] normUsed;
-<span class="fc" id="L145">        float[] ballXY = new float[] {this.getBallCenter()[0], this.getBallCenter()[1]};</span>
-<span class="fc" id="L146">        float[] midpoint = line.getMidPoint();</span>
-<span class="fc" id="L147">        double[] n1Line = new double[] {midpoint[0] + normalised1[0], midpoint[1] + normalised1[1]};</span>
-<span class="fc" id="L148">        double[] n2Line = new double[] {midpoint[0] + normalised2[0], midpoint[1] + normalised2[1]};</span>
+<span class="fc" id="L147">        float[] ballXY = new float[] {this.getBallCenter()[0], this.getBallCenter()[1]};</span>
+<span class="fc" id="L148">        float[] midpoint = line.getMidPoint();</span>
+<span class="fc" id="L149">        double[] n1Line = new double[] {midpoint[0] + normalised1[0], midpoint[1] + normalised1[1]};</span>
+<span class="fc" id="L150">        double[] n2Line = new double[] {midpoint[0] + normalised2[0], midpoint[1] + normalised2[1]};</span>
 
-<span class="pc bpc" id="L150" title="1 of 2 branches missed.">        if (App.getDistance(n1Line, ballXY) &lt; App.getDistance(n2Line, ballXY)) {</span>
-<span class="nc" id="L151">            normUsed = normalised1;</span>
+<span class="pc bpc" id="L152" title="1 of 2 branches missed.">        if (App.getDistance(n1Line, ballXY) &lt; App.getDistance(n2Line, ballXY)) {</span>
+<span class="nc" id="L153">            normUsed = normalised1;</span>
         }
         else {
-<span class="fc" id="L154">            normUsed = normalised2;</span>
+<span class="fc" id="L156">            normUsed = normalised2;</span>
         }
 
         //CALCULATE NEW DIRECTION VECTOR
-<span class="fc" id="L158">        double vDotn = this.vector[0] * normUsed[0] + this.vector[1] * normUsed[1];</span>
-<span class="fc" id="L159">        double newDirectionX = this.vector[0] - 2 * vDotn * normUsed[0];</span>
-<span class="fc" id="L160">        double newDirectionY = this.vector[1] - 2 * vDotn * normUsed[1];</span>
+<span class="fc" id="L160">        double vDotn = this.vector[0] * normUsed[0] + this.vector[1] * normUsed[1];</span>
+<span class="fc" id="L161">        double newDirectionX = this.vector[0] - 2 * vDotn * normUsed[0];</span>
+<span class="fc" id="L162">        double newDirectionY = this.vector[1] - 2 * vDotn * normUsed[1];</span>
 
-<span class="fc" id="L162">        this.vector = new float[] {(float)newDirectionX, (float)newDirectionY};</span>
-<span class="fc" id="L163">        return new float[] {(float)newDirectionX, (float)newDirectionY};</span>
+<span class="fc" id="L164">        this.vector = new float[] {(float)newDirectionX, (float)newDirectionY};</span>
+<span class="fc" id="L165">        return new float[] {(float)newDirectionX, (float)newDirectionY};</span>
     }
 
     public void setNewColour(Line line) {
-<span class="fc bfc" id="L167" title="All 2 branches covered.">        if (line.getColourTo() == 0) {</span>
-<span class="fc" id="L168">            return;</span>
+<span class="fc bfc" id="L169" title="All 2 branches covered.">        if (line.getColourTo() == 0) {</span>
+<span class="fc" id="L170">            return;</span>
         }
-<span class="pc bpc" id="L170" title="1 of 4 branches missed.">        if (1 &lt;= line.getColourTo() &amp;&amp; line.getColourTo() &lt;= 4) {</span>
-<span class="fc" id="L171">            this.colour = line.getColourTo();</span>
+<span class="pc bpc" id="L172" title="1 of 4 branches missed.">        if (1 &lt;= line.getColourTo() &amp;&amp; line.getColourTo() &lt;= 4) {</span>
+<span class="fc" id="L173">            this.colour = line.getColourTo();</span>
         }
-<span class="fc" id="L173">    }</span>
+<span class="fc" id="L175">    }</span>
 
     public boolean meetHole(Hole hole, App app) {
-<span class="pc bpc" id="L176" title="1 of 2 branches missed.">        if (this.getIsAbsorbed()) {</span>
-<span class="fc" id="L177">            return false;</span>
+<span class="pc bpc" id="L178" title="1 of 2 branches missed.">        if (this.getIsAbsorbed()) {</span>
+<span class="fc" id="L179">            return false;</span>
         }
 
-<span class="nc bnc" id="L180" title="All 2 branches missed.">        if (hole.getHoleCenter() == null) {</span>
-<span class="nc" id="L181">            return false;</span>
+<span class="nc bnc" id="L182" title="All 2 branches missed.">        if (hole.getHoleCenter() == null) {</span>
+<span class="nc" id="L183">            return false;</span>
         }
 
-<span class="nc" id="L184">        float[] ballCenter = this.getBallCenter();</span>
-<span class="nc" id="L185">        float[] holeCenter = hole.getHoleCenter();</span>
+<span class="nc" id="L186">        float[] ballCenter = this.getBallCenter();</span>
+<span class="nc" id="L187">        float[] holeCenter = hole.getHoleCenter();</span>
 
-<span class="nc" id="L187">        float[] attractionVector = this.getAttractionVector(hole);</span>
-<span class="nc" id="L188">        this.vector[0] += attractionVector[0];</span>
-<span class="nc" id="L189">        this.vector[1] += attractionVector[1];</span>
+<span class="nc" id="L189">        float[] attractionVector = this.getAttractionVector(hole);</span>
+<span class="nc" id="L190">        this.vector[0] += attractionVector[0];</span>
+<span class="nc" id="L191">        this.vector[1] += attractionVector[1];</span>
 
-<span class="nc" id="L191">        float shrinkFactor = (float) (App.getDistance(holeCenter, ballCenter) / 32);</span>
-<span class="nc" id="L192">        this.ballRadius = 12 * shrinkFactor; //make ball increase/decrease proportionally to its original radius</span>
+<span class="nc" id="L193">        float shrinkFactor = (float) (App.getDistance(holeCenter, ballCenter) / 32);</span>
+<span class="nc" id="L194">        this.ballRadius = 12 * shrinkFactor; //make ball increase/decrease proportionally to its original radius</span>
 
-<span class="nc bnc" id="L194" title="All 4 branches missed.">        if (this.ballRadius &lt; 6 || App.getDistance(ballCenter, holeCenter) &lt; 8) {</span>
-<span class="nc" id="L195">            this.ballRadius = 0;</span>
+<span class="nc bnc" id="L196" title="All 4 branches missed.">        if (this.ballRadius &lt; 6 || App.getDistance(ballCenter, holeCenter) &lt; 8) {</span>
+<span class="nc" id="L197">            this.ballRadius = 0;</span>
             //this.isAbsorbed = true;
 
-<span class="nc bnc" id="L198" title="All 2 branches missed.">            if (this.colourToString().equals(hole.colourToString())) {</span>
-<span class="nc" id="L199">                App.score += App.scoreIncrease.get(hole.colourToString()) * app.modScoreIncrease;</span>
-<span class="nc" id="L200">                app.getBalls().remove(this);</span>
-<span class="nc" id="L201">                this.absorb();</span>
+<span class="nc bnc" id="L200" title="All 2 branches missed.">            if (this.colourToString().equals(hole.colourToString())) {</span>
+<span class="nc" id="L201">                App.score += App.scoreIncrease.get(hole.colourToString()) * app.modScoreIncrease;</span>
+<span class="nc" id="L202">                app.getBalls().remove(this);</span>
+<span class="nc" id="L203">                this.absorb();</span>
             }
 
-<span class="nc bnc" id="L204" title="All 4 branches missed.">            else if (this.colour == 0 || hole.getColour() == 0) {</span>
-<span class="nc" id="L205">                App.score += App.scoreIncrease.get(&quot;grey&quot;) * app.modScoreIncrease;</span>
-<span class="nc" id="L206">                app.getBalls().remove(this);</span>
-<span class="nc" id="L207">                this.absorb();</span>
+<span class="nc bnc" id="L206" title="All 4 branches missed.">            else if (this.colour == 0 || hole.getColour() == 0) {</span>
+<span class="nc" id="L207">                App.score += App.scoreIncrease.get(&quot;grey&quot;) * app.modScoreIncrease;</span>
+<span class="nc" id="L208">                app.getBalls().remove(this);</span>
+<span class="nc" id="L209">                this.absorb();</span>
             }
 
             else {
-<span class="nc" id="L211">                App.score -= App.scoreDecrease.get(hole.colourToString()) * app.modScoreDecrease;</span>
-<span class="nc" id="L212">                app.getBalls().remove(this); // avoid concurrent modification</span>
-<span class="nc bnc" id="L213" title="All 2 branches missed.">                for (int i = 0; i &lt; app.ballQueue.length; i++) {</span>
-<span class="nc bnc" id="L214" title="All 2 branches missed.">                    if (app.ballQueue[i] == null) {</span>
-<span class="nc" id="L215">                        int c = this.getColour();</span>
-<span class="nc" id="L216">                        app.ballQueue[i] = new Ball(19 + 28 * i, 21, c); // add back to queue</span>
-<span class="nc" id="L217">                        break;</span>
+<span class="nc" id="L213">                App.score -= App.scoreDecrease.get(hole.colourToString()) * app.modScoreDecrease;</span>
+<span class="nc" id="L214">                app.getBalls().remove(this); // avoid concurrent modification</span>
+<span class="nc bnc" id="L215" title="All 2 branches missed.">                for (int i = 0; i &lt; app.ballQueue.length; i++) {</span>
+<span class="nc bnc" id="L216" title="All 2 branches missed.">                    if (app.ballQueue[i] == null) {</span>
+<span class="nc" id="L217">                        int c = this.getColour();</span>
+<span class="nc" id="L218">                        app.ballQueue[i] = new Ball(19 + 28 * i, 21, c); // add back to queue</span>
+<span class="nc" id="L219">                        break;</span>
                     }
                 }
             }
 
         }
-<span class="nc" id="L223">        return true;</span>
+<span class="nc" id="L225">        return true;</span>
     }
 
     public float[] getBallCenter() {
-<span class="fc" id="L227">        return new float[] {this.x + this.ballRadius, this.y + this.ballRadius};</span>
+<span class="fc" id="L229">        return new float[] {this.x + this.ballRadius, this.y + this.ballRadius};</span>
     }
 
     public float[] getAttractionVector(Hole hole) {
-<span class="fc" id="L231">        float[] ballCenter = this.getBallCenter();</span>
-<span class="fc" id="L232">        float[] holeCenter = hole.getHoleCenter();</span>
-<span class="fc" id="L233">        float[] attractionVec = new float[] {holeCenter[0] - ballCenter[0], holeCenter[1] - ballCenter[1]};</span>
+<span class="fc" id="L233">        float[] ballCenter = this.getBallCenter();</span>
+<span class="fc" id="L234">        float[] holeCenter = hole.getHoleCenter();</span>
+<span class="fc" id="L235">        float[] attractionVec = new float[] {holeCenter[0] - ballCenter[0], holeCenter[1] - ballCenter[1]};</span>
 
-<span class="fc" id="L235">        float mag = (float) (Math.sqrt(Math.pow(attractionVec[0], 2) + Math.pow(attractionVec[1], 2)));</span>
+<span class="fc" id="L237">        float mag = (float) (Math.sqrt(Math.pow(attractionVec[0], 2) + Math.pow(attractionVec[1], 2)));</span>
 
-<span class="fc bfc" id="L237" title="All 2 branches covered.">        if (mag &lt; 3) { //prevent zero division error</span>
-<span class="fc" id="L238">            this.isAbsorbed = true;</span>
-<span class="fc" id="L239">            this.ballRadius = 0;</span>
-<span class="fc" id="L240">            return new float[] {0, 0};</span>
+<span class="fc bfc" id="L239" title="All 2 branches covered.">        if (mag &lt; 3) { //prevent zero division error</span>
+<span class="fc" id="L240">            this.isAbsorbed = true;</span>
+<span class="fc" id="L241">            this.ballRadius = 0;</span>
+<span class="fc" id="L242">            return new float[] {0, 0};</span>
         }
 
-<span class="fc" id="L243">        float speed = (float) (Math.min(MAX_SPEED, (App.getDistance(ballCenter, holeCenter) * 0.005f)));</span>
-<span class="fc" id="L244">        float attractionX = attractionVec[0] / mag * speed;</span>
-<span class="fc" id="L245">        float attractionY = attractionVec[1] / mag * speed;</span>
+<span class="fc" id="L245">        float speed = (float) (Math.min(MAX_SPEED, (App.getDistance(ballCenter, holeCenter) * 0.005f)));</span>
+<span class="fc" id="L246">        float attractionX = attractionVec[0] / mag * speed;</span>
+<span class="fc" id="L247">        float attractionY = attractionVec[1] / mag * speed;</span>
 
-<span class="fc" id="L247">        return new float[] {attractionX, attractionY};</span>
+<span class="fc" id="L249">        return new float[] {attractionX, attractionY};</span>
     }
 
     public String colourToString() {
-<span class="nc bnc" id="L251" title="All 2 branches missed.">        if (this.colour == 0) {</span>
-<span class="nc" id="L252">            return &quot;grey&quot;;</span>
+<span class="nc bnc" id="L253" title="All 2 branches missed.">        if (this.colour == 0) {</span>
+<span class="nc" id="L254">            return &quot;grey&quot;;</span>
         }
-<span class="nc bnc" id="L254" title="All 2 branches missed.">        if (this.colour == 1) {</span>
-<span class="nc" id="L255">            return &quot;orange&quot;;</span>
+<span class="nc bnc" id="L256" title="All 2 branches missed.">        if (this.colour == 1) {</span>
+<span class="nc" id="L257">            return &quot;orange&quot;;</span>
         }
-<span class="nc bnc" id="L257" title="All 2 branches missed.">        if (this.colour == 2) {</span>
-<span class="nc" id="L258">            return &quot;blue&quot;;</span>
+<span class="nc bnc" id="L259" title="All 2 branches missed.">        if (this.colour == 2) {</span>
+<span class="nc" id="L260">            return &quot;blue&quot;;</span>
         }
-<span class="nc bnc" id="L260" title="All 2 branches missed.">        if (this.colour == 3) {</span>
-<span class="nc" id="L261">            return &quot;green&quot;;</span>
+<span class="nc bnc" id="L262" title="All 2 branches missed.">        if (this.colour == 3) {</span>
+<span class="nc" id="L263">            return &quot;green&quot;;</span>
         }
-<span class="nc bnc" id="L263" title="All 2 branches missed.">        if (this.colour == 4) {</span>
-<span class="nc" id="L264">            return &quot;yellow&quot;;</span>
+<span class="nc bnc" id="L265" title="All 2 branches missed.">        if (this.colour == 4) {</span>
+<span class="nc" id="L266">            return &quot;yellow&quot;;</span>
         }
-<span class="nc" id="L266">        return &quot;grey&quot;;</span>
+<span class="nc" id="L268">        return &quot;grey&quot;;</span>
     }
 
 }

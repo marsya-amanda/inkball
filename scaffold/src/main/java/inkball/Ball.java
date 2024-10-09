@@ -19,9 +19,11 @@ public class Ball {
         this.x = x; // so it spawns in the middle of the tile/spawner
         this.y = y;
         if (colour < 0 || colour > 4) {
-            colour = 0;
+            this.colour = 0;
         }
-        this.colour = colour;
+        else {
+            this.colour = colour;
+        }
         if (Ball.rand.nextBoolean()) {
             this.vector = new float[] {2, -2};
         }
@@ -248,9 +250,6 @@ public class Ball {
     }
 
     public String colourToString() {
-        if (this.colour == 0) {
-            return "grey";
-        }
         if (this.colour == 1) {
             return "orange";
         }

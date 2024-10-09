@@ -269,7 +269,15 @@ class BallTest {
         ball.setVector(new float[]{-2, 2});
         float[] expectedNewDir = new float[]{2.0f, -2.0f};
 
-        ball.setNewDirection(line); // also not passing correctly
+        ball.setNewDirection(line);
+        assertEquals(expectedNewDir[0], ball.getVector()[0], 0.0001f);
+        assertEquals(expectedNewDir[1], ball.getVector()[1], 0.0001f);
+
+        line = new Line(new float[]{100,96}, new float[]{104,100}, 0, false);
+        expectedNewDir = new float[]{-2.0f,2.0f};
+        ball.setVector(new float[]{2, -2});
+        
+        ball.setNewDirection(line);
         assertEquals(expectedNewDir[0], ball.getVector()[0], 0.0001f);
         assertEquals(expectedNewDir[1], ball.getVector()[1], 0.0001f);
     }
@@ -278,6 +286,7 @@ class BallTest {
     public void testNegativeNewDirection() {
         Line negativeLine = new Line(new float[]{0, 0}, new float[]{2, 2}, 0, false);
 
+        assertNull(ball.willCollide(negativeLine));
         assertNull(ball.setNewDirection(negativeLine));
     }
 
@@ -350,5 +359,23 @@ class BallTest {
         assertTrue(negativeBall.getIsAbsorbed());
         assertEquals(0, negativeBall.getBallRadius());
         assertArrayEquals(new float[]{0, 0}, negativeBall.getAttractionVector(hole), 0.1f);
+    }
+
+    @Test
+    public void testToString() {
+        ball = new Ball(84, 148, 0);
+        assertEquals("grey", ball.colourToString());
+
+        ball = new Ball(84, 148, 1);
+        assertEquals("orange", ball.colourToString());
+
+        ball = new Ball(84, 148, 2);
+        assertEquals("blue", ball.colourToString());
+
+        ball = new Ball(84, 148, 3);
+        assertEquals("green", ball.colourToString());
+
+        ball = new Ball(84, 148, 4);
+        assertEquals("yellow", ball.colourToString());
     }
 }
