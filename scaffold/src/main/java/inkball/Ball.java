@@ -18,6 +18,9 @@ public class Ball {
     public Ball(float x, float y, int colour) {
         this.x = x; // so it spawns in the middle of the tile/spawner
         this.y = y;
+        if (colour < 0 || colour > 4) {
+            colour = 0;
+        }
         this.colour = colour;
         if (Ball.rand.nextBoolean()) {
             this.vector = new float[] {2, -2};
@@ -57,6 +60,9 @@ public class Ball {
     }
 
     public void setBallRadius(float ballRadius) {
+        if (ballRadius < 0) {
+            ballRadius = 0;
+        }
         this.ballRadius = ballRadius;
     }
 
@@ -68,16 +74,20 @@ public class Ball {
         return this.isAbsorbed;
     }
 
+    public void absorb() {
+        this.isAbsorbed = true;
+    }
+
     public void moveOne() {
         this.x += vector[0];
         this.y += vector[1];
     }
 
-    public void interact(Line line, App app) {
+    public void interact(Line line) {
         if (this.willCollide(line) != null) {
             //System.out.println("Collided!");
             this.setNewColour(line);
-            this.setNewDirection(line);
+            this.setNewDirection(line); // removed app arg
             this.moveOne();
         }
     }
@@ -92,8 +102,11 @@ public class Ball {
         double distP1P2 = App.getDistance(P1, P2);
 
         if (distP1 + distP2 < ARTIFICIAL_RADIUS + distP1P2) {
+            if (distP1P2 < 0.0001) {
+                return P1;
+            }
             // Calculate the collision point
-            float t = (float) ((distP1 - ARTIFICIAL_RADIUS) / distP1P2);
+            float t = (float) ((distP1 - ARTIFICIAL_RADIUS) / distP1P2); // zeroDivisionError not handled
             float collisionX = P1[0] + t * (P2[0] - P1[0]);
             float collisionY = P1[1] + t * (P2[1] - P1[1]);
             return new float[] {collisionX, collisionY};
@@ -103,7 +116,17 @@ public class Ball {
         //return distP1 + distP2 < ARTIFICIAL_RADIUS + distP1P2;
     }
 
-    public void setNewDirection(Line line) {
+    public float[] setNewDirection(Line line) {
+        if (this.willCollide(line) == null) {
+            return null;
+        }
+
+        // Handle zeroDivisionError and when ball is directly on a dot
+        if (Arrays.equals(this.willCollide(line), line.getP1())) {
+            this.vector = new float[] {-1*this.getVector()[0], -1*this.getVector()[1]};
+            return this.vector;
+        }
+
         float[] P1 = line.getP1();
         float[] P2 = line.getP2();
         float dy = P2[1] - P1[1];
@@ -115,7 +138,7 @@ public class Ball {
         ////normalise
         double mag1 = Math.sqrt(Math.pow(norm1[0], 2) + Math.pow(norm1[1], 2));
         double mag2 = Math.sqrt(Math.pow(norm2[0], 2) + Math.pow(norm2[1], 2));
-        double[] normalised1 = new double[] {norm1[0] / mag1, norm1[1] / mag1};
+        double[] normalised1 = new double[] {norm1[0] / mag1, norm1[1] / mag1}; // zeroDivisionError not handled
         double[] normalised2 = new double[] {norm2[0] / mag2, norm2[1] / mag2};
 
         //GET CLOSEST NORMAL
@@ -138,7 +161,7 @@ public class Ball {
         double newDirectionY = this.vector[1] - 2 * vDotn * normUsed[1];
 
         this.vector = new float[] {(float)newDirectionX, (float)newDirectionY};
-       // System.out.println(Arrays.toString(this.vector));
+        return new float[] {(float)newDirectionX, (float)newDirectionY};
     }
 
     public void setNewColour(Line line) {
@@ -150,13 +173,13 @@ public class Ball {
         }
     }
 
-    public void meetHole(Hole hole, App app) {
-        if (this.isAbsorbed) {
-            return;
+    public boolean meetHole(Hole hole, App app) {
+        if (this.getIsAbsorbed()) {
+            return false;
         }
 
         if (hole.getHoleCenter() == null) {
-            return;
+            return false;
         }
 
         float[] ballCenter = this.getBallCenter();
@@ -176,13 +199,13 @@ public class Ball {
             if (this.colourToString().equals(hole.colourToString())) {
                 App.score += App.scoreIncrease.get(hole.colourToString()) * app.modScoreIncrease;
                 app.getBalls().remove(this);
-                this.isAbsorbed = true;
+                this.absorb();
             }
 
             else if (this.colour == 0 || hole.getColour() == 0) {
                 App.score += App.scoreIncrease.get("grey") * app.modScoreIncrease;
                 app.getBalls().remove(this);
-                this.isAbsorbed = true;
+                this.absorb();
             }
 
             else {
@@ -198,7 +221,7 @@ public class Ball {
             }
 
         }
-
+        return true;
     }
 
     public float[] getBallCenter() {

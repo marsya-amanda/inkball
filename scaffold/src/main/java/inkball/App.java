@@ -999,7 +999,7 @@ public class App extends PApplet {
                         }
                         //ball.interact(line, this);
                     }
-                    ball.interact(line, this);
+                    ball.interact(line);
                     break;
                 }
 
@@ -1009,7 +1009,7 @@ public class App extends PApplet {
             for (int j = this.drawnLines.size() - 1; j >= 0; j--) {
                 for (int k = this.drawnLines.get(j).size() - 1; k >= 0; k--) {
                     if (ball.willCollide(this.drawnLines.get(j).get(k)) != null) {
-                        ball.interact(this.drawnLines.get(j).get(k), this);
+                        ball.interact(this.drawnLines.get(j).get(k));
                         hasCollided = true;
                         this.removeLine(this.drawnLines.get(j).get(k));
                         break outerLoop;
