@@ -351,9 +351,4 @@ class BallTest {
         assertEquals(0, negativeBall.getBallRadius());
         assertArrayEquals(new float[]{0, 0}, negativeBall.getAttractionVector(hole), 0.1f);
     }
-
-    @Test
-    public void testEdgeAttractionVector() {
-
-    }
 }

@@ -56,26 +56,26 @@ Current scope:     <a href="../../index.html">all classes</a>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    55.6%
+    77.8%
   </span>
   <span class="absValue">
-    (5/9)
+    (7/9)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    81.2%
   </span>
   <span class="absValue">
-    (0/16)
+    (13/16)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    42.3%
+    92.3%
   </span>
   <span class="absValue">
-    (11/26)
+    (24/26)
   </span>
 </td>
 </tr>
@@ -121,13 +121,13 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;
 &nbsp;    @Override
 &nbsp;    public boolean equals(Object obj) {
-<b class="nc">&nbsp;        if (this == obj) return true;</b>
-<b class="nc">&nbsp;        if (obj == null || getClass() != obj.getClass()) return false;</b>
-<b class="nc">&nbsp;        Line line = (Line) obj;</b>
-<b class="nc">&nbsp;        return this.isDrawn == line.isDrawn &amp;&amp;</b>
+<b class="fc">&nbsp;        if (this == obj) return true;</b>
+<b class="pc">&nbsp;        if (obj == null || getClass() != obj.getClass()) return false;</b>
+<b class="fc">&nbsp;        Line line = (Line) obj;</b>
+<b class="pc">&nbsp;        return this.isDrawn == line.isDrawn &amp;&amp;</b>
 &nbsp;                this.colourTo == line.colourTo &amp;&amp;
-<b class="nc">&nbsp;                Arrays.equals(this.getP1(), line.getP1()) &amp;&amp;</b>
-<b class="nc">&nbsp;                Arrays.equals(this.getP2(), line.getP2());</b>
+<b class="fc">&nbsp;                Arrays.equals(this.getP1(), line.getP1()) &amp;&amp;</b>
+<b class="fc">&nbsp;                Arrays.equals(this.getP2(), line.getP2());</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    public void draw(App app) {
@@ -135,18 +135,18 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;            return;
 &nbsp;        }*/
 &nbsp;
-<b class="nc">&nbsp;        if (this.isDrawn) {</b>
-<b class="nc">&nbsp;            app.line(this.P1[0], this.P1[1], this.P2[0], this.P2[1]);</b>
+<b class="fc">&nbsp;        if (this.isDrawn) {</b>
+<b class="fc">&nbsp;            app.line(this.P1[0], this.P1[1], this.P2[0], this.P2[1]);</b>
 &nbsp;
-<b class="nc">&nbsp;            Random rand = new Random();</b>
-<b class="nc">&nbsp;            if (rand.nextBoolean()) {</b>
-<b class="nc">&nbsp;                app.stroke(colourTo);</b>
+<b class="fc">&nbsp;            Random rand = new Random();</b>
+<b class="fc">&nbsp;            if (rand.nextBoolean()) {</b>
+<b class="fc">&nbsp;                app.stroke(colourTo);</b>
 &nbsp;            }
 &nbsp;            else {
-<b class="nc">&nbsp;                app.stroke(colourTo);</b>
+<b class="fc">&nbsp;                app.stroke(colourTo);</b>
 &nbsp;            }
 &nbsp;            //app.stroke(0);
-<b class="nc">&nbsp;            app.strokeWeight(10);</b>
+<b class="fc">&nbsp;            app.strokeWeight(10);</b>
 &nbsp;        }
 &nbsp;
 &nbsp;    }
@@ -200,7 +200,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2024-10-09 17:25</div>
+    <div style="float:right;">generated on 2024-10-09 17:42</div>
 </div>
 </body>
 </html>

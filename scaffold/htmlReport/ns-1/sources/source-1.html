@@ -45,26 +45,26 @@ Current scope:     <a href="../../index.html">all classes</a>
   <td class="name">App</td>
 <td class="coverageStat">
   <span class="percent">
-    51.4%
+    85.7%
   </span>
   <span class="absValue">
-    (18/35)
+    (30/35)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    38.1%
+    71.7%
   </span>
   <span class="absValue">
-    (137/360)
+    (258/360)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    53.4%
+    87.1%
   </span>
   <span class="absValue">
-    (257/481)
+    (419/481)
   </span>
 </td>
 </tr>
@@ -91,26 +91,26 @@ Current scope:     <a href="../../index.html">all classes</a>
   <td class="name"><strong>Total</strong></td>
 <td class="coverageStat">
   <span class="percent">
-    52.8%
+    86.1%
   </span>
   <span class="absValue">
-    (19/36)
+    (31/36)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    38.1%
+    71.7%
   </span>
   <span class="absValue">
-    (137/360)
+    (258/360)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    53.6%
+    87.2%
   </span>
   <span class="absValue">
-    (259/483)
+    (421/483)
   </span>
 </td>
 </tr>
@@ -220,7 +220,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;    }
 &nbsp;
 &nbsp;    public ArrayList&lt;Ball&gt; getBalls() {
-<b class="nc">&nbsp;        return this.balls;</b>
+<b class="fc">&nbsp;        return this.balls;</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    /**
@@ -405,7 +405,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;                }
 &nbsp;
 &nbsp;                //WALL 1-4
-<b class="pc">&nbsp;                else if (lines.get(i).get(j).equals(&quot;1&quot;) || lines.get(i).get(j).equals(&quot;2&quot;) || lines.get(i).get(j).equals(&quot;3&quot;) || lines.get(i).get(j).equals(&quot;4&quot;)) {</b>
+<b class="fc">&nbsp;                else if (lines.get(i).get(j).equals(&quot;1&quot;) || lines.get(i).get(j).equals(&quot;2&quot;) || lines.get(i).get(j).equals(&quot;3&quot;) || lines.get(i).get(j).equals(&quot;4&quot;)) {</b>
 &nbsp;                    //make above more succinct
 <b class="fc">&nbsp;                    int colour = Integer.parseInt(lines.get(i).get(j));</b>
 <b class="fc">&nbsp;                    this.board[i][j] = new Wall(j, i, colour);</b>
@@ -446,7 +446,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;                }
 &nbsp;
 &nbsp;                //BALL
-<b class="pc">&nbsp;                else if (lines.get(i).get(j).equals(&quot;B&quot;)) {</b>
+<b class="fc">&nbsp;                else if (lines.get(i).get(j).equals(&quot;B&quot;)) {</b>
 <b class="fc">&nbsp;                    this.board[i][j] = new Blank(j, i);</b>
 <b class="pc">&nbsp;                    if (App.getColourCode(lines, i, j) != -1) {</b>
 <b class="fc">&nbsp;                        int colour = getColourCode(lines, i, j);</b>
@@ -455,7 +455,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;                }
 &nbsp;
 &nbsp;                else {
-<b class="nc">&nbsp;                    this.board[i][j] = new Blank(j, i);</b>
+<b class="fc">&nbsp;                    this.board[i][j] = new Blank(j, i);</b>
 &nbsp;                }
 &nbsp;            }
 &nbsp;        }
@@ -474,39 +474,39 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;    }
 &nbsp;
 &nbsp;    public void restart() {
-<b class="nc">&nbsp;        frameCount = 0;</b>
-<b class="nc">&nbsp;        ballTimer = 1;</b>
-<b class="nc">&nbsp;        this.balls = new ArrayList&lt;&gt;();</b>
-<b class="nc">&nbsp;        this.allLines = new ArrayList&lt;&gt;();</b>
-<b class="nc">&nbsp;        this.drawnLines = new ArrayList&lt;&gt;();</b>
-<b class="nc">&nbsp;        this.tempLines = new ArrayList&lt;&gt;();</b>
-<b class="nc">&nbsp;        this.spawners = new ArrayList&lt;&gt;();</b>
-<b class="nc">&nbsp;        this.holes = new ArrayList&lt;&gt;();</b>
-<b class="nc">&nbsp;        this.lastLine = 0;</b>
-<b class="nc">&nbsp;        isDrawing = false;</b>
-<b class="nc">&nbsp;        this.ballQueue = new Ball[0];</b>
+<b class="fc">&nbsp;        frameCount = 0;</b>
+<b class="fc">&nbsp;        ballTimer = 1;</b>
+<b class="fc">&nbsp;        this.balls = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;        this.allLines = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;        this.drawnLines = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;        this.tempLines = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;        this.spawners = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;        this.holes = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;        this.lastLine = 0;</b>
+<b class="fc">&nbsp;        isDrawing = false;</b>
+<b class="fc">&nbsp;        this.ballQueue = new Ball[0];</b>
 &nbsp;
-<b class="nc">&nbsp;        if (gameLevel &gt; this.json.getJSONArray(&quot;levels&quot;).size()) {</b>
+<b class="pc">&nbsp;        if (gameLevel &gt; this.json.getJSONArray(&quot;levels&quot;).size()) {</b>
 <b class="nc">&nbsp;            gameLevel = 1;</b>
 &nbsp;        }
 &nbsp;
-<b class="nc">&nbsp;        setup();</b>
+<b class="fc">&nbsp;        setup();</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    public int[] moveSpiral(int[] spiral) {
-<b class="nc">&nbsp;        if (spiral[1] == 0 &amp;&amp; spiral[0] &lt; this.board[0].length - 1) {</b>
-<b class="nc">&nbsp;            spiral[0]++;</b>
+<b class="fc">&nbsp;        if (spiral[1] == 0 &amp;&amp; spiral[0] &lt; this.board[0].length - 1) {</b>
+<b class="fc">&nbsp;            spiral[0]++;</b>
 &nbsp;        }
-<b class="nc">&nbsp;        else if (spiral[0] == this.board[0].length - 1 &amp;&amp; spiral[1] &lt; this.board.length - 1) {</b>
-<b class="nc">&nbsp;            spiral[1]++;</b>
+<b class="fc">&nbsp;        else if (spiral[0] == this.board[0].length - 1 &amp;&amp; spiral[1] &lt; this.board.length - 1) {</b>
+<b class="fc">&nbsp;            spiral[1]++;</b>
 &nbsp;        }
-<b class="nc">&nbsp;        else if (spiral[1] == this.board.length - 1 &amp;&amp; spiral[0] &lt;= this.board[0].length - 1 &amp;&amp; spiral[0] &gt; 0) {</b>
-<b class="nc">&nbsp;            spiral[0]--;</b>
+<b class="pc">&nbsp;        else if (spiral[1] == this.board.length - 1 &amp;&amp; spiral[0] &lt;= this.board[0].length - 1 &amp;&amp; spiral[0] &gt; 0) {</b>
+<b class="fc">&nbsp;            spiral[0]--;</b>
 &nbsp;        }
-<b class="nc">&nbsp;        else if (spiral[0] == 0 &amp;&amp; spiral[1] &lt;= this.board.length - 1 &amp;&amp; spiral[1] &gt; 0) {</b>
-<b class="nc">&nbsp;            spiral[1]--;</b>
+<b class="pc">&nbsp;        else if (spiral[0] == 0 &amp;&amp; spiral[1] &lt;= this.board.length - 1 &amp;&amp; spiral[1] &gt; 0) {</b>
+<b class="fc">&nbsp;            spiral[1]--;</b>
 &nbsp;        }
-<b class="nc">&nbsp;        return spiral;</b>
+<b class="fc">&nbsp;        return spiral;</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    public void spawnBalls() {
@@ -514,39 +514,39 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;            return;
 &nbsp;        }
 &nbsp;
-<b class="pc">&nbsp;        if (this.ballQueue[0] == null) {</b>
+<b class="fc">&nbsp;        if (this.ballQueue[0] == null) {</b>
 &nbsp;            return;
 &nbsp;        }
 &nbsp;
-<b class="pc">&nbsp;        if (frameCount % (this.spawnInterval * FPS) == 0) {</b>
-<b class="nc">&nbsp;            ballTimer = 1.1f;</b>
+<b class="fc">&nbsp;        if (frameCount % (this.spawnInterval * FPS) == 0) {</b>
+<b class="fc">&nbsp;            ballTimer = 1.1f;</b>
 &nbsp;
-<b class="nc">&nbsp;            int colour = this.ballQueue[0].getColour();</b>
-<b class="nc">&nbsp;            Random rand = new Random();</b>
-<b class="nc">&nbsp;            int i = rand.nextInt(this.spawners.size());</b>
-<b class="nc">&nbsp;            Spawner spawner = this.spawners.get(i);</b>
-<b class="nc">&nbsp;            this.balls.add(new Ball(spawner.getX() * CELLSIZE + 4, spawner.getY() * CELLSIZE + TOPBAR + 4, colour));</b>
-<b class="nc">&nbsp;            this.ballQueue[0] = null;</b>
+<b class="fc">&nbsp;            int colour = this.ballQueue[0].getColour();</b>
+<b class="fc">&nbsp;            Random rand = new Random();</b>
+<b class="fc">&nbsp;            int i = rand.nextInt(this.spawners.size());</b>
+<b class="fc">&nbsp;            Spawner spawner = this.spawners.get(i);</b>
+<b class="fc">&nbsp;            this.balls.add(new Ball(spawner.getX() * CELLSIZE + 4, spawner.getY() * CELLSIZE + TOPBAR + 4, colour));</b>
+<b class="fc">&nbsp;            this.ballQueue[0] = null;</b>
 &nbsp;
-<b class="nc">&nbsp;            if (this.ballQueue.length &gt; 1) {</b>
-<b class="nc">&nbsp;                ArrayList&lt;Ball&gt; tempQueue = new ArrayList&lt;&gt;();</b>
-<b class="nc">&nbsp;                for (Ball ball : this.ballQueue) {</b>
-<b class="nc">&nbsp;                    if (ball != null) {</b>
-<b class="nc">&nbsp;                        tempQueue.add(ball);</b>
+<b class="pc">&nbsp;            if (this.ballQueue.length &gt; 1) {</b>
+<b class="fc">&nbsp;                ArrayList&lt;Ball&gt; tempQueue = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;                for (Ball ball : this.ballQueue) {</b>
+<b class="fc">&nbsp;                    if (ball != null) {</b>
+<b class="fc">&nbsp;                        tempQueue.add(ball);</b>
 &nbsp;                    }
 &nbsp;                }
 &nbsp;
-<b class="nc">&nbsp;                this.ballQueue = new Ball[this.maxBallQueue]; // make queue null</b>
-<b class="nc">&nbsp;                for (int j = 0; j &lt; tempQueue.size(); j++) {</b>
-<b class="nc">&nbsp;                    this.ballQueue[j] = tempQueue.get(j);</b>
+<b class="fc">&nbsp;                this.ballQueue = new Ball[this.maxBallQueue]; // make queue null</b>
+<b class="fc">&nbsp;                for (int j = 0; j &lt; tempQueue.size(); j++) {</b>
+<b class="fc">&nbsp;                    this.ballQueue[j] = tempQueue.get(j);</b>
 &nbsp;                }
 &nbsp;
-<b class="nc">&nbsp;                for (int j = 0; j &lt; this.ballQueue.length - 1; j++) {</b>
-<b class="nc">&nbsp;                    if (this.ballQueue[j] == null) {</b>
+<b class="pc">&nbsp;                for (int j = 0; j &lt; this.ballQueue.length - 1; j++) {</b>
+<b class="fc">&nbsp;                    if (this.ballQueue[j] == null) {</b>
 &nbsp;                        return;
 &nbsp;                    }
-<b class="nc">&nbsp;                    int c = this.ballQueue[j].getColour();</b>
-<b class="nc">&nbsp;                    this.ballQueue[j] = new Ball(19 + 28 * j, 21, c); // move ball coordinates</b>
+<b class="fc">&nbsp;                    int c = this.ballQueue[j].getColour();</b>
+<b class="fc">&nbsp;                    this.ballQueue[j] = new Ball(19 + 28 * j, 21, c); // move ball coordinates</b>
 &nbsp;                }
 &nbsp;            }
 &nbsp;        }
@@ -612,21 +612,21 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;    }
 &nbsp;
 &nbsp;    public static Line[] getWallLineSegments(Wall wall) {
-<b class="nc">&nbsp;        Line[] lines = new Line[4];</b>
+<b class="fc">&nbsp;        Line[] lines = new Line[4];</b>
 &nbsp;
-<b class="nc">&nbsp;        float[] topLeftCorner = new float[] {wall.getX()*CELLSIZE, wall.getY() * CELLSIZE + TOPBAR}; // H0, V0</b>
-<b class="nc">&nbsp;        float[] topRightCorner = new float[] {(wall.getX()+1)*CELLSIZE, wall.getY() * CELLSIZE + TOPBAR}; // H1, V0</b>
-<b class="nc">&nbsp;        float[] bottomLeftCorner = new float[] {wall.getX()*CELLSIZE, (wall.getY()+1) * CELLSIZE + TOPBAR}; // H0, V1</b>
-<b class="nc">&nbsp;        float[] bottomRightCorner = new float[] {(wall.getX()+1)*CELLSIZE, (wall.getY()+1)*CELLSIZE + TOPBAR};</b>
+<b class="fc">&nbsp;        float[] topLeftCorner = new float[] {wall.getX()*CELLSIZE, wall.getY() * CELLSIZE + TOPBAR}; // H0, V0</b>
+<b class="fc">&nbsp;        float[] topRightCorner = new float[] {(wall.getX()+1)*CELLSIZE, wall.getY() * CELLSIZE + TOPBAR}; // H1, V0</b>
+<b class="fc">&nbsp;        float[] bottomLeftCorner = new float[] {wall.getX()*CELLSIZE, (wall.getY()+1) * CELLSIZE + TOPBAR}; // H0, V1</b>
+<b class="fc">&nbsp;        float[] bottomRightCorner = new float[] {(wall.getX()+1)*CELLSIZE, (wall.getY()+1)*CELLSIZE + TOPBAR};</b>
 &nbsp;
-<b class="nc">&nbsp;        int colour = wall.getColour();</b>
-<b class="nc">&nbsp;        boolean isDrawn = false;</b>
-<b class="nc">&nbsp;        lines[0] = new Line(topLeftCorner, topRightCorner, colour, isDrawn); //TOP</b>
-<b class="nc">&nbsp;        lines[1] = new Line(topLeftCorner, bottomLeftCorner, colour, isDrawn); //LEFT</b>
-<b class="nc">&nbsp;        lines[2] = new Line(bottomLeftCorner, bottomRightCorner, colour, isDrawn); // BOTTOM</b>
-<b class="nc">&nbsp;        lines[3] = new Line(bottomRightCorner, topRightCorner, colour, isDrawn);</b>
+<b class="fc">&nbsp;        int colour = wall.getColour();</b>
+<b class="fc">&nbsp;        boolean isDrawn = false;</b>
+<b class="fc">&nbsp;        lines[0] = new Line(topLeftCorner, topRightCorner, colour, isDrawn); //TOP</b>
+<b class="fc">&nbsp;        lines[1] = new Line(topLeftCorner, bottomLeftCorner, colour, isDrawn); //LEFT</b>
+<b class="fc">&nbsp;        lines[2] = new Line(bottomLeftCorner, bottomRightCorner, colour, isDrawn); // BOTTOM</b>
+<b class="fc">&nbsp;        lines[3] = new Line(bottomRightCorner, topRightCorner, colour, isDrawn);</b>
 &nbsp;
-<b class="nc">&nbsp;        return lines;</b>
+<b class="fc">&nbsp;        return lines;</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    public static int getColourCode (ArrayList&lt;ArrayList&lt;String&gt;&gt; lines, int i, int j) {
@@ -695,67 +695,67 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;    }
 &nbsp;
 &nbsp;    public void addDrawnLine(Line line) {
-<b class="nc">&nbsp;        if (line.getP1()[1] &lt; TOPBAR || line.getP2()[1] &lt; TOPBAR) {</b>
+<b class="pc">&nbsp;        if (line.getP1()[1] &lt; TOPBAR || line.getP2()[1] &lt; TOPBAR) {</b>
 &nbsp;            return;
 &nbsp;        }
 &nbsp;
-<b class="nc">&nbsp;        if  (this.tempLines.isEmpty()) {</b>
+<b class="pc">&nbsp;        if  (this.tempLines.isEmpty()) {</b>
 <b class="nc">&nbsp;            this.tempLines.add(new ArrayList&lt;&gt;());</b>
 &nbsp;        }
 &nbsp;
-<b class="nc">&nbsp;        this.tempLines.get(this.tempLines.size() - 1).add(line);</b>
+<b class="fc">&nbsp;        this.tempLines.get(this.tempLines.size() - 1).add(line);</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    public void removeLine(float[] toRemove) {
-<b class="nc">&nbsp;        ArrayList&lt;Line&gt; removedLine = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;        ArrayList&lt;Line&gt; removedLine = new ArrayList&lt;&gt;();</b>
 &nbsp;
 &nbsp;        outerLoop:
-<b class="nc">&nbsp;        for (int i = (this.drawnLines.size() - 1); i &gt;= 0; i--) {</b>
-<b class="nc">&nbsp;            for (int j = (this.drawnLines.get(i).size() - 1); j &gt;= 0; j--) {</b>
-<b class="nc">&nbsp;                if (mouseOnLine(toRemove, this.drawnLines.get(i).get(j).getP1(), this.drawnLines.get(i).get(j).getP2())) {</b>
-<b class="nc">&nbsp;                    removedLine = this.drawnLines.get(i);</b>
+<b class="fc">&nbsp;        for (int i = (this.drawnLines.size() - 1); i &gt;= 0; i--) {</b>
+<b class="pc">&nbsp;            for (int j = (this.drawnLines.get(i).size() - 1); j &gt;= 0; j--) {</b>
+<b class="fc">&nbsp;                if (mouseOnLine(toRemove, this.drawnLines.get(i).get(j).getP1(), this.drawnLines.get(i).get(j).getP2())) {</b>
+<b class="fc">&nbsp;                    removedLine = this.drawnLines.get(i);</b>
 &nbsp;                    break outerLoop;
 &nbsp;                }
 &nbsp;            }
 &nbsp;        }
 &nbsp;
-<b class="nc">&nbsp;        if (removedLine.isEmpty()) {</b>
+<b class="fc">&nbsp;        if (removedLine.isEmpty()) {</b>
 &nbsp;            return;
 &nbsp;        }
 &nbsp;
-<b class="nc">&nbsp;        this.tempLines.remove(removedLine);</b>
-<b class="nc">&nbsp;        this.drawnLines.remove(removedLine);</b>
+<b class="fc">&nbsp;        this.tempLines.remove(removedLine);</b>
+<b class="fc">&nbsp;        this.drawnLines.remove(removedLine);</b>
 &nbsp;        //System.out.println(&quot;just removed a line! current number of lines: &quot; + this.drawnLines.size());
 &nbsp;
 &nbsp;    }
 &nbsp;
 &nbsp;    public void removeLine(Line toRemove) {
-<b class="nc">&nbsp;        ArrayList&lt;Line&gt; removedLine = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;        ArrayList&lt;Line&gt; removedLine = new ArrayList&lt;&gt;();</b>
 &nbsp;
 &nbsp;        outerLoop:
-<b class="nc">&nbsp;        for (int i = this.drawnLines.size() - 1; i &gt;= 0; i--) {</b>
-<b class="nc">&nbsp;            for (int j = (this.drawnLines.get(i).size() - 1); j &gt;= 0; j--) {</b>
-<b class="nc">&nbsp;                if (this.drawnLines.get(i).get(j).equals(toRemove)) {</b>
-<b class="nc">&nbsp;                    removedLine = this.drawnLines.get(i);</b>
+<b class="pc">&nbsp;        for (int i = this.drawnLines.size() - 1; i &gt;= 0; i--) {</b>
+<b class="pc">&nbsp;            for (int j = (this.drawnLines.get(i).size() - 1); j &gt;= 0; j--) {</b>
+<b class="fc">&nbsp;                if (this.drawnLines.get(i).get(j).equals(toRemove)) {</b>
+<b class="fc">&nbsp;                    removedLine = this.drawnLines.get(i);</b>
 &nbsp;                    break outerLoop;
 &nbsp;                }
 &nbsp;            }
 &nbsp;        }
 &nbsp;
-<b class="nc">&nbsp;        if (removedLine.isEmpty()) {</b>
+<b class="pc">&nbsp;        if (removedLine.isEmpty()) {</b>
 &nbsp;            return;
 &nbsp;        }
 &nbsp;
-<b class="nc">&nbsp;        this.tempLines.remove(removedLine);</b>
-<b class="nc">&nbsp;        this.drawnLines.remove(removedLine);</b>
+<b class="fc">&nbsp;        this.tempLines.remove(removedLine);</b>
+<b class="fc">&nbsp;        this.drawnLines.remove(removedLine);</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    public static boolean mouseOnLine(float[] mouseXY, float[] lineP1, float[] lineP2) {
-<b class="nc">&nbsp;        double distP1 = App.getDistance(mouseXY, lineP1);</b>
-<b class="nc">&nbsp;        double distP2 = App.getDistance(mouseXY, lineP2);</b>
-<b class="nc">&nbsp;        double distP1P2 = App.getDistance(lineP1, lineP2);</b>
+<b class="fc">&nbsp;        double distP1 = App.getDistance(mouseXY, lineP1);</b>
+<b class="fc">&nbsp;        double distP2 = App.getDistance(mouseXY, lineP2);</b>
+<b class="fc">&nbsp;        double distP1P2 = App.getDistance(lineP1, lineP2);</b>
 &nbsp;
-<b class="nc">&nbsp;        return distP1 + distP2 &lt; mouseRadius + distP1P2; //mouse radius is 5</b>
+<b class="fc">&nbsp;        return distP1 + distP2 &lt; mouseRadius + distP1P2; //mouse radius is 5</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    public boolean getBallsStatus() {
@@ -802,29 +802,29 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;            wallsAssociated[1] = (Wall) (this.board[wallsAssociated[0].getY()][wallsAssociated[0].getX()]);</b>
 <b class="fc">&nbsp;            return wallsAssociated;</b>
 &nbsp;        }
-<b class="nc">&nbsp;        catch (Exception e) {</b>
-<b class="nc">&nbsp;            return null;</b>
+<b class="fc">&nbsp;        catch (Exception e) {</b>
+<b class="fc">&nbsp;            return null;</b>
 &nbsp;        }
 &nbsp;    }
 &nbsp;
 &nbsp;    public void removeWall (Wall wall) {
-<b class="nc">&nbsp;        List&lt;Line&gt; linesToRemove = Arrays.asList(getWallLineSegments(wall));</b>
-<b class="nc">&nbsp;        int removeInd = -1;</b>
+<b class="fc">&nbsp;        List&lt;Line&gt; linesToRemove = Arrays.asList(getWallLineSegments(wall));</b>
+<b class="fc">&nbsp;        int removeInd = -1;</b>
 &nbsp;        //System.out.println(linesToRemove);
-<b class="nc">&nbsp;        boolean removed = false;</b>
-<b class="nc">&nbsp;        for (int i = 0; i &lt; this.allLines.size() - 4; i++) { // starts at 3 because of window border line segments</b>
+<b class="fc">&nbsp;        boolean removed = false;</b>
+<b class="fc">&nbsp;        for (int i = 0; i &lt; this.allLines.size() - 4; i++) { // starts at 3 because of window border line segments</b>
 &nbsp;            //System.out.println(this.allLines.subList(i, i + 4));
-<b class="nc">&nbsp;            if (this.allLines.subList(i, i + 4).equals(linesToRemove)) { // +4 because upper bound exclusive</b>
+<b class="fc">&nbsp;            if (this.allLines.subList(i, i + 4).equals(linesToRemove)) { // +4 because upper bound exclusive</b>
 &nbsp;                //System.out.println(&quot;removed Lines!&quot;); // UPDATE: PASSING
-<b class="nc">&nbsp;                removeInd = i;</b>
-<b class="nc">&nbsp;                removed = true;</b>
+<b class="fc">&nbsp;                removeInd = i;</b>
+<b class="fc">&nbsp;                removed = true;</b>
 &nbsp;                break;
 &nbsp;            }
 &nbsp;        }
-<b class="nc">&nbsp;        if (removed &amp;&amp; removeInd != -1) {</b>
-<b class="nc">&nbsp;            this.allLines.subList(removeInd, removeInd + 4).clear();</b>
-<b class="nc">&nbsp;            this.walls.remove(wall);</b>
-<b class="nc">&nbsp;            this.board[wall.getY()][wall.getX()] = new Blank(wall.getX(), wall.getY());</b>
+<b class="pc">&nbsp;        if (removed &amp;&amp; removeInd != -1) {</b>
+<b class="fc">&nbsp;            this.allLines.subList(removeInd, removeInd + 4).clear();</b>
+<b class="fc">&nbsp;            this.walls.remove(wall);</b>
+<b class="fc">&nbsp;            this.board[wall.getY()][wall.getX()] = new Blank(wall.getX(), wall.getY());</b>
 &nbsp;        }
 &nbsp;    }
 &nbsp;
@@ -866,68 +866,68 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;    @Override
 &nbsp;    public void mousePressed(MouseEvent e) {
 &nbsp;        // create a new player-drawn line object
-<b class="nc">&nbsp;        if (gameState == GameState.PAUSED) {</b>
+<b class="pc">&nbsp;        if (gameState == GameState.PAUSED) {</b>
 &nbsp;            return;
 &nbsp;        }
 &nbsp;
-<b class="nc">&nbsp;        int mouseX = e.getX();</b>
-<b class="nc">&nbsp;        int mouseY = e.getY();</b>
+<b class="fc">&nbsp;        int mouseX = e.getX();</b>
+<b class="fc">&nbsp;        int mouseY = e.getY();</b>
 &nbsp;
-<b class="nc">&nbsp;        if (mouseButton == LEFT) {</b>
-<b class="nc">&nbsp;            if (ctrlPressed) {</b>
+<b class="fc">&nbsp;        if (mouseButton == LEFT) {</b>
+<b class="pc">&nbsp;            if (ctrlPressed) {</b>
 <b class="nc">&nbsp;                float[] toRemove = new float[] {mouseX, mouseY};</b>
 &nbsp;
 <b class="nc">&nbsp;                this.removeLine(toRemove);</b>
 &nbsp;                return;
 &nbsp;            }
 &nbsp;
-<b class="nc">&nbsp;            if (!isDrawing) {</b>
-<b class="nc">&nbsp;                this.start = new float[] {mouseX, mouseY};</b>
+<b class="pc">&nbsp;            if (!isDrawing) {</b>
+<b class="fc">&nbsp;                this.start = new float[] {mouseX, mouseY};</b>
 &nbsp;                //this.drawnLines.add(new ArrayList&lt;&gt;());
-<b class="nc">&nbsp;                this.tempLines.add(new ArrayList&lt;&gt;());</b>
+<b class="fc">&nbsp;                this.tempLines.add(new ArrayList&lt;&gt;());</b>
 &nbsp;            }
 &nbsp;
 <b class="nc">&nbsp;            else if (this.lastLine == 0 || frameCount - this.lastLine == 1) {</b>
 <b class="nc">&nbsp;                this.end = new float[] {mouseX, mouseY};</b>
 &nbsp;            }
 &nbsp;
-<b class="nc">&nbsp;            isDrawing = true;</b>
-<b class="nc">&nbsp;            this.lastLine = frameCount;</b>
+<b class="fc">&nbsp;            isDrawing = true;</b>
+<b class="fc">&nbsp;            this.lastLine = frameCount;</b>
 &nbsp;        }
 &nbsp;
-<b class="nc">&nbsp;        else if (mouseButton == RIGHT) {</b>
-<b class="nc">&nbsp;            float[] toRemove = new float[] {mouseX, mouseY};</b>
+<b class="pc">&nbsp;        else if (mouseButton == RIGHT) {</b>
+<b class="fc">&nbsp;            float[] toRemove = new float[] {mouseX, mouseY};</b>
 &nbsp;
-<b class="nc">&nbsp;            this.removeLine(toRemove);</b>
+<b class="fc">&nbsp;            this.removeLine(toRemove);</b>
 &nbsp;        }
 &nbsp;
 &nbsp;    }
 &nbsp;	
 &nbsp;	@Override
 &nbsp;    public void mouseDragged(MouseEvent e) {
-<b class="nc">&nbsp;        if (gameState == GameState.PAUSED) {</b>
+<b class="pc">&nbsp;        if (gameState == GameState.PAUSED) {</b>
 &nbsp;            return;
 &nbsp;        }
 &nbsp;
 &nbsp;		// remove player-drawn line object if right mouse button is held
 &nbsp;		// and mouse position collides with the line
-<b class="nc">&nbsp;        int mouseX = e.getX();</b>
-<b class="nc">&nbsp;        int mouseY = e.getY();</b>
+<b class="fc">&nbsp;        int mouseX = e.getX();</b>
+<b class="fc">&nbsp;        int mouseY = e.getY();</b>
 &nbsp;
-<b class="nc">&nbsp;        if (mouseButton == LEFT) {</b>
-<b class="nc">&nbsp;            if (mouseX == this.start[0] &amp;&amp; mouseY == this.start[1]) {</b>
+<b class="fc">&nbsp;        if (mouseButton == LEFT) {</b>
+<b class="pc">&nbsp;            if (mouseX == this.start[0] &amp;&amp; mouseY == this.start[1]) {</b>
 &nbsp;                return;
 &nbsp;            }
 &nbsp;
-<b class="nc">&nbsp;            else if (isDrawing) {</b>
+<b class="pc">&nbsp;            else if (isDrawing) {</b>
 &nbsp;                //note handle null
-<b class="nc">&nbsp;                this.end = new float[] {mouseX, mouseY};</b>
+<b class="fc">&nbsp;                this.end = new float[] {mouseX, mouseY};</b>
 &nbsp;
-<b class="nc">&nbsp;                if (frameCount - this.lastLine == 1 || this.lastLine == 0) {</b>
-<b class="nc">&nbsp;                    this.lastLine = frameCount;</b>
+<b class="pc">&nbsp;                if (frameCount - this.lastLine == 1 || this.lastLine == 0) {</b>
+<b class="fc">&nbsp;                    this.lastLine = frameCount;</b>
 &nbsp;
-<b class="nc">&nbsp;                    this.addDrawnLine(new Line(start, end, 0, true));</b>
-<b class="nc">&nbsp;                    this.start = new float[] {mouseX, mouseY};</b>
+<b class="fc">&nbsp;                    this.addDrawnLine(new Line(start, end, 0, true));</b>
+<b class="fc">&nbsp;                    this.start = new float[] {mouseX, mouseY};</b>
 &nbsp;                }
 &nbsp;            }
 &nbsp;
@@ -941,24 +941,24 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;
 &nbsp;    @Override
 &nbsp;    public void mouseReleased(MouseEvent e) {
-<b class="nc">&nbsp;        if (gameState == GameState.PAUSED) {</b>
+<b class="pc">&nbsp;        if (gameState == GameState.PAUSED) {</b>
 &nbsp;            return;
 &nbsp;        }
 &nbsp;
-<b class="nc">&nbsp;        int mouseX = e.getX();</b>
-<b class="nc">&nbsp;        int mouseY = e.getY();</b>
+<b class="fc">&nbsp;        int mouseX = e.getX();</b>
+<b class="fc">&nbsp;        int mouseY = e.getY();</b>
 &nbsp;
-<b class="nc">&nbsp;        if (mouseButton == LEFT) {</b>
-<b class="nc">&nbsp;            if (isDrawing) {</b>
-<b class="nc">&nbsp;                this.end = new float[]{mouseX, mouseY};</b>
-<b class="nc">&nbsp;                this.addDrawnLine(new Line(this.start, this.end, 0, true));</b>
+<b class="fc">&nbsp;        if (mouseButton == LEFT) {</b>
+<b class="pc">&nbsp;            if (isDrawing) {</b>
+<b class="fc">&nbsp;                this.end = new float[]{mouseX, mouseY};</b>
+<b class="fc">&nbsp;                this.addDrawnLine(new Line(this.start, this.end, 0, true));</b>
 &nbsp;                //System.out.println(&quot;just drew a line! current number of lines: &quot; + this.drawnLines.size());
 &nbsp;                //this.allLines.addAll(this.drawnLines.get(this.drawnLines.size() - 1)); //other way
-<b class="nc">&nbsp;                if (!this.tempLines.isEmpty()) {</b>
-<b class="nc">&nbsp;                    this.drawnLines.add(this.tempLines.get(this.tempLines.size() - 1));</b>
+<b class="pc">&nbsp;                if (!this.tempLines.isEmpty()) {</b>
+<b class="fc">&nbsp;                    this.drawnLines.add(this.tempLines.get(this.tempLines.size() - 1));</b>
 &nbsp;                }
-<b class="nc">&nbsp;                this.lastLine = frameCount;</b>
-<b class="nc">&nbsp;                isDrawing = false;</b>
+<b class="fc">&nbsp;                this.lastLine = frameCount;</b>
+<b class="fc">&nbsp;                isDrawing = false;</b>
 &nbsp;            }
 &nbsp;        }
 &nbsp;    }
@@ -983,18 +983,18 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;        }
 &nbsp;
 &nbsp;
-<b class="pc">&nbsp;        if (gameState == GameState.WIN) {</b>
-<b class="nc">&nbsp;            textSize(30);</b>
-<b class="nc">&nbsp;            fill(0);</b>
-<b class="nc">&nbsp;            textAlign(CENTER, CENTER);</b>
+<b class="fc">&nbsp;        if (gameState == GameState.WIN) {</b>
+<b class="fc">&nbsp;            textSize(30);</b>
+<b class="fc">&nbsp;            fill(0);</b>
+<b class="fc">&nbsp;            textAlign(CENTER, CENTER);</b>
 &nbsp;            //frameCount = (timeLimit - lastSecond) * 30;
-<b class="nc">&nbsp;            Wall firstSpiral = new Wall(this.firstSpiral[0], this.firstSpiral[1], 4);</b>
-<b class="nc">&nbsp;            Wall secondSpiral = new Wall(this.secondSpiral[0], this.secondSpiral[1], 4);</b>
-<b class="nc">&nbsp;            firstSpiral.draw(this);</b>
-<b class="nc">&nbsp;            secondSpiral.draw(this);</b>
-<b class="nc">&nbsp;            if ((frameCount - lastSecond * FPS) % 2 == 0) {</b>
-<b class="nc">&nbsp;                this.moveSpiral(this.firstSpiral);</b>
-<b class="nc">&nbsp;                this.moveSpiral(this.secondSpiral);</b>
+<b class="fc">&nbsp;            Wall firstSpiral = new Wall(this.firstSpiral[0], this.firstSpiral[1], 4);</b>
+<b class="fc">&nbsp;            Wall secondSpiral = new Wall(this.secondSpiral[0], this.secondSpiral[1], 4);</b>
+<b class="fc">&nbsp;            firstSpiral.draw(this);</b>
+<b class="fc">&nbsp;            secondSpiral.draw(this);</b>
+<b class="fc">&nbsp;            if ((frameCount - lastSecond * FPS) % 2 == 0) {</b>
+<b class="fc">&nbsp;                this.moveSpiral(this.firstSpiral);</b>
+<b class="fc">&nbsp;                this.moveSpiral(this.secondSpiral);</b>
 &nbsp;            }
 &nbsp;        }
 &nbsp;
@@ -1003,13 +1003,13 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;        //----------------------------------
 &nbsp;        // 1) Timer
 <b class="pc">&nbsp;        if (timeLimit != 0) {</b>
-<b class="pc">&nbsp;            if (frameCount - (timeLimit - lastSecond) * 30 == FPS &amp;&amp; gameState == GameState.PLAYING) {</b>
+<b class="fc">&nbsp;            if (frameCount - (timeLimit - lastSecond) * 30 == FPS &amp;&amp; gameState == GameState.PLAYING) {</b>
 <b class="fc">&nbsp;                lastSecond--;</b>
-<b class="pc">&nbsp;                if (this.ballQueue[0] != null) {</b>
+<b class="fc">&nbsp;                if (this.ballQueue[0] != null) {</b>
 <b class="fc">&nbsp;                    ballTimer -= 0.1f;</b>
 &nbsp;                }
 &nbsp;                else {
-<b class="nc">&nbsp;                    ballTimer = 1.1f;</b>
+<b class="fc">&nbsp;                    ballTimer = 1.1f;</b>
 &nbsp;                }
 &nbsp;            }
 <b class="pc">&nbsp;            if (gameState == GameState.PAUSED) {</b>
@@ -1032,30 +1032,30 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;        }
 &nbsp;
 &nbsp;        // if PAUSED
-<b class="pc">&nbsp;        if (gameState != GameState.PLAYING) {</b>
-<b class="nc">&nbsp;            textSize(22);</b>
-<b class="nc">&nbsp;            fill(0);</b>
-<b class="nc">&nbsp;            textAlign(CENTER, CENTER);</b>
-<b class="nc">&nbsp;            if (gameState == GameState.PAUSED) {</b>
+<b class="fc">&nbsp;        if (gameState != GameState.PLAYING) {</b>
+<b class="fc">&nbsp;            textSize(22);</b>
+<b class="fc">&nbsp;            fill(0);</b>
+<b class="fc">&nbsp;            textAlign(CENTER, CENTER);</b>
+<b class="pc">&nbsp;            if (gameState == GameState.PAUSED) {</b>
 <b class="nc">&nbsp;                text(&quot;*** PAUSED ***&quot;, WIDTH / 2, TOPBAR / 2);</b>
 &nbsp;            }
-<b class="nc">&nbsp;            else if (gameState == GameState.WIN &amp;&amp; gameLevel &gt; this.json.getJSONArray(&quot;levels&quot;).size()) {</b>
-<b class="nc">&nbsp;                text(&quot;=== ENDED ===&quot;, WIDTH / 2, TOPBAR / 2);</b>
+<b class="pc">&nbsp;            else if (gameState == GameState.WIN &amp;&amp; gameLevel &gt; this.json.getJSONArray(&quot;levels&quot;).size()) {</b>
+<b class="fc">&nbsp;                text(&quot;=== ENDED ===&quot;, WIDTH / 2, TOPBAR / 2);</b>
 &nbsp;            }
-<b class="nc">&nbsp;            else if (gameState == GameState.OVER) {</b>
+<b class="pc">&nbsp;            else if (gameState == GameState.OVER) {</b>
 <b class="nc">&nbsp;                text(&quot;=== TIME&#39;S UP ===&quot;, WIDTH / 2, TOPBAR / 2);</b>
 &nbsp;            }
 &nbsp;
-<b class="nc">&nbsp;            for (Ball ball : this.balls) {</b>
+<b class="pc">&nbsp;            for (Ball ball : this.balls) {</b>
 <b class="nc">&nbsp;                ball.draw(this);</b>
 &nbsp;            }
-<b class="nc">&nbsp;            for (Line line : this.allLines) {</b>
-<b class="nc">&nbsp;                line.draw(this);</b>
+<b class="fc">&nbsp;            for (Line line : this.allLines) {</b>
+<b class="fc">&nbsp;                line.draw(this);</b>
 &nbsp;            }
 &nbsp;
-<b class="nc">&nbsp;            if (gameState == GameState.WIN &amp;&amp; gameLevel &lt;= this.json.getJSONArray(&quot;levels&quot;).size()) {</b>
-<b class="nc">&nbsp;                if (Arrays.equals(this.firstSpiral, new int[]{this.board[0].length - 1, this.board.length - 1}) &amp;&amp; Arrays.equals(this.secondSpiral, new int[]{0, 0})) {</b>
-<b class="nc">&nbsp;                    restart();</b>
+<b class="pc">&nbsp;            if (gameState == GameState.WIN &amp;&amp; gameLevel &lt;= this.json.getJSONArray(&quot;levels&quot;).size()) {</b>
+<b class="pc">&nbsp;                if (Arrays.equals(this.firstSpiral, new int[]{this.board[0].length - 1, this.board.length - 1}) &amp;&amp; Arrays.equals(this.secondSpiral, new int[]{0, 0})) {</b>
+<b class="fc">&nbsp;                    restart();</b>
 &nbsp;                }
 &nbsp;            }
 &nbsp;        }
@@ -1072,18 +1072,18 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;            if (i &gt; 4) {</b>
 &nbsp;                break;
 &nbsp;            }
-<b class="pc">&nbsp;            if (this.ballQueue[i] == null) {</b>
+<b class="fc">&nbsp;            if (this.ballQueue[i] == null) {</b>
 &nbsp;                continue;
 &nbsp;            }
 <b class="fc">&nbsp;            this.ballQueue[i].draw(this);</b>
 &nbsp;        }
 &nbsp;
 &nbsp;        // 3b) Ball timer
-<b class="pc">&nbsp;        if (this.ballQueue[0] != null) {</b>
+<b class="fc">&nbsp;        if (this.ballQueue[0] != null) {</b>
 <b class="fc">&nbsp;            textSize(18);</b>
 <b class="fc">&nbsp;            fill(0);</b>
 <b class="fc">&nbsp;            textAlign(LEFT, TOP);</b>
-<b class="pc">&nbsp;            if (ballTimer != 1.1f) {</b>
+<b class="fc">&nbsp;            if (ballTimer != 1.1f) {</b>
 <b class="fc">&nbsp;                String s = String.format(&quot;%.1f&quot;, ballTimer);</b>
 <b class="fc">&nbsp;                text(s, 164, 22);</b>
 &nbsp;            }
@@ -1097,9 +1097,9 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;        // draw lines in real time
 &nbsp;        //----------------------------------
 <b class="fc">&nbsp;        strokeWeight(10);</b>
-<b class="pc">&nbsp;        for (ArrayList&lt;Line&gt; lineList : this.tempLines) {</b>
-<b class="nc">&nbsp;            for (Line line : lineList) {</b>
-<b class="nc">&nbsp;                line.draw(this);</b>
+<b class="fc">&nbsp;        for (ArrayList&lt;Line&gt; lineList : this.tempLines) {</b>
+<b class="fc">&nbsp;            for (Line line : lineList) {</b>
+<b class="fc">&nbsp;                line.draw(this);</b>
 &nbsp;            }
 &nbsp;        }
 &nbsp;
@@ -1112,13 +1112,13 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;                Line line = this.allLines.get(j);</b>
 <b class="fc">&nbsp;                if (ball.willCollide(line) != null) {</b>
 <b class="fc">&nbsp;                    hasCollided = true;</b>
-<b class="pc">&nbsp;                    if (this.getWallAssociated(ball, line) != null) {</b>
+<b class="fc">&nbsp;                    if (this.getWallAssociated(ball, line) != null) {</b>
 <b class="fc">&nbsp;                        Wall[] wallsAssociated = this.getWallAssociated(ball, line);</b>
 <b class="fc">&nbsp;                        (wallsAssociated[0]).damage(ball);</b>
 <b class="fc">&nbsp;                        (wallsAssociated[1]).damage(ball);</b>
-<b class="pc">&nbsp;                        if (wallsAssociated[0].getHP() == 0) {</b>
+<b class="fc">&nbsp;                        if (wallsAssociated[0].getHP() == 0) {</b>
 &nbsp;                            //System.out.println(&quot;removed wall&quot;);
-<b class="nc">&nbsp;                            this.removeWall(wallsAssociated[0]); // not REMOVING LINES, removing wrong walls</b>
+<b class="fc">&nbsp;                            this.removeWall(wallsAssociated[0]); // not REMOVING LINES, removing wrong walls</b>
 &nbsp;                        }
 &nbsp;                        //ball.interact(line, this);
 &nbsp;                    }
@@ -1129,12 +1129,12 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;            }
 &nbsp;
 &nbsp;            outerLoop:
-<b class="pc">&nbsp;            for (int j = this.drawnLines.size() - 1; j &gt;= 0; j--) {</b>
-<b class="nc">&nbsp;                for (int k = this.drawnLines.get(j).size() - 1; k &gt;= 0; k--) {</b>
-<b class="nc">&nbsp;                    if (ball.willCollide(this.drawnLines.get(j).get(k)) != null) {</b>
-<b class="nc">&nbsp;                        ball.interact(this.drawnLines.get(j).get(k));</b>
-<b class="nc">&nbsp;                        hasCollided = true;</b>
-<b class="nc">&nbsp;                        this.removeLine(this.drawnLines.get(j).get(k));</b>
+<b class="fc">&nbsp;            for (int j = this.drawnLines.size() - 1; j &gt;= 0; j--) {</b>
+<b class="fc">&nbsp;                for (int k = this.drawnLines.get(j).size() - 1; k &gt;= 0; k--) {</b>
+<b class="fc">&nbsp;                    if (ball.willCollide(this.drawnLines.get(j).get(k)) != null) {</b>
+<b class="fc">&nbsp;                        ball.interact(this.drawnLines.get(j).get(k));</b>
+<b class="fc">&nbsp;                        hasCollided = true;</b>
+<b class="fc">&nbsp;                        this.removeLine(this.drawnLines.get(j).get(k));</b>
 &nbsp;                        break outerLoop;
 &nbsp;                    }
 &nbsp;                }
@@ -1146,8 +1146,8 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;
 &nbsp;            //Interact with line first
 <b class="fc">&nbsp;            for (Hole hole : this.holes) {</b>
-<b class="pc">&nbsp;                if (getDistance(ball.getBallCenter(), hole.getHoleCenter()) &lt; 32) {</b>
-<b class="nc">&nbsp;                    ball.meetHole(hole, this);</b>
+<b class="fc">&nbsp;                if (getDistance(ball.getBallCenter(), hole.getHoleCenter()) &lt; 32) {</b>
+<b class="fc">&nbsp;                    ball.meetHole(hole, this);</b>
 &nbsp;                    break;
 &nbsp;                }
 &nbsp;                else {
@@ -1160,9 +1160,9 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;        // game end
 &nbsp;        //----------------------------------
 <b class="pc">&nbsp;        if (this.ballQueue[0] == null &amp;&amp; this.balls.isEmpty() &amp;&amp; gameState != GameState.WIN) {</b>
-<b class="nc">&nbsp;            gameState = GameState.WIN;</b>
-<b class="nc">&nbsp;            gameLevel++;</b>
-<b class="nc">&nbsp;            score += (int) (lastSecond / 0.067);</b>
+<b class="fc">&nbsp;            gameState = GameState.WIN;</b>
+<b class="fc">&nbsp;            gameLevel++;</b>
+<b class="fc">&nbsp;            score += (int) (lastSecond / 0.067);</b>
 &nbsp;        }
 &nbsp;
 <b class="pc">&nbsp;        else if (frameCount &gt;= timeLimit * FPS) {</b>
@@ -1198,7 +1198,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2024-10-09 17:25</div>
+    <div style="float:right;">generated on 2024-10-09 17:42</div>
 </div>
 </body>
 </html>

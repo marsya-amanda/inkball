@@ -64,18 +64,18 @@ Current scope:     <a href="../../index.html">all classes</a>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    15%
+    40%
   </span>
   <span class="absValue">
-    (3/20)
+    (8/20)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    42.3%
+    57.7%
   </span>
   <span class="absValue">
-    (11/26)
+    (15/26)
   </span>
 </td>
 </tr>
@@ -107,8 +107,8 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="pc">&nbsp;        if (this.hp &lt;= 3 &amp;&amp; this.hp &gt; 1) {</b>
 <b class="fc">&nbsp;            tile = app.getSprite(&quot;wall&quot;+this.colour);</b>
 &nbsp;        }
-<b class="nc">&nbsp;        else if (this.hp &lt; 2) {</b>
-<b class="nc">&nbsp;            tile = app.getSprite(&quot;wall&quot;+this.colour+&quot;-damaged&quot;);</b>
+<b class="pc">&nbsp;        else if (this.hp &lt; 2) {</b>
+<b class="fc">&nbsp;            tile = app.getSprite(&quot;wall&quot;+this.colour+&quot;-damaged&quot;);</b>
 &nbsp;        }
 <b class="fc">&nbsp;        app.image(tile, x*App.CELLSIZE, y*App.CELLSIZE+App.TOPBAR, App.CELLSIZE, App.CELLSIZE);</b>
 &nbsp;    }
@@ -122,12 +122,12 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;    }
 &nbsp;
 &nbsp;    public void damage(Ball ball) {
-<b class="pc">&nbsp;        if (this.colour == 0) {</b>
+<b class="fc">&nbsp;        if (this.colour == 0) {</b>
 <b class="fc">&nbsp;            this.hp--;</b>
 &nbsp;            return;
 &nbsp;        }
-<b class="nc">&nbsp;        if (this.colour == ball.getColour()) {</b>
-<b class="nc">&nbsp;            this.hp--;</b>
+<b class="fc">&nbsp;        if (this.colour == ball.getColour()) {</b>
+<b class="fc">&nbsp;            this.hp--;</b>
 &nbsp;        }
 &nbsp;    }
 &nbsp;
@@ -174,7 +174,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2024-10-09 17:25</div>
+    <div style="float:right;">generated on 2024-10-09 17:42</div>
 </div>
 </body>
 </html>
