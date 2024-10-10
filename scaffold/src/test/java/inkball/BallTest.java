@@ -1,26 +1,60 @@
 package inkball;
 
 import org.junit.jupiter.api.BeforeEach;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import static org.mockito.Mockito.*;
 import org.junit.jupiter.api.Test;
+import processing.core.PImage;
 
 import java.util.Arrays;
+import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class BallTest {
 
-    App app;
+    private App app;
     private Ball ball;
     private Line line;
     private Hole hole;
+    private ArrayList<Ball> mockBallList;
 
     @BeforeEach
     public void setUp() {
         // Setup runs before each test
-        app = new App();
+        app = mock(App.class); // Creating a mock app because only score tests are relevant
+        this.appMockSetUp();
+
+        mockBallList = mock(ArrayList.class);
+        when(app.getBalls()).thenReturn(mockBallList);
+
         ball = new Ball(88, 88, 4);
         line = new Line(new float[]{90, 90}, new float[]{105, 105}, 1, false);
         hole = new Hole(3, 3, 0, Hole.GridPosition.BR);
+    }
+
+    public void appMockSetUp() {
+        App.score = 0;
+        app.modScoreIncrease = 1.1f;
+        app.modScoreDecrease = 1.0f;
+        App.scoreIncrease = new HashMap<>();
+        App.scoreDecrease = new HashMap<>();
+
+        App.scoreIncrease.put("grey", 70);
+        App.scoreIncrease.put("orange", 50);
+        App.scoreIncrease.put("blue", 30);
+        App.scoreIncrease.put("green", 20);
+        App.scoreIncrease.put("yellow", 100);
+
+        App.scoreDecrease.put("grey", 0);
+        App.scoreDecrease.put("orange", 25); //-25
+        App.scoreDecrease.put("blue", 20);
+        App.scoreDecrease.put("green", 10); //-10
+        App.scoreDecrease.put("yellow", 60); //-60
+
+        app.ballQueue = new Ball[5];
     }
 
     /** Testing Ball Construction **/
@@ -52,6 +86,22 @@ class BallTest {
 
         edgeBall = new Ball(-100.1f, -23.55f, -1);
         assertEquals(0, edgeBall.getColour()); // Expected to default to grey
+    }
+
+    /** Testing draw() **/
+    @Test
+    public void testNormalDraw() {
+        ball.draw(app);
+        verify(app).getSprite("ball"+ball.getColour());
+        verify(app).image(app.getSprite("ball"+ball.getColour()),ball.getX(), ball.getY(), ball.getBallRadius() * 2, ball.getBallRadius() * 2);
+    }
+
+    @Test
+    public void testNegativeDraw() {
+        ball.absorb();
+        ball.draw(app);
+        verify(app, never()).getSprite(anyString());
+        verify(app, never()).image(any(PImage.class), anyFloat(), anyFloat(), anyFloat(), anyFloat());
     }
 
     /** Testing get/setVector() **/
@@ -305,15 +355,160 @@ class BallTest {
     /** Testing meetHole() **/
     @Test
     public void testNormalMeetHole() {
+        // Positive Case 1: Ball within attraction radius, but not directly over the hole
+        ball = new Ball(116, 116, 0);
+        ball.setVector(new float[]{-2, -2});
+        float[] ballCenter = ball.getBallCenter();
+        float[] holeCenter = hole.getHoleCenter();
 
+        double expectedScore = App.score;
+        float[] expectedVec = new float[] {ball.getVector()[0] + ball.getAttractionVector(hole)[0], ball.getVector()[1] + ball.getAttractionVector(hole)[1]};
+        float expectedRad = 12 * (float) (App.getDistance(holeCenter, ballCenter) / 32); // Ensures shrink animation is applied
+
+        assertFalse(expectedRad < 6 || App.getDistance(ballCenter, holeCenter) < 8);
+        assertTrue(ball.meetHole(hole, app));
+
+        ball.meetHole(hole, app);
+        assertEquals(expectedScore, App.score);
+        assertArrayEquals(expectedVec, ball.getVector(), 0.5f);
+        assertEquals(expectedRad, ball.getBallRadius(), 0.5f); // Floating-point differences are unrecognisable to the eye, hence higher delta
+
+        /** Positive Case 2: Ball over the hole
+         * A) Same hole and ball colour
+         * Radius < 6 **/
+        Ball ball2 = new Ball(94, 157, 2); // Distance is ~12
+        Hole hole2 = new Hole(3, 3, ball2.getColour(), Hole.GridPosition.BR);
+        ball2.setVector(new float[]{-2, -2});
+        float[] ball2Center = ball2.getBallCenter();
+        float[] hole2Center = hole2.getHoleCenter();
+
+        // Not testing for vec because doesn't matter due to absorption
+        expectedRad = 12 * (float) (App.getDistance(hole2Center, ball2Center) / 32); // Ensures shrink animation is applied
+        expectedScore += App.scoreIncrease.get(hole2.colourToString()) * app.modScoreIncrease; // 30 * 1.1 = 33
+
+        assertTrue(expectedRad < 6);
+        assertTrue(ball2.meetHole(hole2, app));
+
+        ball2.meetHole(hole2, app);
+        assertEquals(0, ball2.getBallRadius()); // Need to be 0
+        assertEquals(ball2.getColour(), hole2.getColour());
+        assertEquals(expectedScore, App.score, 0.5d);
+        verify(mockBallList).remove(ball2);
+        assertTrue(ball2.getIsAbsorbed());
+
+//        /** Distance is < 8 **/
+//        Ball ball2b = new Ball(90, 150, 2); // Distance is < 8
+//        ball2Center = ball2b.getBallCenter();
+//
+//        assertTrue(App.getDistance(ball2Center, hole2Center) < 8);
+//        assertTrue(ball2b.meetHole(hole2, app));
+//
+//        expectedRad = 12 * (float) (App.getDistance(hole2Center, ball2Center) / 32);
+//        expectedScore += App.scoreIncrease.get(hole2.colourToString()) * app.modScoreIncrease; // 30 + 30 * 1.1 = 66
+//
+//        ball2b.meetHole(hole2, app);
+//////        assertEquals(0, ball2b.getBallRadius()); // Need to be 0
+////        assertEquals(ball2b.getColour(), hole2.getColour());
+//////        assertEquals(expectedScore, App.score, 0.5d);
+////        verify(mockBallList).remove(ball2b);
+////        assertTrue(ball2b.getIsAbsorbed());
+
+        /** B) Either colour is grey
+         * Ball is grey **/
+        Ball ball3 = new Ball(90, 150, 0); // hole colour is 0
+
+        assertEquals(0,ball3.getColour());
+        assertNotEquals(0, hole2.getColour());
+
+        expectedScore += App.scoreIncrease.get("grey") * app.modScoreIncrease; // 110
+        ball3.meetHole(hole2, app);
+        assertEquals(expectedScore, App.score, 0.5d);
+        verify(mockBallList).remove(ball3);
+        assertTrue(ball3.getIsAbsorbed());
+
+        /** Hole is grey **/
+        ball3 = new Ball(ball2.getX(), ball2.getY(), ball2.getColour());
+        Hole hole3 = new Hole(hole2.getX(), hole2.getY(), 0, Hole.GridPosition.BR);
+        // Using ball2 to test non-grey ball
+
+        assertNotEquals(0, ball3.getColour());
+        assertEquals(0, hole3.getColour());
+
+        expectedScore += App.scoreIncrease.get("grey") * app.modScoreIncrease; // 187
+        ball3.meetHole(hole3, app);
+        assertEquals(expectedScore, App.score, 0.5d);
+        verify(mockBallList).remove(ball3);
+        assertTrue(ball3.getIsAbsorbed());
+
+        /** Both are grey **/
+        ball3 = new Ball(ball2.getX(), ball2.getY(), 0);
+        // reusing hole3
+
+        assertEquals(0, ball3.getColour());
+        assertEquals(0, hole3.getColour());
+
+        expectedScore += App.scoreIncrease.get("grey") * app.modScoreIncrease; // 264
+        ball3.meetHole(hole3, app);
+        assertEquals(expectedScore, App.score, 0.5d);
+        verify(mockBallList).remove(ball3);
+        assertTrue(ball3.getIsAbsorbed());
+
+        /** C) Different colours and NOT grey **/
+        Random rand = new Random();
+        double initialScore = App.score;
+        for (int i = 0; i < 1000; i++) { // Do 1000 rounds of testing
+            //System.out.println(i); //track how many tests successful
+            Ball ball4 = new Ball(ball2.getX(), ball2.getY(), ball2.getColour());
+            int randColour = rand.nextInt(5);
+            while (randColour == 0 || randColour == ball4.getColour()) {
+                randColour = rand.nextInt(5);
+            }
+            Hole hole4 = new Hole(hole2.getX(), hole2.getY(), randColour, Hole.GridPosition.BR);
+
+            // Ensuring that this case follows the 'else' branch
+            assertNotEquals(ball4.getColour(), hole4.getColour());
+            assertFalse(ball4.getColour() == 0 || hole4.getColour() == 0);
+
+            expectedScore = initialScore;
+            App.score = initialScore;
+            expectedScore -= App.scoreDecrease.get(hole4.colourToString()) * app.modScoreDecrease; //239, 254, 204
+            Ball[] initialQueue = app.ballQueue.clone();
+
+            ball4.meetHole(hole4, app);
+            assertEquals(expectedScore, App.score, 0.5d);
+            verify(mockBallList).remove(ball4);
+            assertFalse(ball4.getIsAbsorbed()); // Ball should not be signaled as absorbed, or else it wouldn't draw
+
+            for (int j = i % 5; j < initialQueue.length - 1; j++) {
+                if (initialQueue[j] == null) {
+                    if (app.ballQueue[j] == null) {
+                        fail("Failed NormalMeetHole: Failed capture ball was not added to app.ballQueue");
+                    }
+                    else if (app.ballQueue[j].getColour() == ball4.getColour()) {
+                        break;
+                    }
+                    else {
+                        fail("Failed NormalMeetHole: Ball added but colour was wrong");
+                    }
+                }
+            }
+
+            if (app.ballQueue[app.ballQueue.length - 1] != null) {
+                app.ballQueue = new Ball[5]; // clear array
+            }
+        }
+    }
+
+    @Test
+    public void testNegativeMeetHole() {
+        // Negative Case: Ball already absorbed
+        ball.absorb();
+        assertFalse(ball.meetHole(hole, app));
     }
 
     @Test
     public void testEdgeMeetHole() {
-        Ball copyBall = ball;
-        copyBall.absorb();
-        assertFalse(copyBall.meetHole(hole, app));
-
+        // Edge Case: gridPosition of hole is null, hence center of hole unknown
         Hole edgeHole = new Hole(4, 4, 0, null);
         assertFalse(ball.meetHole(edgeHole, app));
     }

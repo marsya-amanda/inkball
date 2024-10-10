@@ -38,9 +38,6 @@ public class Hole extends Tile {
     }
 
     public String colourToString() {
-        if (this.colour == 0) {
-            return "grey";
-        }
         if (this.colour == 1) {
             return "orange";
         }

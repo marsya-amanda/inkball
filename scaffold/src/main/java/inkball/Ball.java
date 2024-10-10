@@ -193,11 +193,11 @@ public class Ball {
         float shrinkFactor = (float) (App.getDistance(holeCenter, ballCenter) / 32);
         this.ballRadius = 12 * shrinkFactor; //make ball increase/decrease proportionally to its original radius
 
-        if (this.ballRadius < 6 || App.getDistance(ballCenter, holeCenter) < 8) {
+        if (this.ballRadius < 6) {
             this.ballRadius = 0;
             //this.isAbsorbed = true;
 
-            if (this.colourToString().equals(hole.colourToString())) {
+            if (this.getColour() == hole.getColour()) {
                 App.score += App.scoreIncrease.get(hole.colourToString()) * app.modScoreIncrease;
                 app.getBalls().remove(this);
                 this.absorb();

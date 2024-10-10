@@ -34,17 +34,17 @@ public class App extends PApplet {
 	
 	// Feel free to add any additional methods or attributes you want. Please put classes in different files.
 
-<span class="fc" id="L37">    public App() {</span>
-<span class="fc" id="L38">        this.configPath = &quot;config.json&quot;;</span>
-<span class="fc" id="L39">    }</span>
+<span class="nc" id="L37">    public App() {</span>
+<span class="nc" id="L38">        this.configPath = &quot;config.json&quot;;</span>
+<span class="nc" id="L39">    }</span>
 
-<span class="fc" id="L41">    public enum GameState {</span>
-<span class="fc" id="L42">        PLAYING, PAUSED, WIN, OVER;</span>
+<span class="nc" id="L41">    public enum GameState {</span>
+<span class="nc" id="L42">        PLAYING, PAUSED, WIN, OVER;</span>
     }
 
 <span class="fc" id="L45">    public static int gameLevel = 1;</span>
 
-<span class="fc" id="L47">    public GameState gameState = GameState.PLAYING;</span>
+<span class="nc" id="L47">    public GameState gameState = GameState.PLAYING;</span>
 
 <span class="fc" id="L49">    public static int timeLimit = 0;</span>
 <span class="fc" id="L50">    public static int lastSecond = 0;</span>
@@ -52,32 +52,32 @@ public class App extends PApplet {
 <span class="fc" id="L52">    public static double score = 0.0d;</span>
 <span class="fc" id="L53">    public static HashMap&lt;String, Integer&gt; scoreIncrease = new HashMap&lt;&gt;();</span>
 <span class="fc" id="L54">    public static HashMap&lt;String, Integer&gt; scoreDecrease = new HashMap&lt;&gt;();</span>
-<span class="fc" id="L55">    public float modScoreIncrease = 1;</span>
-<span class="fc" id="L56">    public float modScoreDecrease = 1;</span>
-<span class="fc" id="L57">    private int spawnInterval = 0;</span>
+<span class="nc" id="L55">    public float modScoreIncrease = 1;</span>
+<span class="nc" id="L56">    public float modScoreDecrease = 1;</span>
+<span class="nc" id="L57">    private int spawnInterval = 0;</span>
     public Ball[] ballQueue;
     public int maxBallQueue;
 <span class="fc" id="L60">    public static float ballTimer = 1.0f;</span>
 
 <span class="fc" id="L62">    public static boolean ctrlPressed = false;</span>
 <span class="fc" id="L63">    public static boolean isDrawing = false;</span>
-<span class="fc" id="L64">    public float[] start = new float[2];</span>
-<span class="fc" id="L65">    public float[] end = new float[2];</span>
+<span class="nc" id="L64">    public float[] start = new float[2];</span>
+<span class="nc" id="L65">    public float[] end = new float[2];</span>
 <span class="fc" id="L66">    public static int mouseRadius = 5;</span>
-<span class="fc" id="L67">    public int lastLine = 0;</span>
+<span class="nc" id="L67">    public int lastLine = 0;</span>
 
     private Tile[][] board;
-<span class="fc" id="L70">    private ArrayList&lt;Ball&gt; balls = new ArrayList&lt;Ball&gt;();</span>
-<span class="fc" id="L71">    private ArrayList&lt;Wall&gt; walls = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L72">    private ArrayList&lt;Line&gt; allLines = new ArrayList&lt;Line&gt;();</span>
-<span class="fc" id="L73">    private ArrayList&lt;ArrayList&lt;Line&gt;&gt; drawnLines = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L74">    private ArrayList&lt;ArrayList&lt;Line&gt;&gt; tempLines = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L75">    private ArrayList&lt;Spawner&gt; spawners = new ArrayList&lt;Spawner&gt;();</span>
-<span class="fc" id="L76">    private ArrayList&lt;Hole&gt; holes = new ArrayList&lt;Hole&gt;();</span>
-<span class="fc" id="L77">    private HashMap&lt;String, PImage&gt; sprites = new HashMap();</span>
+<span class="nc" id="L70">    private ArrayList&lt;Ball&gt; balls = new ArrayList&lt;Ball&gt;();</span>
+<span class="nc" id="L71">    private ArrayList&lt;Wall&gt; walls = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L72">    private ArrayList&lt;Line&gt; allLines = new ArrayList&lt;Line&gt;();</span>
+<span class="nc" id="L73">    private ArrayList&lt;ArrayList&lt;Line&gt;&gt; drawnLines = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L74">    private ArrayList&lt;ArrayList&lt;Line&gt;&gt; tempLines = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L75">    private ArrayList&lt;Spawner&gt; spawners = new ArrayList&lt;Spawner&gt;();</span>
+<span class="nc" id="L76">    private ArrayList&lt;Hole&gt; holes = new ArrayList&lt;Hole&gt;();</span>
+<span class="nc" id="L77">    private HashMap&lt;String, PImage&gt; sprites = new HashMap();</span>
 
-<span class="fc" id="L79">    public int[] firstSpiral = new int[] {0, 0};</span>
-<span class="fc" id="L80">    public int[] secondSpiral = new int[] {WIDTH/CELLSIZE - 1, (HEIGHT-TOPBAR)/CELLSIZE - 1};</span>
+<span class="nc" id="L79">    public int[] firstSpiral = new int[] {0, 0};</span>
+<span class="nc" id="L80">    public int[] secondSpiral = new int[] {WIDTH/CELLSIZE - 1, (HEIGHT-TOPBAR)/CELLSIZE - 1};</span>
 
     public PImage getSprite(String s) {
 <span class="nc" id="L83">        PImage result = sprites.get(s);</span>
