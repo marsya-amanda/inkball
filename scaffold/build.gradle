@@ -36,6 +36,9 @@ dependencies {
     // Use Mockito for testing
     testImplementation 'org.mockito:mockito-inline:4.11.0'
     testImplementation "org.mockito:mockito-junit-jupiter:4.11.0"
+
+    // Use GSON for JSONObjects
+    implementation 'com.google.code.gson:gson:2.8.9'
 }
 
 application {

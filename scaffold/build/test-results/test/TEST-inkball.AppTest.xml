@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="inkball.AppTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2024-10-10T02:26:29" hostname="LAPTOP-T9CSJGT7" time="0.026">
+<testsuite name="inkball.AppTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2024-10-15T04:28:35" hostname="LAPTOP-T9CSJGT7" time="1.855">
   <properties/>
-  <testcase name="test()" classname="inkball.AppTest" time="0.026"/>
-  <system-out><![CDATA[]]></system-out>
+  <testcase name="testSetup()" classname="inkball.AppTest" time="1.855"/>
+  <system-out><![CDATA[Last second: 0
+timeLimit: 0
+]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

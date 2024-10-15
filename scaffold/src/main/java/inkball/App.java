@@ -6,12 +6,15 @@ import processing.data.JSONObject;
 import processing.data.JSONArray;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
+import com.google.gson.Gson;
 
 import java.util.*;
 import java.lang.*;
 import java.io.*;
 
 public class App extends PApplet {
+
+    public boolean isTesting = false;
 
     public static final int CELLSIZE = 32; //8;
     public static final int CELLHEIGHT = 32;
@@ -54,7 +57,7 @@ public class App extends PApplet {
     public static HashMap<String, Integer> scoreDecrease = new HashMap<>();
     public float modScoreIncrease = 1;
     public float modScoreDecrease = 1;
-    private int spawnInterval = 0;
+    int spawnInterval = 0;
     public Ball[] ballQueue;
     public int maxBallQueue;
     public static float ballTimer = 1.0f;
@@ -66,15 +69,15 @@ public class App extends PApplet {
     public static int mouseRadius = 5;
     public int lastLine = 0;
 
-    private Tile[][] board;
+    protected Tile[][] board;
     private ArrayList<Ball> balls = new ArrayList<Ball>();
-    private ArrayList<Wall> walls = new ArrayList<>();
-    private ArrayList<Line> allLines = new ArrayList<Line>();
-    private ArrayList<ArrayList<Line>> drawnLines = new ArrayList<>();
-    private ArrayList<ArrayList<Line>> tempLines = new ArrayList<>();
-    private ArrayList<Spawner> spawners = new ArrayList<Spawner>();
-    private ArrayList<Hole> holes = new ArrayList<Hole>();
-    private HashMap<String, PImage> sprites = new HashMap();
+    protected ArrayList<Wall> walls = new ArrayList<>();
+    protected ArrayList<Line> allLines = new ArrayList<Line>();
+    protected ArrayList<ArrayList<Line>> drawnLines = new ArrayList<>();
+    protected ArrayList<ArrayList<Line>> tempLines = new ArrayList<>();
+    protected ArrayList<Spawner> spawners = new ArrayList<Spawner>();
+    protected ArrayList<Hole> holes = new ArrayList<Hole>();
+    protected HashMap<String, PImage> sprites = new HashMap<>();
 
     public int[] firstSpiral = new int[] {0, 0};
     public int[] secondSpiral = new int[] {WIDTH/CELLSIZE - 1, (HEIGHT-TOPBAR)/CELLSIZE - 1};
@@ -113,17 +116,18 @@ public class App extends PApplet {
      */
 	@Override
     public void setup() {
-        frameRate(FPS);
+        if (!isTesting) {
+            frameRate(FPS);
+            this.json = loadJSONObject(configPath);
+        }
         this.gameState = GameState.PLAYING;
         //See PApplet javadoc:
-        //loadJSONObject(configPath)
         // the image is loaded from relative path: "src/main/resources/inkball/..."
 		/*try {
             result = loadImage(URLDecoder.decode(this.getClass().getResource(filename+".png").getPath(), StandardCharsets.UTF_8.name()));
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }*/
-        this.json = loadJSONObject(configPath);
 
         //get information from config
         try {
@@ -142,19 +146,57 @@ public class App extends PApplet {
         System.out.println("Last second: " + lastSecond);
         System.out.println("timeLimit: " + timeLimit);
 
-        this.spawnInterval = this.json.getJSONArray("levels").getJSONObject(gameLevel - 1).getInt("spawn_interval");
+        try {
+            this.spawnInterval = this.json.getJSONArray("levels").getJSONObject(gameLevel - 1).getInt("spawn_interval");
+        }
+        catch (Exception e) {
+            this.spawnInterval = 1;
+        }
 
-        this.modScoreIncrease = this.json.getJSONArray("levels").getJSONObject(gameLevel - 1).getFloat("score_increase_from_hole_capture_modifier");
-        this.modScoreDecrease = this.json.getJSONArray("levels").getJSONObject(gameLevel - 1).getFloat("score_decrease_from_wrong_hole_modifier");
+        try {
+            this.modScoreIncrease = this.json.getJSONArray("levels").getJSONObject(gameLevel - 1).getFloat("score_increase_from_hole_capture_modifier");
+        }
+        catch (Exception e) {
+            this.modScoreIncrease = 1; // Default value is no multiplier
+        }
 
-        JSONObject scoreIncJSON = this.json.getJSONObject("score_increase_from_hole_capture");
+        try {
+            this.modScoreDecrease = this.json.getJSONArray("levels").getJSONObject(gameLevel - 1).getFloat("score_decrease_from_wrong_hole_modifier");
+        }
+        catch (Exception e) {
+            this.modScoreDecrease = 1; // Default value is no multiplier
+        }
+
+        JSONObject scoreIncJSON = new JSONObject();
+        try {
+            scoreIncJSON = this.json.getJSONObject("score_increase_from_hole_capture");
+        }
+        catch (Exception e) {
+            scoreIncJSON.put("grey", 50); // Set defaults
+            scoreIncJSON.put("orange", 50);
+            scoreIncJSON.put("blue", 50);
+            scoreIncJSON.put("green", 50);
+            scoreIncJSON.put("yellow", 50);
+        }
+
         for (Object key : scoreIncJSON.keys()) {
             String keyStr = (String) key;
             Integer scoreInc = scoreIncJSON.getInt(keyStr);
             scoreIncrease.put(keyStr, scoreInc);
         }
 
-        JSONObject scoreDecJSON = this.json.getJSONObject("score_decrease_from_wrong_hole");
+        JSONObject scoreDecJSON = new JSONObject();
+        try {
+            scoreDecJSON = this.json.getJSONObject("score_decrease_from_wrong_hole");
+        }
+        catch (Exception e){
+            scoreDecJSON.put("grey", 25); // Set defaults
+            scoreDecJSON.put("orange", 25);
+            scoreDecJSON.put("blue", 25);
+            scoreDecJSON.put("green", 25);
+            scoreDecJSON.put("yellow", 25);
+        }
+
         for (Object key : scoreIncJSON.keys()) {
             String keyStr = (String) key;
             Integer scoreInc = scoreDecJSON.getInt(keyStr);
@@ -188,7 +230,16 @@ public class App extends PApplet {
         this.setLayout();
 
         // ADD BALL QUEUE
-        JSONArray ballsJSON = this.json.getJSONArray("levels").getJSONObject(gameLevel - 1).getJSONArray("balls");
+        JSONArray ballsJSON = new JSONArray();
+        try {
+            ballsJSON = this.json.getJSONArray("levels").getJSONObject(gameLevel - 1).getJSONArray("balls");
+        }
+        catch (Exception e) {
+            List<String> balls = Arrays.asList("grey", "grey", "grey", "grey", "grey");
+            Gson gson = new Gson();
+            ballsJSON = JSONArray.parse(gson.toJson(balls));
+        }
+
         this.maxBallQueue = ballsJSON.size() + this.balls.size();
 
         this.ballQueue = new Ball[this.maxBallQueue];
@@ -197,25 +248,17 @@ public class App extends PApplet {
             int colour = colourToInt(ballsJSON.getString(i));
             this.ballQueue[i] = new Ball(19 + 28 * i, 21, colour);
         }
-
-        //this.drawnLines.add(new ArrayList<Line>());
-
-        //FOR CHECKING
-        /*for (int i = 0; i < this.lineSegments.size(); i++) {
-            Line line = this.lineSegments.get(i);
-            System.out.println(Line.toString(line));
-        }*/
-
-        //TESTING WALL COORDS
-        /*for (int i = 0; i < this.board.length; i++) {
-            System.out.println(Arrays.toString(this.board[i]));
-        }*/
-        //System.out.println(Arrays.deepToString(this.board)); //some are null
-
     }
 
     public void setLayout() {
-        File JSONfile = new File(this.json.getJSONArray("levels").getJSONObject(gameLevel - 1).getString("layout"));
+        File JSONfile = null;
+        try {
+            JSONfile = new File(this.json.getJSONArray("levels").getJSONObject(gameLevel - 1).getString("layout"));
+        }
+        catch (Exception e) {
+            System.out.println("JSON file not found");
+            System.exit(1);
+        }
         Scanner scan = null;
         try {
              scan = new Scanner(JSONfile);

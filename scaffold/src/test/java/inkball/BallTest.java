@@ -396,23 +396,6 @@ class BallTest {
         verify(mockBallList).remove(ball2);
         assertTrue(ball2.getIsAbsorbed());
 
-//        /** Distance is < 8 **/
-//        Ball ball2b = new Ball(90, 150, 2); // Distance is < 8
-//        ball2Center = ball2b.getBallCenter();
-//
-//        assertTrue(App.getDistance(ball2Center, hole2Center) < 8);
-//        assertTrue(ball2b.meetHole(hole2, app));
-//
-//        expectedRad = 12 * (float) (App.getDistance(hole2Center, ball2Center) / 32);
-//        expectedScore += App.scoreIncrease.get(hole2.colourToString()) * app.modScoreIncrease; // 30 + 30 * 1.1 = 66
-//
-//        ball2b.meetHole(hole2, app);
-//////        assertEquals(0, ball2b.getBallRadius()); // Need to be 0
-////        assertEquals(ball2b.getColour(), hole2.getColour());
-//////        assertEquals(expectedScore, App.score, 0.5d);
-////        verify(mockBallList).remove(ball2b);
-////        assertTrue(ball2b.getIsAbsorbed());
-
         /** B) Either colour is grey
          * Ball is grey **/
         Ball ball3 = new Ball(90, 150, 0); // hole colour is 0
