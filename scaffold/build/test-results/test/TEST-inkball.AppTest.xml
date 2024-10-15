@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="inkball.AppTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2024-10-15T04:28:35" hostname="LAPTOP-T9CSJGT7" time="1.855">
+<testsuite name="inkball.AppTest" tests="10" skipped="0" failures="0" errors="0" timestamp="2024-10-15T04:36:42" hostname="LAPTOP-T9CSJGT7" time="2.24">
   <properties/>
-  <testcase name="testSetup()" classname="inkball.AppTest" time="1.855"/>
+  <testcase name="testSettings()" classname="inkball.AppTest" time="1.72"/>
+  <testcase name="testGetBalls()" classname="inkball.AppTest" time="0.019"/>
+  <testcase name="testGetBoard()" classname="inkball.AppTest" time="0.006"/>
+  <testcase name="testSetup()" classname="inkball.AppTest" time="0.257"/>
+  <testcase name="testNegativeSpawnBalls()" classname="inkball.AppTest" time="0.002"/>
+  <testcase name="testAppConstructor()" classname="inkball.AppTest" time="0.003"/>
+  <testcase name="testRestartWithGameLevelExceedingJsonLevels()" classname="inkball.AppTest" time="0.19"/>
+  <testcase name="testRestart()" classname="inkball.AppTest" time="0.004"/>
+  <testcase name="testNormalSpawnBalls()" classname="inkball.AppTest" time="0.002"/>
+  <testcase name="testGetLineSegments()" classname="inkball.AppTest" time="0.001"/>
   <system-out><![CDATA[Last second: 0
 timeLimit: 0
 ]]></system-out>
