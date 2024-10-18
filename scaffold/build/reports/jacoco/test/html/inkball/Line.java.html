@@ -26,16 +26,16 @@ public class Line {
         this.intercept = this.P1[1] - this.P1[0] * this.slope;*/
 <span class="fc" id="L27">    }</span>
 
-    public static String toString(Line line) {
-<span class="nc" id="L30">        return &quot;P1 is &quot; + Arrays.toString(line.getP1()) + &quot;, P2 is &quot; + Arrays.toString(line.getP2());</span>
-    }
+//    public static String toString(Line line) {
+//        return &quot;P1 is &quot; + Arrays.toString(line.getP1()) + &quot;, P2 is &quot; + Arrays.toString(line.getP2());
+//    }
 
     @Override
     public boolean equals(Object obj) {
 <span class="fc bfc" id="L35" title="All 2 branches covered.">        if (this == obj) return true;</span>
-<span class="pc bpc" id="L36" title="2 of 4 branches missed.">        if (obj == null || getClass() != obj.getClass()) return false;</span>
+<span class="fc bfc" id="L36" title="All 4 branches covered.">        if (obj == null || getClass() != obj.getClass()) return false;</span>
 <span class="fc" id="L37">        Line line = (Line) obj;</span>
-<span class="pc bpc" id="L38" title="1 of 4 branches missed.">        return this.isDrawn == line.isDrawn &amp;&amp;</span>
+<span class="fc bfc" id="L38" title="All 4 branches covered.">        return this.isDrawn == line.isDrawn &amp;&amp;</span>
                 this.colourTo == line.colourTo &amp;&amp;
 <span class="fc bfc" id="L40" title="All 2 branches covered.">                Arrays.equals(this.getP1(), line.getP1()) &amp;&amp;</span>
 <span class="pc bpc" id="L41" title="1 of 2 branches missed.">                Arrays.equals(this.getP2(), line.getP2());</span>
@@ -46,21 +46,21 @@ public class Line {
             return;
         }*/
 
-<span class="nc bnc" id="L49" title="All 2 branches missed.">        if (this.isDrawn) {</span>
-<span class="nc" id="L50">            app.line(this.P1[0], this.P1[1], this.P2[0], this.P2[1]);</span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">        if (this.isDrawn) {</span>
+<span class="fc" id="L50">            app.line(this.P1[0], this.P1[1], this.P2[0], this.P2[1]);</span>
 
-<span class="nc" id="L52">            Random rand = new Random();</span>
-<span class="nc bnc" id="L53" title="All 2 branches missed.">            if (rand.nextBoolean()) {</span>
+<span class="fc" id="L52">            Random rand = new Random();</span>
+<span class="pc bpc" id="L53" title="1 of 2 branches missed.">            if (rand.nextBoolean()) {</span>
 <span class="nc" id="L54">                app.stroke(colourTo);</span>
             }
             else {
-<span class="nc" id="L57">                app.stroke(colourTo);</span>
+<span class="fc" id="L57">                app.stroke(colourTo);</span>
             }
             //app.stroke(0);
-<span class="nc" id="L60">            app.strokeWeight(10);</span>
+<span class="fc" id="L60">            app.strokeWeight(10);</span>
         }
 
-<span class="nc" id="L63">    }</span>
+<span class="fc" id="L63">    }</span>
 
     public float[] getP1() {
 <span class="fc" id="L66">        return this.P1;</span>
@@ -81,7 +81,7 @@ public class Line {
     }
 
     public String toString() {
-<span class="nc" id="L84">        return &quot;P1 is &quot; + Arrays.toString(this.P1) + &quot;, P2 is &quot; + Arrays.toString(this.P2) + &quot;, drawn is &quot; + this.isDrawn;</span>
+<span class="fc" id="L84">        return &quot;P1 is &quot; + Arrays.toString(this.P1) + &quot;, P2 is &quot; + Arrays.toString(this.P2) + &quot;, drawn is &quot; + this.isDrawn;</span>
     }
 
     /*public float[] getSlopeIntercept(float x) {

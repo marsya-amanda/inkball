@@ -15,11 +15,11 @@ public class Wall extends Tile {
     @Override
     public void draw(App app) {
 <span class="fc" id="L17">        PImage tile = app.getSprite(&quot;wall&quot;+this.colour);</span>
-<span class="pc bpc" id="L18" title="2 of 4 branches missed.">        if (this.hp &lt;= 3 &amp;&amp; this.hp &gt; 1) {</span>
+<span class="pc bpc" id="L18" title="1 of 4 branches missed.">        if (this.hp &lt;= 3 &amp;&amp; this.hp &gt; 1) {</span>
 <span class="fc" id="L19">            tile = app.getSprite(&quot;wall&quot;+this.colour);</span>
         }
-<span class="nc bnc" id="L21" title="All 2 branches missed.">        else if (this.hp &lt; 2) {</span>
-<span class="nc" id="L22">            tile = app.getSprite(&quot;wall&quot;+this.colour+&quot;-damaged&quot;);</span>
+<span class="pc bpc" id="L21" title="1 of 2 branches missed.">        else if (this.hp &lt; 2) {</span>
+<span class="fc" id="L22">            tile = app.getSprite(&quot;wall&quot;+this.colour+&quot;-damaged&quot;);</span>
         }
 <span class="fc" id="L24">        app.image(tile, x*App.CELLSIZE, y*App.CELLSIZE+App.TOPBAR, App.CELLSIZE, App.CELLSIZE);</span>
 <span class="fc" id="L25">    }</span>
@@ -29,36 +29,36 @@ public class Wall extends Tile {
     }
 
     public int getHP() {
-<span class="nc" id="L32">        return this.hp;</span>
+<span class="fc" id="L32">        return this.hp;</span>
     }
 
     public void damage(Ball ball) {
-<span class="nc bnc" id="L36" title="All 2 branches missed.">        if (this.colour == 0) {</span>
-<span class="nc" id="L37">            this.hp--;</span>
-<span class="nc" id="L38">            return;</span>
+<span class="fc bfc" id="L36" title="All 2 branches covered.">        if (this.colour == 0) {</span>
+<span class="fc" id="L37">            this.hp--;</span>
+<span class="fc" id="L38">            return;</span>
         }
-<span class="nc bnc" id="L40" title="All 2 branches missed.">        if (this.colour == ball.getColour()) {</span>
-<span class="nc" id="L41">            this.hp--;</span>
+<span class="fc bfc" id="L40" title="All 2 branches covered.">        if (this.colour == ball.getColour()) {</span>
+<span class="fc" id="L41">            this.hp--;</span>
         }
-<span class="nc" id="L43">    }</span>
+<span class="fc" id="L43">    }</span>
 
     public String colourToString() {
-<span class="nc bnc" id="L46" title="All 2 branches missed.">        if (this.colour == 0) {</span>
-<span class="nc" id="L47">            return &quot;grey&quot;;</span>
+<span class="fc bfc" id="L46" title="All 2 branches covered.">        if (this.colour == 0) {</span>
+<span class="fc" id="L47">            return &quot;grey&quot;;</span>
         }
-<span class="nc bnc" id="L49" title="All 2 branches missed.">        if (this.colour == 1) {</span>
-<span class="nc" id="L50">            return &quot;orange&quot;;</span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">        if (this.colour == 1) {</span>
+<span class="fc" id="L50">            return &quot;orange&quot;;</span>
         }
-<span class="nc bnc" id="L52" title="All 2 branches missed.">        if (this.colour == 2) {</span>
-<span class="nc" id="L53">            return &quot;blue&quot;;</span>
+<span class="fc bfc" id="L52" title="All 2 branches covered.">        if (this.colour == 2) {</span>
+<span class="fc" id="L53">            return &quot;blue&quot;;</span>
         }
-<span class="nc bnc" id="L55" title="All 2 branches missed.">        if (this.colour == 3) {</span>
-<span class="nc" id="L56">            return &quot;green&quot;;</span>
+<span class="fc bfc" id="L55" title="All 2 branches covered.">        if (this.colour == 3) {</span>
+<span class="fc" id="L56">            return &quot;green&quot;;</span>
         }
-<span class="nc bnc" id="L58" title="All 2 branches missed.">        if (this.colour == 4) {</span>
-<span class="nc" id="L59">            return &quot;yellow&quot;;</span>
+<span class="fc bfc" id="L58" title="All 2 branches covered.">        if (this.colour == 4) {</span>
+<span class="fc" id="L59">            return &quot;yellow&quot;;</span>
         }
-<span class="nc" id="L61">        return &quot;grey&quot;;</span>
+<span class="fc" id="L61">        return &quot;grey&quot;;</span>
     }
 
 }

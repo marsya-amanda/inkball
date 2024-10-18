@@ -26,9 +26,9 @@ public class Line {
         this.intercept = this.P1[1] - this.P1[0] * this.slope;*/
     }
 
-    public static String toString(Line line) {
-        return "P1 is " + Arrays.toString(line.getP1()) + ", P2 is " + Arrays.toString(line.getP2());
-    }
+//    public static String toString(Line line) {
+//        return "P1 is " + Arrays.toString(line.getP1()) + ", P2 is " + Arrays.toString(line.getP2());
+//    }
 
     @Override
     public boolean equals(Object obj) {

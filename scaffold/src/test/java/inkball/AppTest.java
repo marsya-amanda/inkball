@@ -6,9 +6,6 @@ import org.junit.jupiter.api.Test;
 import static org.mockito.Mockito.*;
 
 import org.mockito.MockedStatic;
-import org.mockito.stubbing.OngoingStubbing;
-import org.mockito.verification.VerificationMode;
-import processing.core.PConstants;
 import processing.core.PImage;
 import processing.data.JSONArray;
 import processing.data.JSONObject;
@@ -16,21 +13,12 @@ import processing.event.Event;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class AppTest extends App {
-
-//    private final String configPath = "config.json";
-//    private final JSONObject json = loadJSONObject(configPath);
-//    private JSONArray mockLevels = json.getJSONArray("levels");
-//    private JSONObject mockLevel;
-//    private File mockFile;
-//    private Scanner mockScanner;
 
     private App app;
 

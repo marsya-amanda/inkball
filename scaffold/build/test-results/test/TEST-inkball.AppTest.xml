@@ -1,44 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="inkball.AppTest" tests="38" skipped="0" failures="0" errors="0" timestamp="2024-10-18T05:34:21" hostname="LAPTOP-T9CSJGT7" time="1.281">
+<testsuite name="inkball.AppTest" tests="38" skipped="0" failures="0" errors="0" timestamp="2024-10-18T09:58:04" hostname="LAPTOP-T9CSJGT7" time="1.533">
   <properties/>
-  <testcase name="testSettings()" classname="inkball.AppTest" time="0.007"/>
-  <testcase name="testMouseReleased()" classname="inkball.AppTest" time="0.005"/>
-  <testcase name="testGetPosition()" classname="inkball.AppTest" time="0.004"/>
-  <testcase name="testAddWallLineSegments()" classname="inkball.AppTest" time="0.004"/>
+  <testcase name="testSettings()" classname="inkball.AppTest" time="0.011"/>
+  <testcase name="testMouseReleased()" classname="inkball.AppTest" time="0.004"/>
+  <testcase name="testGetPosition()" classname="inkball.AppTest" time="0.006"/>
+  <testcase name="testAddWallLineSegments()" classname="inkball.AppTest" time="0.005"/>
   <testcase name="testGetBalls()" classname="inkball.AppTest" time="0.004"/>
   <testcase name="testGetBoard()" classname="inkball.AppTest" time="0.004"/>
-  <testcase name="testAllDraw()" classname="inkball.AppTest" time="0.206"/>
-  <testcase name="testGetColourCode()" classname="inkball.AppTest" time="0.002"/>
-  <testcase name="testSetup()" classname="inkball.AppTest" time="0.242"/>
-  <testcase name="testDraw()" classname="inkball.AppTest" time="0.388"/>
-  <testcase name="testGetWallAssociated()" classname="inkball.AppTest" time="0.004"/>
-  <testcase name="testLeftDrawingMouseDragged()" classname="inkball.AppTest" time="0.004"/>
-  <testcase name="testPausedMouseDragged()" classname="inkball.AppTest" time="0.002"/>
-  <testcase name="testKeyPressed()" classname="inkball.AppTest" time="0.004"/>
-  <testcase name="testLeftMousePressed()" classname="inkball.AppTest" time="0.003"/>
-  <testcase name="testColourToInt()" classname="inkball.AppTest" time="0.003"/>
-  <testcase name="testGetFileContents()" classname="inkball.AppTest" time="0.007"/>
-  <testcase name="testNegativeSpawnBalls()" classname="inkball.AppTest" time="0.003"/>
-  <testcase name="testAppConstructor()" classname="inkball.AppTest" time="0.001"/>
-  <testcase name="testRemoveLine()" classname="inkball.AppTest" time="0.001"/>
-  <testcase name="testRemoveWall()" classname="inkball.AppTest" time="0.003"/>
-  <testcase name="testRestartWithGameLevelExceedingJsonLevels()" classname="inkball.AppTest" time="0.137"/>
-  <testcase name="testSpawnBalls()" classname="inkball.AppTest" time="0.004"/>
-  <testcase name="testGetWallLineSegments()" classname="inkball.AppTest" time="0.003"/>
-  <testcase name="testRestart()" classname="inkball.AppTest" time="0.003"/>
+  <testcase name="testAllDraw()" classname="inkball.AppTest" time="0.233"/>
+  <testcase name="testGetColourCode()" classname="inkball.AppTest" time="0.004"/>
+  <testcase name="testSetup()" classname="inkball.AppTest" time="0.251"/>
+  <testcase name="testDraw()" classname="inkball.AppTest" time="0.475"/>
+  <testcase name="testGetWallAssociated()" classname="inkball.AppTest" time="0.005"/>
+  <testcase name="testLeftDrawingMouseDragged()" classname="inkball.AppTest" time="0.003"/>
+  <testcase name="testPausedMouseDragged()" classname="inkball.AppTest" time="0.003"/>
+  <testcase name="testKeyPressed()" classname="inkball.AppTest" time="0.003"/>
+  <testcase name="testLeftMousePressed()" classname="inkball.AppTest" time="0.004"/>
+  <testcase name="testColourToInt()" classname="inkball.AppTest" time="0.004"/>
+  <testcase name="testGetFileContents()" classname="inkball.AppTest" time="0.009"/>
+  <testcase name="testNegativeSpawnBalls()" classname="inkball.AppTest" time="0.004"/>
+  <testcase name="testAppConstructor()" classname="inkball.AppTest" time="0.004"/>
+  <testcase name="testRemoveLine()" classname="inkball.AppTest" time="0.002"/>
+  <testcase name="testRemoveWall()" classname="inkball.AppTest" time="0.004"/>
+  <testcase name="testRestartWithGameLevelExceedingJsonLevels()" classname="inkball.AppTest" time="0.161"/>
+  <testcase name="testSpawnBalls()" classname="inkball.AppTest" time="0.005"/>
+  <testcase name="testGetWallLineSegments()" classname="inkball.AppTest" time="0.002"/>
+  <testcase name="testRestart()" classname="inkball.AppTest" time="0.004"/>
   <testcase name="testNotLeftMouseDragged()" classname="inkball.AppTest" time="0.002"/>
-  <testcase name="testSetLayout()" classname="inkball.AppTest" time="0.027"/>
-  <testcase name="testAddDrawnLine()" classname="inkball.AppTest" time="0.002"/>
-  <testcase name="testNormalSpawnBalls()" classname="inkball.AppTest" time="0.001"/>
-  <testcase name="testLeftNotDrawingMouseDragged()" classname="inkball.AppTest" time="0.001"/>
-  <testcase name="testAddBorders()" classname="inkball.AppTest" time="0.021"/>
-  <testcase name="testRightMousePressed()" classname="inkball.AppTest" time="0.002"/>
+  <testcase name="testSetLayout()" classname="inkball.AppTest" time="0.031"/>
+  <testcase name="testAddDrawnLine()" classname="inkball.AppTest" time="0.003"/>
+  <testcase name="testNormalSpawnBalls()" classname="inkball.AppTest" time="0.003"/>
+  <testcase name="testLeftNotDrawingMouseDragged()" classname="inkball.AppTest" time="0.002"/>
+  <testcase name="testAddBorders()" classname="inkball.AppTest" time="0.027"/>
+  <testcase name="testRightMousePressed()" classname="inkball.AppTest" time="0.003"/>
   <testcase name="testPausedMousePressed()" classname="inkball.AppTest" time="0.002"/>
-  <testcase name="testGetLineSegments()" classname="inkball.AppTest" time="0.001"/>
-  <testcase name="testGetDistance()" classname="inkball.AppTest" time="0.002"/>
-  <testcase name="testSpiral()" classname="inkball.AppTest" time="0.002"/>
-  <testcase name="testLeftNegativeMouseDragged()" classname="inkball.AppTest" time="0.002"/>
-  <testcase name="testLineDraw()" classname="inkball.AppTest" time="0.1"/>
+  <testcase name="testGetLineSegments()" classname="inkball.AppTest" time="0.002"/>
+  <testcase name="testGetDistance()" classname="inkball.AppTest" time="0.003"/>
+  <testcase name="testSpiral()" classname="inkball.AppTest" time="0.003"/>
+  <testcase name="testLeftNegativeMouseDragged()" classname="inkball.AppTest" time="0.003"/>
+  <testcase name="testLineDraw()" classname="inkball.AppTest" time="0.154"/>
   <system-out><![CDATA[Last second: 0
 timeLimit: 0
 JSON file not found

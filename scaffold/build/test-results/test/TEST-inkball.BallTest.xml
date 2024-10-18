@@ -1,36 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="inkball.BallTest" tests="30" skipped="0" failures="0" errors="0" timestamp="2024-10-18T05:34:19" hostname="LAPTOP-T9CSJGT7" time="2.51">
+<testsuite name="inkball.BallTest" tests="30" skipped="0" failures="0" errors="0" timestamp="2024-10-18T09:58:01" hostname="LAPTOP-T9CSJGT7" time="2.852">
   <properties/>
-  <testcase name="testNormalWillCollide()" classname="inkball.BallTest" time="1.765"/>
-  <testcase name="testNormalConstruction()" classname="inkball.BallTest" time="0.014"/>
-  <testcase name="testAbsorption()" classname="inkball.BallTest" time="0.003"/>
-  <testcase name="testNormalDraw()" classname="inkball.BallTest" time="0.042"/>
-  <testcase name="testNegativeWillCollide()" classname="inkball.BallTest" time="0.002"/>
+  <testcase name="testNormalWillCollide()" classname="inkball.BallTest" time="1.847"/>
+  <testcase name="testNormalConstruction()" classname="inkball.BallTest" time="0.013"/>
+  <testcase name="testAbsorption()" classname="inkball.BallTest" time="0.002"/>
+  <testcase name="testNormalDraw()" classname="inkball.BallTest" time="0.057"/>
+  <testcase name="testNegativeWillCollide()" classname="inkball.BallTest" time="0.003"/>
   <testcase name="testNegativeSetColour()" classname="inkball.BallTest" time="0.002"/>
-  <testcase name="testGetBallCenter()" classname="inkball.BallTest" time="0.002"/>
-  <testcase name="testEdgeNewDirection()" classname="inkball.BallTest" time="0.002"/>
+  <testcase name="testGetBallCenter()" classname="inkball.BallTest" time="0.003"/>
+  <testcase name="testEdgeNewDirection()" classname="inkball.BallTest" time="0.001"/>
   <testcase name="testToString()" classname="inkball.BallTest" time="0.001"/>
   <testcase name="testNormalNewDirection()" classname="inkball.BallTest" time="0.001"/>
-  <testcase name="testNegativeMeetHole()" classname="inkball.BallTest" time="0.002"/>
-  <testcase name="testNormalMeetHole()" classname="inkball.BallTest" time="0.607"/>
-  <testcase name="testNormalSetColour()" classname="inkball.BallTest" time="0.002"/>
+  <testcase name="testNegativeMeetHole()" classname="inkball.BallTest" time="0.001"/>
+  <testcase name="testNormalMeetHole()" classname="inkball.BallTest" time="0.841"/>
+  <testcase name="testNormalSetColour()" classname="inkball.BallTest" time="0.001"/>
   <testcase name="testEdgeMeetHole()" classname="inkball.BallTest" time="0.001"/>
   <testcase name="testNegativeAttractionVector()" classname="inkball.BallTest" time="0.002"/>
-  <testcase name="testNormalSetVector()" classname="inkball.BallTest" time="0.009"/>
+  <testcase name="testNormalSetVector()" classname="inkball.BallTest" time="0.008"/>
   <testcase name="testNegativeNewDirection()" classname="inkball.BallTest" time="0.002"/>
-  <testcase name="testNegativeInteract()" classname="inkball.BallTest" time="0.001"/>
-  <testcase name="testMoveOne()" classname="inkball.BallTest" time="0.001"/>
-  <testcase name="testNormalSetBallRadius()" classname="inkball.BallTest" time="0.001"/>
-  <testcase name="testZeroBallRadius()" classname="inkball.BallTest" time="0.001"/>
-  <testcase name="testEdgeSetColour()" classname="inkball.BallTest" time="0.001"/>
-  <testcase name="testNegativeDraw()" classname="inkball.BallTest" time="0.004"/>
-  <testcase name="testEdgeInteract()" classname="inkball.BallTest" time="0.001"/>
-  <testcase name="testEdgeSetBallRadius()" classname="inkball.BallTest" time="0.001"/>
-  <testcase name="testEdgeConstruction()" classname="inkball.BallTest" time="0.001"/>
-  <testcase name="testNormalAttractionVector()" classname="inkball.BallTest" time="0.001"/>
-  <testcase name="testEdgeWillCollide()" classname="inkball.BallTest" time="0.001"/>
+  <testcase name="testNegativeInteract()" classname="inkball.BallTest" time="0.002"/>
+  <testcase name="testMoveOne()" classname="inkball.BallTest" time="0.003"/>
+  <testcase name="testNormalSetBallRadius()" classname="inkball.BallTest" time="0.002"/>
+  <testcase name="testZeroBallRadius()" classname="inkball.BallTest" time="0.002"/>
+  <testcase name="testEdgeSetColour()" classname="inkball.BallTest" time="0.002"/>
+  <testcase name="testNegativeDraw()" classname="inkball.BallTest" time="0.006"/>
+  <testcase name="testEdgeInteract()" classname="inkball.BallTest" time="0.002"/>
+  <testcase name="testEdgeSetBallRadius()" classname="inkball.BallTest" time="0.003"/>
+  <testcase name="testEdgeConstruction()" classname="inkball.BallTest" time="0.002"/>
+  <testcase name="testNormalAttractionVector()" classname="inkball.BallTest" time="0.002"/>
+  <testcase name="testEdgeWillCollide()" classname="inkball.BallTest" time="0.003"/>
   <testcase name="testEdgeSetVector()" classname="inkball.BallTest" time="0.002"/>
-  <testcase name="testPositiveInteract()" classname="inkball.BallTest" time="0.003"/>
+  <testcase name="testPositiveInteract()" classname="inkball.BallTest" time="0.002"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>
