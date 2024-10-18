@@ -5,7 +5,7 @@
 <html id="htmlId">
 <head>
   <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
-  <title>Coverage Report > Spawner</title>
+  <title>Coverage Report > Tile</title>
   <style type="text/css">
     @import "../../css/coverage.css";
     @import "../../css/idea.min.css";
@@ -22,7 +22,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     <a href="../index.html">inkball</a>
 </div>
 
-<h1>Coverage Summary for Class: Spawner (inkball)</h1>
+<h1>Coverage Summary for Class: Tile (inkball)</h1>
 
 <table class="coverageStats">
 <tr>
@@ -41,7 +41,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 </th>
 </tr>
 <tr>
-  <td class="name">Spawner</td>
+  <td class="name">Tile</td>
 <td class="coverageStat">
   <span class="percent">
     100%
@@ -55,7 +55,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     100%
   </span>
   <span class="absValue">
-    (2/2)
+    (3/3)
   </span>
 </td>
 <td class="coverageStat">
@@ -63,7 +63,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     100%
   </span>
   <span class="absValue">
-    (3/3)
+    (5/5)
   </span>
 </td>
 </tr>
@@ -77,18 +77,25 @@ Current scope:     <a href="../../index.html">all classes</a>
 <pre>
 <code class="sourceCode" id="sourceCode">&nbsp;package inkball;
 &nbsp;
-&nbsp;import processing.core.PImage;
+&nbsp;public abstract class Tile {
+&nbsp;    protected int x;
+&nbsp;    protected int y;
 &nbsp;
-&nbsp;public class Spawner extends Tile {
-&nbsp;    public Spawner (int x, int y) {
-<b class="fc">&nbsp;        super(x, y);</b>
+<b class="fc">&nbsp;    public Tile(int x, int y) {</b>
+<b class="fc">&nbsp;        this.x = x;</b>
+<b class="fc">&nbsp;        this.y = y;</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    @Override
-&nbsp;    public void draw(App app) {
-<b class="fc">&nbsp;        PImage tile = app.getSprite(&quot;entrypoint&quot;);</b>
-<b class="fc">&nbsp;        app.image(tile, x*App.CELLSIZE, y*App.CELLSIZE+App.TOPBAR, App.CELLSIZE, App.CELLSIZE);</b>
+&nbsp;    public abstract void draw(App app);
+&nbsp;
+&nbsp;    public int getX() {
+<b class="fc">&nbsp;        return this.x;</b>
 &nbsp;    }
+&nbsp;
+&nbsp;    public int getY() {
+<b class="fc">&nbsp;        return this.y;</b>
+&nbsp;    }
+&nbsp;
 &nbsp;}
 </code>
 </pre>
@@ -113,7 +120,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2024-10-09 17:42</div>
+    <div style="float:right;">generated on 2024-10-18 09:20</div>
 </div>
 </body>
 </html>

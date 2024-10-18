@@ -1,6 +1,7 @@
 package inkball;
 
 import processing.core.PApplet;
+import processing.core.PConstants;
 import processing.core.PImage;
 import processing.data.JSONObject;
 import processing.data.JSONArray;
@@ -46,6 +47,7 @@ public class App extends PApplet {
     }
 
     public static int gameLevel = 1;
+    public int maxLevel = 1;
 
     public GameState gameState = GameState.PLAYING;
 
@@ -70,7 +72,7 @@ public class App extends PApplet {
     public int lastLine = 0;
 
     protected Tile[][] board;
-    private ArrayList<Ball> balls = new ArrayList<Ball>();
+    protected ArrayList<Ball> balls = new ArrayList<Ball>();
     protected ArrayList<Wall> walls = new ArrayList<>();
     protected ArrayList<Line> allLines = new ArrayList<Line>();
     protected ArrayList<ArrayList<Line>> drawnLines = new ArrayList<>();
@@ -130,6 +132,13 @@ public class App extends PApplet {
         }*/
 
         //get information from config
+        try {
+            maxLevel = this.json.getJSONArray("levels").size();
+        }
+        catch (Exception e) {
+            maxLevel = 1;
+        }
+
         try {
             timeLimit = this.json.getJSONArray("levels").getJSONObject(gameLevel - 1).getInt("time");
         }
@@ -245,29 +254,61 @@ public class App extends PApplet {
         this.ballQueue = new Ball[this.maxBallQueue];
 
         for (int i = 0; i < ballsJSON.size(); i++) {
-            int colour = colourToInt(ballsJSON.getString(i));
+            int colour = this.colourToInt(ballsJSON.getString(i));
             this.ballQueue[i] = new Ball(19 + 28 * i, 21, colour);
         }
     }
 
-    public void setLayout() {
+    public ArrayList<ArrayList<String>> getFileContents() {
         File JSONfile = null;
         try {
             JSONfile = new File(this.json.getJSONArray("levels").getJSONObject(gameLevel - 1).getString("layout"));
         }
         catch (Exception e) {
             System.out.println("JSON file not found");
-            System.exit(1);
-        }
-        Scanner scan = null;
-        try {
-             scan = new Scanner(JSONfile);
-        }
-        catch (FileNotFoundException e) {
-            System.exit(1);
+            if (!this.isTesting) return null;
         }
 
-        //READ TXT LAYOUT FILE
+        Scanner scan = null;
+        if (!this.isTesting) {
+            try {
+                scan = new Scanner(JSONfile);
+            } catch (FileNotFoundException e) {
+                if (!this.isTesting) return null;
+            }
+        }
+
+        else {
+            JSONfile = new File("for-testing.txt");
+            try {
+                JSONfile.createNewFile();
+            }
+            catch (IOException e) {
+                return null;
+            }
+            FileWriter fw = null;
+            try {
+                fw = new FileWriter("for-testing.txt");
+            }
+            catch (IOException e) {
+                return null;
+            }
+            try {
+                fw.write("XXH67  H");
+                fw.close();
+            }
+            catch (IOException e) {
+                return null;
+            }
+            JSONfile = new File("for-testing.txt");
+            try {
+                scan = new Scanner(JSONfile);
+            }
+            catch (FileNotFoundException e) {
+                return null;
+            }
+        }
+
         ArrayList<ArrayList<String>> lines = new ArrayList<>();
         while (scan.hasNextLine()) {
             String line = scan.nextLine();
@@ -277,6 +318,20 @@ public class App extends PApplet {
                 lineChars.add(c);
             }
             lines.add(lineChars);
+        }
+
+        scan.close();
+
+        return lines;
+    }
+
+    public void setLayout() {
+        ArrayList<ArrayList<String>> lines = null;
+        try {
+            lines = this.getFileContents();
+        }
+        catch (Exception e) {
+            System.exit(1);
         }
 
         //CREATE OBJECTS BASED ON FILE
@@ -334,12 +389,12 @@ public class App extends PApplet {
 
                 //HOLE
                 else if (lines.get(i).get(j).equals("H")) {
-                    if (getColourCode(lines, i, j) == -1) {
+                    if (this.getColourCode(lines, i, j) == -1) {
                         this.board[i][j] = new Blank(j, i);
                         this.board[i][j+1] = new Blank(j+1, i); //handle out of bounds
                     }
                     else {
-                        int colour = getColourCode(lines, i, j);
+                        int colour = this.getColourCode(lines, i, j);
                         for (int k = 0; k <= 1; k++) {
                             for (int l = 0; l <= 1; l++) {
                                 Hole.GridPosition gp = this.getPosition(l, k);
@@ -368,8 +423,8 @@ public class App extends PApplet {
                 //BALL
                 else if (lines.get(i).get(j).equals("B")) {
                     this.board[i][j] = new Blank(j, i);
-                    if (App.getColourCode(lines, i, j) != -1) {
-                        int colour = getColourCode(lines, i, j);
+                    if (this.getColourCode(lines, i, j) != -1) {
+                        int colour = this.getColourCode(lines, i, j);
                         this.balls.add(new Ball(j*CELLSIZE + 4, i*CELLSIZE+TOPBAR + 4, colour)); //add 4 so spawns in the middle
                     }
                 }
@@ -472,7 +527,7 @@ public class App extends PApplet {
         }
     }
 
-    public static int colourToInt(String colourStr) {
+    public int colourToInt(String colourStr) {
         if (colourStr.equals("grey")) {
             return 0;
         }
@@ -531,7 +586,7 @@ public class App extends PApplet {
         this.allLines.add(new Line(bottomRightCorner, topRightCorner, colour, isDrawn));
     }
 
-    public static Line[] getWallLineSegments(Wall wall) {
+    public Line[] getWallLineSegments(Wall wall) {
         Line[] lines = new Line[4];
 
         float[] topLeftCorner = new float[] {wall.getX()*CELLSIZE, wall.getY() * CELLSIZE + TOPBAR}; // H0, V0
@@ -549,7 +604,7 @@ public class App extends PApplet {
         return lines;
     }
 
-    public static int getColourCode (ArrayList<ArrayList<String>> lines, int i, int j) {
+    public int getColourCode (ArrayList<ArrayList<String>> lines, int i, int j) {
         String colour = " ";
         try {
             colour = lines.get(i).get(j+1);
@@ -607,13 +662,6 @@ public class App extends PApplet {
         return Math.sqrt(Math.pow((P2[1] - P1[1]), 2) + Math.pow((P2[0] - P1[0]), 2));
     }
 
-    public static double getDistance(double[] P1, double[] P2) {
-        if (P1 == null || P2 == null || P1.length != 2 || P2.length != 2) {
-            throw new IllegalArgumentException("Wrong points!");
-        }
-        return Math.sqrt(Math.pow((P2[1] - P1[1]), 2) + Math.pow((P2[0] - P1[0]), 2));
-    }
-
     public void addDrawnLine(Line line) {
         if (line.getP1()[1] < TOPBAR || line.getP2()[1] < TOPBAR) {
             return;
@@ -632,7 +680,7 @@ public class App extends PApplet {
         outerLoop:
         for (int i = (this.drawnLines.size() - 1); i >= 0; i--) {
             for (int j = (this.drawnLines.get(i).size() - 1); j >= 0; j--) {
-                if (mouseOnLine(toRemove, this.drawnLines.get(i).get(j).getP1(), this.drawnLines.get(i).get(j).getP2())) {
+                if (this.mouseOnLine(toRemove, this.drawnLines.get(i).get(j).getP1(), this.drawnLines.get(i).get(j).getP2())) {
                     removedLine = this.drawnLines.get(i);
                     break outerLoop;
                 }
@@ -670,21 +718,12 @@ public class App extends PApplet {
         this.drawnLines.remove(removedLine);
     }
 
-    public static boolean mouseOnLine(float[] mouseXY, float[] lineP1, float[] lineP2) {
+    public boolean mouseOnLine(float[] mouseXY, float[] lineP1, float[] lineP2) {
         double distP1 = App.getDistance(mouseXY, lineP1);
         double distP2 = App.getDistance(mouseXY, lineP2);
         double distP1P2 = App.getDistance(lineP1, lineP2);
 
         return distP1 + distP2 < mouseRadius + distP1P2; //mouse radius is 5
-    }
-
-    public boolean getBallsStatus() {
-        for (Ball ball : this.balls) {
-            if (!ball.getIsAbsorbed()) {
-                return false;
-            }
-        }
-        return true;
     }
 
     public Wall[] getWallAssociated(Ball ball, Line line) {
@@ -728,7 +767,7 @@ public class App extends PApplet {
     }
 
     public void removeWall (Wall wall) {
-        List<Line> linesToRemove = Arrays.asList(getWallLineSegments(wall));
+        List<Line> linesToRemove = Arrays.asList(this.getWallLineSegments(wall));
         int removeInd = -1;
         //System.out.println(linesToRemove);
         boolean removed = false;
@@ -786,15 +825,15 @@ public class App extends PApplet {
     @Override
     public void mousePressed(MouseEvent e) {
         // create a new player-drawn line object
-        if (gameState == GameState.PAUSED) {
+        if (gameState != GameState.PLAYING) {
             return;
         }
 
         int mouseX = e.getX();
         int mouseY = e.getY();
 
-        if (mouseButton == LEFT) {
-            if (ctrlPressed) {
+        if (e.getButton() == 37) { // Button is left
+            if (e.getModifiers() == 2) { // Modifier is CTRL
                 float[] toRemove = new float[] {mouseX, mouseY};
 
                 this.removeLine(toRemove);
@@ -815,7 +854,7 @@ public class App extends PApplet {
             this.lastLine = frameCount;
         }
 
-        else if (mouseButton == RIGHT) {
+        else if (e.getButton() == 39) {
             float[] toRemove = new float[] {mouseX, mouseY};
 
             this.removeLine(toRemove);
@@ -825,7 +864,7 @@ public class App extends PApplet {
 	
 	@Override
     public void mouseDragged(MouseEvent e) {
-        if (gameState == GameState.PAUSED) {
+        if (gameState != GameState.PLAYING) {
             return;
         }
 
@@ -834,7 +873,7 @@ public class App extends PApplet {
         int mouseX = e.getX();
         int mouseY = e.getY();
 
-        if (mouseButton == LEFT) {
+        if (e.getButton() == 37) { //Left button dragged
             if (mouseX == this.start[0] && mouseY == this.start[1]) {
                 return;
             }
@@ -861,14 +900,14 @@ public class App extends PApplet {
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        if (gameState == GameState.PAUSED) {
+        if (gameState != GameState.PLAYING) {
             return;
         }
 
         int mouseX = e.getX();
         int mouseY = e.getY();
 
-        if (mouseButton == LEFT) {
+        if (e.getButton() == LEFT) {
             if (isDrawing) {
                 this.end = new float[]{mouseX, mouseY};
                 this.addDrawnLine(new Line(this.start, this.end, 0, true));
@@ -883,13 +922,71 @@ public class App extends PApplet {
         }
     }
 
+    public void drawAll() {
+        for (int i = this.balls.size() - 1; i >= 0; i--) {
+            Ball ball = this.balls.get(i);
+            ball.draw(this);
+
+            boolean hasCollided = false;
+            for (int j = this.allLines.size() - 1; j >= 0; j--) {
+                Line line = this.allLines.get(j);
+                if (ball.willCollide(line) != null) {
+                    hasCollided = true;
+                    if (this.getWallAssociated(ball, line) != null) {
+                        Wall[] wallsAssociated = this.getWallAssociated(ball, line);
+                        (wallsAssociated[0]).damage(ball);
+                        (wallsAssociated[1]).damage(ball);
+                        if (wallsAssociated[0].getHP() == 0) {
+                            //System.out.println("removed wall");
+                            this.removeWall(wallsAssociated[0]); // not REMOVING LINES, removing wrong walls
+                        }
+                        //ball.interact(line, this);
+                    }
+                    ball.interact(line);
+                    break;
+                }
+
+            }
+
+            outerLoop:
+            for (int j = this.drawnLines.size() - 1; j >= 0; j--) {
+                for (int k = this.drawnLines.get(j).size() - 1; k >= 0; k--) {
+                    if (ball.willCollide(this.drawnLines.get(j).get(k)) != null) {
+                        ball.interact(this.drawnLines.get(j).get(k));
+                        hasCollided = true;
+                        this.removeLine(this.drawnLines.get(j).get(k));
+                        break outerLoop;
+                    }
+                }
+            }
+
+            if (!hasCollided) {
+                ball.moveOne();
+            }
+
+            //Interact with line first
+            for (Hole hole : this.holes) {
+                if (getDistance(ball.getBallCenter(), hole.getHoleCenter()) < 32) {
+                    ball.meetHole(hole, this);
+                    break;
+                }
+                else {
+                    ball.setBallRadius(12);
+                }
+            }
+        }
+    }
+
+
     /**
      * Draw all elements in the game by current frame.
      */
 	@Override
     public void draw() {
-        background(206);
-        this.spawnBalls();
+        if (!isTesting) {
+            background(206);
+            this.spawnBalls();
+        }
 
         //----------------------------------
         //display Board for current level:
@@ -959,7 +1056,7 @@ public class App extends PApplet {
             if (gameState == GameState.PAUSED) {
                 text("*** PAUSED ***", WIDTH / 2, TOPBAR / 2);
             }
-            else if (gameState == GameState.WIN && gameLevel > this.json.getJSONArray("levels").size()) {
+            else if (gameState == GameState.WIN && gameLevel > maxLevel) {
                 text("=== ENDED ===", WIDTH / 2, TOPBAR / 2);
             }
             else if (gameState == GameState.OVER) {
@@ -969,11 +1066,18 @@ public class App extends PApplet {
             for (Ball ball : this.balls) {
                 ball.draw(this);
             }
+
+            for (ArrayList<Line> line : this.drawnLines) {
+                for (Line l : line) {
+                    l.draw(this);
+                }
+            }
+
             for (Line line : this.allLines) {
                 line.draw(this);
             }
 
-            if (gameState == GameState.WIN && gameLevel <= this.json.getJSONArray("levels").size()) {
+            if (gameState == GameState.WIN && gameLevel <= maxLevel) {
                 if (Arrays.equals(this.firstSpiral, new int[]{this.board[0].length - 1, this.board.length - 1}) && Arrays.equals(this.secondSpiral, new int[]{0, 0})) {
                     restart();
                 }
@@ -988,7 +1092,7 @@ public class App extends PApplet {
         strokeWeight(0);
         rect(14, 16, 5 * 28 + 4, 34); // max 5 balls in queue
         fill(0);
-        for (int i = 0; i < this.ballQueue.length; i++) {
+          for (int i = 0; i < this.ballQueue.length; i++) {
             if (i > 4) {
                 break;
             }
@@ -1009,7 +1113,18 @@ public class App extends PApplet {
             }
         }
 
-        if (gameState == GameState.PAUSED) { // looks ugly
+        if (gameState == GameState.PAUSED) {// looks ugly
+
+            for (ArrayList<Line> line : this.drawnLines) {
+                for (Line l : line) {
+                    l.draw(this);
+                }
+            }
+
+            for (Line line : this.allLines) {
+                line.draw(this);
+            }
+
             return;
         }
 
@@ -1023,58 +1138,7 @@ public class App extends PApplet {
             }
         }
 
-        for (int i = this.balls.size() - 1; i >= 0; i--) {
-            Ball ball = this.balls.get(i);
-            ball.draw(this);
-
-            boolean hasCollided = false;
-            for (int j = this.allLines.size() - 1; j >= 0; j--) {
-                Line line = this.allLines.get(j);
-                if (ball.willCollide(line) != null) {
-                    hasCollided = true;
-                    if (this.getWallAssociated(ball, line) != null) {
-                        Wall[] wallsAssociated = this.getWallAssociated(ball, line);
-                        (wallsAssociated[0]).damage(ball);
-                        (wallsAssociated[1]).damage(ball);
-                        if (wallsAssociated[0].getHP() == 0) {
-                            //System.out.println("removed wall");
-                            this.removeWall(wallsAssociated[0]); // not REMOVING LINES, removing wrong walls
-                        }
-                        //ball.interact(line, this);
-                    }
-                    ball.interact(line);
-                    break;
-                }
-
-            }
-
-            outerLoop:
-            for (int j = this.drawnLines.size() - 1; j >= 0; j--) {
-                for (int k = this.drawnLines.get(j).size() - 1; k >= 0; k--) {
-                    if (ball.willCollide(this.drawnLines.get(j).get(k)) != null) {
-                        ball.interact(this.drawnLines.get(j).get(k));
-                        hasCollided = true;
-                        this.removeLine(this.drawnLines.get(j).get(k));
-                        break outerLoop;
-                    }
-                }
-            }
-
-            if (!hasCollided) {
-                ball.moveOne();
-            }
-
-            //Interact with line first
-            for (Hole hole : this.holes) {
-                if (getDistance(ball.getBallCenter(), hole.getHoleCenter()) < 32) {
-                    ball.meetHole(hole, this);
-                    break;
-                }
-                else {
-                    ball.setBallRadius(12);
-                }
-            }
-        }
+        this.drawAll();
         
 		//----------------------------------
         // game end

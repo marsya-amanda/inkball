@@ -7,25 +7,25 @@ public class Wall extends Tile {
     private int hp;
 
     public Wall(int x, int y, int colour) {
-<span class="nc" id="L10">        super(x, y);</span>
-<span class="nc" id="L11">        this.colour = colour;</span>
-<span class="nc" id="L12">        this.hp = 3;</span>
-<span class="nc" id="L13">    }</span>
+<span class="fc" id="L10">        super(x, y);</span>
+<span class="fc" id="L11">        this.colour = colour;</span>
+<span class="fc" id="L12">        this.hp = 3;</span>
+<span class="fc" id="L13">    }</span>
 
     @Override
     public void draw(App app) {
-<span class="nc" id="L17">        PImage tile = app.getSprite(&quot;wall&quot;+this.colour);</span>
-<span class="nc bnc" id="L18" title="All 4 branches missed.">        if (this.hp &lt;= 3 &amp;&amp; this.hp &gt; 1) {</span>
-<span class="nc" id="L19">            tile = app.getSprite(&quot;wall&quot;+this.colour);</span>
+<span class="fc" id="L17">        PImage tile = app.getSprite(&quot;wall&quot;+this.colour);</span>
+<span class="pc bpc" id="L18" title="2 of 4 branches missed.">        if (this.hp &lt;= 3 &amp;&amp; this.hp &gt; 1) {</span>
+<span class="fc" id="L19">            tile = app.getSprite(&quot;wall&quot;+this.colour);</span>
         }
 <span class="nc bnc" id="L21" title="All 2 branches missed.">        else if (this.hp &lt; 2) {</span>
 <span class="nc" id="L22">            tile = app.getSprite(&quot;wall&quot;+this.colour+&quot;-damaged&quot;);</span>
         }
-<span class="nc" id="L24">        app.image(tile, x*App.CELLSIZE, y*App.CELLSIZE+App.TOPBAR, App.CELLSIZE, App.CELLSIZE);</span>
-<span class="nc" id="L25">    }</span>
+<span class="fc" id="L24">        app.image(tile, x*App.CELLSIZE, y*App.CELLSIZE+App.TOPBAR, App.CELLSIZE, App.CELLSIZE);</span>
+<span class="fc" id="L25">    }</span>
 
     public int getColour() {
-<span class="nc" id="L28">        return this.colour;</span>
+<span class="fc" id="L28">        return this.colour;</span>
     }
 
     public int getHP() {

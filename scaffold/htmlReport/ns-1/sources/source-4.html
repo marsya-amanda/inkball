@@ -5,7 +5,7 @@
 <html id="htmlId">
 <head>
   <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
-  <title>Coverage Report > ConcreteTile</title>
+  <title>Coverage Report > Hole</title>
   <style type="text/css">
     @import "../../css/coverage.css";
     @import "../../css/idea.min.css";
@@ -22,18 +22,19 @@ Current scope:     <a href="../../index.html">all classes</a>
     <a href="../index.html">inkball</a>
 </div>
 
-<h1>Coverage Summary for Class: ConcreteTile (inkball)</h1>
+<h1>Coverage Summary for Class: Hole (inkball)</h1>
 
 <table class="coverageStats">
+
 <tr>
   <th class="name">Class</th>
 <th class="coverageStat 
 ">
-  Class, %
+  Method, %
 </th>
 <th class="coverageStat 
 ">
-  Method, %
+  Branch, %
 </th>
 <th class="coverageStat 
 ">
@@ -41,33 +42,78 @@ Current scope:     <a href="../../index.html">all classes</a>
 </th>
 </tr>
 <tr>
-  <td class="name">ConcreteTile</td>
+  <td class="name">Hole</td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    83.3%
   </span>
   <span class="absValue">
-    (0/1)
+    (5/6)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    50%
   </span>
   <span class="absValue">
-    (0/2)
+    (9/18)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    59.3%
   </span>
   <span class="absValue">
-    (0/2)
+    (16/27)
   </span>
 </td>
 </tr>
-
+  <tr>
+    <td class="name">Hole$GridPosition</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    85.7%
+  </span>
+  <span class="absValue">
+    (6/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (9/18)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    62.1%
+  </span>
+  <span class="absValue">
+    (18/29)
+  </span>
+</td>
+</tr>
 </table>
 
 <br/>
@@ -77,14 +123,74 @@ Current scope:     <a href="../../index.html">all classes</a>
 <pre>
 <code class="sourceCode" id="sourceCode">&nbsp;package inkball;
 &nbsp;
-&nbsp;public class ConcreteTile extends Tile {
-&nbsp;    public ConcreteTile(int x, int y) {
-<b class="nc">&nbsp;        super(x, y);</b>
+&nbsp;import processing.core.PImage;
+&nbsp;import java.util.Arrays;
+&nbsp;
+&nbsp;public class Hole extends Tile {
+&nbsp;    public int colour;
+<b class="fc">&nbsp;    public enum GridPosition {</b>
+<b class="fc">&nbsp;        TL, BL, TR, BR</b>
+&nbsp;    }
+&nbsp;    public GridPosition gridPosition;
+&nbsp;
+&nbsp;    public Hole(int x, int y, int colour, GridPosition gridPosition) {
+<b class="fc">&nbsp;        super(x, y);</b>
+<b class="fc">&nbsp;        this.colour = colour;</b>
+<b class="fc">&nbsp;        this.gridPosition = gridPosition;</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    public void draw(App app) {
+&nbsp;    public static String toString(Hole hole) {
+<b class="nc">&nbsp;        String s = &quot;Hole at %s, colour %d&quot;;</b>
+<b class="nc">&nbsp;        return String.format(s, Arrays.toString(new float[] {hole.getX(), hole.getY()}), hole.colour);</b>
+&nbsp;    }
 &nbsp;
-<b class="nc">&nbsp;    }</b>
+&nbsp;    @Override
+&nbsp;    public void draw(App app) {
+&nbsp;        PImage tile;
+<b class="fc">&nbsp;        if (this.gridPosition == GridPosition.TL) {</b>
+<b class="fc">&nbsp;            tile = app.getSprite(&quot;hole&quot;+colour);</b>
+&nbsp;        }
+&nbsp;        else {
+&nbsp;            return;
+&nbsp;        }
+<b class="fc">&nbsp;        app.image(tile, x*App.CELLSIZE, y*App.CELLSIZE+App.TOPBAR, App.CELLSIZE * 2, App.CELLSIZE * 2);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public int getColour() {
+<b class="fc">&nbsp;        return this.colour;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String colourToString() {
+<b class="fc">&nbsp;        if (this.colour == 1) {</b>
+<b class="fc">&nbsp;            return &quot;orange&quot;;</b>
+&nbsp;        }
+<b class="pc">&nbsp;        if (this.colour == 2) {</b>
+<b class="fc">&nbsp;            return &quot;blue&quot;;</b>
+&nbsp;        }
+<b class="nc">&nbsp;        if (this.colour == 3) {</b>
+<b class="nc">&nbsp;            return &quot;green&quot;;</b>
+&nbsp;        }
+<b class="nc">&nbsp;        if (this.colour == 4) {</b>
+<b class="nc">&nbsp;            return &quot;yellow&quot;;</b>
+&nbsp;        }
+<b class="nc">&nbsp;        return &quot;grey&quot;;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public float[] getHoleCenter() {
+<b class="pc">&nbsp;        if (this.gridPosition == GridPosition.TL) {</b>
+<b class="nc">&nbsp;            return new float[] {(this.getX()+1)*App.CELLSIZE, (this.getY()+1)*App.CELLSIZE+App.TOPBAR};</b>
+&nbsp;        }
+<b class="pc">&nbsp;        else if (this.gridPosition == GridPosition.BL) {</b>
+<b class="nc">&nbsp;            return new float[] {(this.getX()+1)*App.CELLSIZE, this.getY()*App.CELLSIZE+App.TOPBAR};</b>
+&nbsp;        }
+<b class="pc">&nbsp;        else if (this.gridPosition == GridPosition.TR) {</b>
+<b class="nc">&nbsp;            return new float[] {this.getX()*App.CELLSIZE, (this.getY()+1)*App.CELLSIZE+App.TOPBAR};</b>
+&nbsp;        }
+<b class="pc">&nbsp;        else if (this.gridPosition == GridPosition.BR) { //BR</b>
+<b class="fc">&nbsp;            return new float[] {this.getX()*App.CELLSIZE, this.getY()*App.CELLSIZE+App.TOPBAR};</b>
+&nbsp;        }
+<b class="nc">&nbsp;        return null;</b>
+&nbsp;    }
 &nbsp;}
 </code>
 </pre>
@@ -109,7 +215,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2024-10-09 17:42</div>
+    <div style="float:right;">generated on 2024-10-18 09:20</div>
 </div>
 </body>
 </html>

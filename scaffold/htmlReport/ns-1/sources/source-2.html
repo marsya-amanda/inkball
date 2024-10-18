@@ -56,26 +56,26 @@ Current scope:     <a href="../../index.html">all classes</a>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    81%
+    71.4%
   </span>
   <span class="absValue">
-    (17/21)
+    (15/21)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    75.9%
+    57.4%
   </span>
   <span class="absValue">
-    (44/58)
+    (31/54)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    89.8%
+    80.2%
   </span>
   <span class="absValue">
-    (115/128)
+    (101/126)
   </span>
 </td>
 </tr>
@@ -108,9 +108,11 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;        this.x = x; // so it spawns in the middle of the tile/spawner</b>
 <b class="fc">&nbsp;        this.y = y;</b>
 <b class="pc">&nbsp;        if (colour &lt; 0 || colour &gt; 4) {</b>
-<b class="nc">&nbsp;            colour = 0;</b>
+<b class="nc">&nbsp;            this.colour = 0;</b>
 &nbsp;        }
-<b class="fc">&nbsp;        this.colour = colour;</b>
+&nbsp;        else {
+<b class="fc">&nbsp;            this.colour = colour;</b>
+&nbsp;        }
 <b class="fc">&nbsp;        if (Ball.rand.nextBoolean()) {</b>
 <b class="fc">&nbsp;            this.vector = new float[] {2, -2};</b>
 &nbsp;        }
@@ -141,7 +143,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;    }
 &nbsp;
 &nbsp;    public float[] getVector() {
-<b class="fc">&nbsp;        return this.vector;</b>
+<b class="nc">&nbsp;        return this.vector;</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    public float getBallRadius() {
@@ -191,8 +193,8 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;        double distP1P2 = App.getDistance(P1, P2);</b>
 &nbsp;
 <b class="fc">&nbsp;        if (distP1 + distP2 &lt; ARTIFICIAL_RADIUS + distP1P2) {</b>
-<b class="fc">&nbsp;            if (distP1P2 &lt; 0.001f) {</b>
-<b class="fc">&nbsp;                return P1;</b>
+<b class="pc">&nbsp;            if (distP1P2 &lt; 0.001f) {</b>
+<b class="nc">&nbsp;                return P1;</b>
 &nbsp;            }
 &nbsp;            // Calculate the collision point
 <b class="fc">&nbsp;            float t = (float) ((distP1 - ARTIFICIAL_RADIUS) / distP1P2);</b>
@@ -210,9 +212,9 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;        }
 &nbsp;
 &nbsp;        // Handle zeroDivisionError and when ball is directly on a dot
-<b class="fc">&nbsp;        if (Arrays.equals(this.willCollide(line), line.getP1())) {</b>
-<b class="fc">&nbsp;            this.vector = new float[] {-1*this.getVector()[0], -1*this.getVector()[1]};</b>
-<b class="fc">&nbsp;            return new float[] {-1*this.getVector()[0], -1*this.getVector()[1]};</b>
+<b class="pc">&nbsp;        if (Arrays.equals(this.willCollide(line), line.getP1())) {</b>
+<b class="nc">&nbsp;            this.vector = new float[] {-1*this.getVector()[0], -1*this.getVector()[1]};</b>
+<b class="nc">&nbsp;            return new float[] {-1*this.getVector()[0], -1*this.getVector()[1]};</b>
 &nbsp;        }
 &nbsp;
 <b class="fc">&nbsp;        float[] P1 = line.getP1();</b>
@@ -280,17 +282,17 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;        float shrinkFactor = (float) (App.getDistance(holeCenter, ballCenter) / 32);</b>
 <b class="fc">&nbsp;        this.ballRadius = 12 * shrinkFactor; //make ball increase/decrease proportionally to its original radius</b>
 &nbsp;
-<b class="pc">&nbsp;        if (this.ballRadius &lt; 6 || App.getDistance(ballCenter, holeCenter) &lt; 8) {</b>
+<b class="fc">&nbsp;        if (this.ballRadius &lt; 6) {</b>
 <b class="fc">&nbsp;            this.ballRadius = 0;</b>
 &nbsp;            //this.isAbsorbed = true;
 &nbsp;
-<b class="fc">&nbsp;            if (this.colourToString().equals(hole.colourToString())) {</b>
+<b class="fc">&nbsp;            if (this.getColour() == hole.getColour()) {</b>
 <b class="fc">&nbsp;                App.score += App.scoreIncrease.get(hole.colourToString()) * app.modScoreIncrease;</b>
 <b class="fc">&nbsp;                app.getBalls().remove(this);</b>
 <b class="fc">&nbsp;                this.absorb();</b>
 &nbsp;            }
 &nbsp;
-<b class="fc">&nbsp;            else if (this.colour == 0 || hole.getColour() == 0) {</b>
+<b class="pc">&nbsp;            else if (this.colour == 0 || hole.getColour() == 0) {</b>
 <b class="fc">&nbsp;                App.score += App.scoreIncrease.get(&quot;grey&quot;) * app.modScoreIncrease;</b>
 <b class="fc">&nbsp;                app.getBalls().remove(this);</b>
 <b class="fc">&nbsp;                this.absorb();</b>
@@ -337,20 +339,17 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;    }
 &nbsp;
 &nbsp;    public String colourToString() {
-<b class="fc">&nbsp;        if (this.colour == 0) {</b>
-<b class="fc">&nbsp;            return &quot;grey&quot;;</b>
+<b class="nc">&nbsp;        if (this.colour == 1) {</b>
+<b class="nc">&nbsp;            return &quot;orange&quot;;</b>
 &nbsp;        }
-<b class="fc">&nbsp;        if (this.colour == 1) {</b>
-<b class="fc">&nbsp;            return &quot;orange&quot;;</b>
+<b class="nc">&nbsp;        if (this.colour == 2) {</b>
+<b class="nc">&nbsp;            return &quot;blue&quot;;</b>
 &nbsp;        }
-<b class="fc">&nbsp;        if (this.colour == 2) {</b>
-<b class="fc">&nbsp;            return &quot;blue&quot;;</b>
+<b class="nc">&nbsp;        if (this.colour == 3) {</b>
+<b class="nc">&nbsp;            return &quot;green&quot;;</b>
 &nbsp;        }
-<b class="fc">&nbsp;        if (this.colour == 3) {</b>
-<b class="fc">&nbsp;            return &quot;green&quot;;</b>
-&nbsp;        }
-<b class="pc">&nbsp;        if (this.colour == 4) {</b>
-<b class="fc">&nbsp;            return &quot;yellow&quot;;</b>
+<b class="nc">&nbsp;        if (this.colour == 4) {</b>
+<b class="nc">&nbsp;            return &quot;yellow&quot;;</b>
 &nbsp;        }
 <b class="nc">&nbsp;        return &quot;grey&quot;;</b>
 &nbsp;    }
@@ -379,7 +378,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2024-10-09 17:42</div>
+    <div style="float:right;">generated on 2024-10-18 09:20</div>
 </div>
 </body>
 </html>

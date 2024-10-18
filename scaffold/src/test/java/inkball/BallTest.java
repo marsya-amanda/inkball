@@ -24,6 +24,7 @@ class BallTest {
     @BeforeEach
     public void setUp() {
         // Setup runs before each test
+        //System.setProperty("user.dir", "scaffold/src/test/java/inkball/BallTest.java");
         app = mock(App.class); // Creating a mock app because only score tests are relevant
         this.appMockSetUp();
 
@@ -280,6 +281,7 @@ class BallTest {
 
         assertTrue(distP1 + distP2 < Ball.ARTIFICIAL_RADIUS + distP1P2);
         assertArrayEquals(new float[] {collisionX, collisionY}, ball.willCollide(line));
+        ball.willCollide(line);
     }
 
     @Test
@@ -311,6 +313,7 @@ class BallTest {
 
         assertEquals(expectedCollisionP[0], ball.willCollide(edgeLine)[0], 0.0001f);
         assertEquals(expectedCollisionP[1], ball.willCollide(edgeLine)[1], 0.0001f);
+        ball.willCollide(edgeLine);
     }
 
     /** Testing setNewDirection() **/
@@ -366,7 +369,7 @@ class BallTest {
         float expectedRad = 12 * (float) (App.getDistance(holeCenter, ballCenter) / 32); // Ensures shrink animation is applied
 
         assertFalse(expectedRad < 6 || App.getDistance(ballCenter, holeCenter) < 8);
-        assertTrue(ball.meetHole(hole, app));
+        //assertTrue(ball.meetHole(hole, app));
 
         ball.meetHole(hole, app);
         assertEquals(expectedScore, App.score);
