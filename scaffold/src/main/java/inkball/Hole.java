@@ -1,24 +1,22 @@
 package inkball;
 
 import processing.core.PImage;
-import java.util.Arrays;
 
 public class Hole extends Tile {
-    public int colour;
+    private int colour;
+    /**
+     * Defines enum called GridPosition for the position of the tile on a 2x2 space
+     * TL=TopLeft, BL=BottomLeft, TR=TopRight, BR=BottomRight
+     */
     public enum GridPosition {
         TL, BL, TR, BR
     }
-    public GridPosition gridPosition;
+    private GridPosition gridPosition;
 
     public Hole(int x, int y, int colour, GridPosition gridPosition) {
         super(x, y);
         this.colour = colour;
         this.gridPosition = gridPosition;
-    }
-
-    public static String toString(Hole hole) {
-        String s = "Hole at %s, colour %d";
-        return String.format(s, Arrays.toString(new float[] {hole.getX(), hole.getY()}), hole.colour);
     }
 
     @Override
@@ -37,6 +35,10 @@ public class Hole extends Tile {
         return this.colour;
     }
 
+    /**
+     * Converts colour code of Hole into a string representation.
+     * @return String, either 1="orange", 2="blue", 3="green", 4="yellow", 0="grey"
+     */
     public String colourToString() {
         if (this.colour == 1) {
             return "orange";
@@ -53,6 +55,10 @@ public class Hole extends Tile {
         return "grey";
     }
 
+    /**
+     * Gets the coordinates of the center of the hole.
+     * @return float[] or null if invalid GridPosition
+     */
     public float[] getHoleCenter() {
         if (this.gridPosition == GridPosition.TL) {
             return new float[] {(this.getX()+1)*App.CELLSIZE, (this.getY()+1)*App.CELLSIZE+App.TOPBAR};

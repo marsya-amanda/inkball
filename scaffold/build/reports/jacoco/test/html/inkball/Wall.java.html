@@ -9,16 +9,16 @@ public class Wall extends Tile {
     public Wall(int x, int y, int colour) {
 <span class="fc" id="L10">        super(x, y);</span>
 <span class="fc" id="L11">        this.colour = colour;</span>
-<span class="fc" id="L12">        this.hp = 3;</span>
+<span class="fc" id="L12">        this.hp = 4;</span>
 <span class="fc" id="L13">    }</span>
 
     @Override
     public void draw(App app) {
 <span class="fc" id="L17">        PImage tile = app.getSprite(&quot;wall&quot;+this.colour);</span>
-<span class="pc bpc" id="L18" title="1 of 4 branches missed.">        if (this.hp &lt;= 3 &amp;&amp; this.hp &gt; 1) {</span>
+<span class="pc bpc" id="L18" title="1 of 4 branches missed.">        if (this.hp &lt;= 4 &amp;&amp; this.hp &gt; 2) {</span>
 <span class="fc" id="L19">            tile = app.getSprite(&quot;wall&quot;+this.colour);</span>
         }
-<span class="pc bpc" id="L21" title="1 of 2 branches missed.">        else if (this.hp &lt; 2) {</span>
+<span class="pc bpc" id="L21" title="1 of 2 branches missed.">        else if (this.hp &lt; 3) {</span>
 <span class="fc" id="L22">            tile = app.getSprite(&quot;wall&quot;+this.colour+&quot;-damaged&quot;);</span>
         }
 <span class="fc" id="L24">        app.image(tile, x*App.CELLSIZE, y*App.CELLSIZE+App.TOPBAR, App.CELLSIZE, App.CELLSIZE);</span>

@@ -47,11 +47,6 @@ public class HoleTest {
     }
 
     @Test
-    public void testToString() {
-        assertEquals("Hole at [2.0, 2.0], colour 4", Hole.toString(hole));
-    }
-
-    @Test
     public void testDraw() {
         App app = mock(App.class);
         hole.draw(app);

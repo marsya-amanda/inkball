@@ -17,22 +17,22 @@ public class WallTest {
 
     @Test
     public void testGetHP() {
-        assertEquals(3, wall.getHP());
+        assertEquals(4, wall.getHP());
     }
 
     @Test
     public void testDamage() {
         Ball ball  = new Ball(1, 1, 1);
         wall.damage(ball);
-        assertEquals(2, wall.getHP());
+        assertEquals(3, wall.getHP());
 
         Wall wall = new Wall(1, 1, 0);
         wall.damage(ball);
-        assertEquals(2, wall.getHP());
+        assertEquals(3, wall.getHP());
 
         wall = new Wall(1, 1, 3);
         wall.damage(ball);
-        assertEquals(3, wall.getHP());
+        assertEquals(4, wall.getHP());
     }
 
     @Test

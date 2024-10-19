@@ -69,8 +69,8 @@ public class AppTest extends App {
 
         // Instance fields
         assertEquals(App.GameState.PLAYING, app.gameState);
-        assertEquals(1.0f, app.modScoreIncrease, 0.001f);
-        assertEquals(1.0f, app.modScoreDecrease, 0.001f);
+        assertEquals(1.0f, app.getModScoreIncrease(), 0.001f);
+        assertEquals(1.0f, app.getModScoreDecrease(), 0.001f);
         assertEquals(0, app.spawnInterval);
         assertEquals(0, app.lastLine);
 

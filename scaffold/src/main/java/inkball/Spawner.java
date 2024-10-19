@@ -2,6 +2,9 @@ package inkball;
 
 import processing.core.PImage;
 
+/**
+ * Child class of Tile. Has no inward functionality or specific logic handling.
+ */
 public class Spawner extends Tile {
     public Spawner (int x, int y) {
         super(x, y);

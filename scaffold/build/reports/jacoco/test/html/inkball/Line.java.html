@@ -8,84 +8,63 @@ public class Line {
     private float[] P2;
     public boolean isDrawn;
     private int colourTo;
-    //private final float slope;
-    //private float intercept;
 
-    /*public Line(float[] P1, float[] P2, boolean isDrawn) {
-        this.P1 = P1;
-        this.P2 = P2;
-        this.isDrawn = isDrawn;
-    }*/
+<span class="fc" id="L12">    public Line(float[] P1, float[] P2, int colourTo, boolean isDrawn) {</span>
+<span class="fc" id="L13">        this.P1 = P1;</span>
+<span class="fc" id="L14">        this.P2 = P2;</span>
+<span class="fc" id="L15">        this.colourTo = colourTo;</span>
+<span class="fc" id="L16">        this.isDrawn = isDrawn;</span>
 
-<span class="fc" id="L20">    public Line(float[] P1, float[] P2, int colourTo, boolean isDrawn) {</span>
-<span class="fc" id="L21">        this.P1 = P1;</span>
-<span class="fc" id="L22">        this.P2 = P2;</span>
-<span class="fc" id="L23">        this.colourTo = colourTo;</span>
-<span class="fc" id="L24">        this.isDrawn = isDrawn;</span>
-        /*this.slope = (P2[1] - P1[1])/(P2[0] - P1[0]);
-        this.intercept = this.P1[1] - this.P1[0] * this.slope;*/
-<span class="fc" id="L27">    }</span>
-
-//    public static String toString(Line line) {
-//        return &quot;P1 is &quot; + Arrays.toString(line.getP1()) + &quot;, P2 is &quot; + Arrays.toString(line.getP2());
-//    }
+<span class="fc" id="L18">    }</span>
 
     @Override
     public boolean equals(Object obj) {
-<span class="fc bfc" id="L35" title="All 2 branches covered.">        if (this == obj) return true;</span>
-<span class="fc bfc" id="L36" title="All 4 branches covered.">        if (obj == null || getClass() != obj.getClass()) return false;</span>
-<span class="fc" id="L37">        Line line = (Line) obj;</span>
-<span class="fc bfc" id="L38" title="All 4 branches covered.">        return this.isDrawn == line.isDrawn &amp;&amp;</span>
+<span class="fc bfc" id="L22" title="All 2 branches covered.">        if (this == obj) return true;</span>
+<span class="fc bfc" id="L23" title="All 4 branches covered.">        if (obj == null || getClass() != obj.getClass()) return false;</span>
+<span class="fc" id="L24">        Line line = (Line) obj;</span>
+<span class="fc bfc" id="L25" title="All 4 branches covered.">        return this.isDrawn == line.isDrawn &amp;&amp;</span>
                 this.colourTo == line.colourTo &amp;&amp;
-<span class="fc bfc" id="L40" title="All 2 branches covered.">                Arrays.equals(this.getP1(), line.getP1()) &amp;&amp;</span>
-<span class="pc bpc" id="L41" title="1 of 2 branches missed.">                Arrays.equals(this.getP2(), line.getP2());</span>
+<span class="fc bfc" id="L27" title="All 2 branches covered.">                Arrays.equals(this.getP1(), line.getP1()) &amp;&amp;</span>
+<span class="pc bpc" id="L28" title="1 of 2 branches missed.">                Arrays.equals(this.getP2(), line.getP2());</span>
     }
 
     public void draw(App app) {
-        /*if (this.getColorTo() == 0) {
-            return;
-        }*/
+<span class="fc bfc" id="L32" title="All 2 branches covered.">        if (this.isDrawn) {</span>
+<span class="fc" id="L33">            app.line(this.P1[0], this.P1[1], this.P2[0], this.P2[1]);</span>
 
-<span class="fc bfc" id="L49" title="All 2 branches covered.">        if (this.isDrawn) {</span>
-<span class="fc" id="L50">            app.line(this.P1[0], this.P1[1], this.P2[0], this.P2[1]);</span>
-
-<span class="fc" id="L52">            Random rand = new Random();</span>
-<span class="pc bpc" id="L53" title="1 of 2 branches missed.">            if (rand.nextBoolean()) {</span>
-<span class="nc" id="L54">                app.stroke(colourTo);</span>
+<span class="fc" id="L35">            Random rand = new Random();</span>
+<span class="pc bpc" id="L36" title="1 of 2 branches missed.">            if (rand.nextBoolean()) {</span>
+<span class="nc" id="L37">                app.stroke(colourTo);</span>
             }
             else {
-<span class="fc" id="L57">                app.stroke(colourTo);</span>
+<span class="fc" id="L40">                app.stroke(colourTo);</span>
             }
-            //app.stroke(0);
-<span class="fc" id="L60">            app.strokeWeight(10);</span>
+<span class="fc" id="L42">            app.strokeWeight(10);</span>
         }
 
-<span class="fc" id="L63">    }</span>
+<span class="fc" id="L45">    }</span>
 
     public float[] getP1() {
-<span class="fc" id="L66">        return this.P1;</span>
+<span class="fc" id="L48">        return this.P1;</span>
     }
 
     public float[] getP2() {
-<span class="fc" id="L70">        return this.P2;</span>
+<span class="fc" id="L52">        return this.P2;</span>
     }
 
     public float[] getMidPoint() {
-<span class="fc" id="L74">        float midPointX = (this.P2[0] + this.P1[0]) / 2;</span>
-<span class="fc" id="L75">        float midPointY = (this.P2[1] + this.P1[1]) / 2;</span>
-<span class="fc" id="L76">        return new float[] {midPointX, midPointY};</span>
+<span class="fc" id="L56">        float midPointX = (this.P2[0] + this.P1[0]) / 2;</span>
+<span class="fc" id="L57">        float midPointY = (this.P2[1] + this.P1[1]) / 2;</span>
+<span class="fc" id="L58">        return new float[] {midPointX, midPointY};</span>
     }
 
     public int getColourTo() {
-<span class="fc" id="L80">        return this.colourTo;</span>
+<span class="fc" id="L62">        return this.colourTo;</span>
     }
 
     public String toString() {
-<span class="fc" id="L84">        return &quot;P1 is &quot; + Arrays.toString(this.P1) + &quot;, P2 is &quot; + Arrays.toString(this.P2) + &quot;, drawn is &quot; + this.isDrawn;</span>
+<span class="fc" id="L66">        return &quot;P1 is &quot; + Arrays.toString(this.P1) + &quot;, P2 is &quot; + Arrays.toString(this.P2) + &quot;, drawn is &quot; + this.isDrawn;</span>
     }
 
-    /*public float[] getSlopeIntercept(float x) {
-        return new float[] {this.slope, this.intercept};
-    }*/
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

@@ -13,18 +13,18 @@ public class Ball {
     public static final int MAX_SPEED = 12;
 
     private boolean isAbsorbed;
-<span class="fc" id="L16">    private static Random rand = new Random();</span>
 
-<span class="fc" id="L18">    public Ball(float x, float y, int colour) {</span>
-<span class="fc" id="L19">        this.x = x; // so it spawns in the middle of the tile/spawner</span>
-<span class="fc" id="L20">        this.y = y;</span>
-<span class="fc bfc" id="L21" title="All 4 branches covered.">        if (colour &lt; 0 || colour &gt; 4) {</span>
-<span class="fc" id="L22">            this.colour = 0;</span>
+<span class="fc" id="L17">    public Ball(float x, float y, int colour) {</span>
+<span class="fc" id="L18">        this.x = x; // so it spawns in the middle of the tile/spawner</span>
+<span class="fc" id="L19">        this.y = y;</span>
+<span class="fc bfc" id="L20" title="All 4 branches covered.">        if (colour &lt; 0 || colour &gt; 4) {</span>
+<span class="fc" id="L21">            this.colour = 0;</span>
         }
         else {
-<span class="fc" id="L25">            this.colour = colour;</span>
+<span class="fc" id="L24">            this.colour = colour;</span>
         }
-<span class="fc bfc" id="L27" title="All 2 branches covered.">        if (Ball.rand.nextBoolean()) {</span>
+<span class="fc" id="L26">        Random rand = new Random();</span>
+<span class="fc bfc" id="L27" title="All 2 branches covered.">        if (rand.nextBoolean()) {</span>
 <span class="fc" id="L28">            this.vector = new float[] {2, -2};</span>
         }
         else {
@@ -89,7 +89,7 @@ public class Ball {
 <span class="fc bfc" id="L89" title="All 2 branches covered.">        if (this.willCollide(line) != null) {</span>
             //System.out.println(&quot;Collided!&quot;);
 <span class="fc" id="L91">            this.setNewColour(line);</span>
-<span class="fc" id="L92">            this.setNewDirection(line); // removed app arg</span>
+<span class="fc" id="L92">            this.setNewDirection(line);</span>
 <span class="fc" id="L93">            this.moveOne();</span>
         }
 <span class="fc" id="L95">    }</span>
@@ -198,19 +198,19 @@ public class Ball {
             //this.isAbsorbed = true;
 
 <span class="fc bfc" id="L200" title="All 2 branches covered.">            if (this.getColour() == hole.getColour()) {</span>
-<span class="fc" id="L201">                App.score += App.scoreIncrease.get(hole.colourToString()) * app.modScoreIncrease;</span>
+<span class="fc" id="L201">                App.scoreTemp += app.getScoreIncrease().get(hole.colourToString()) * app.modScoreIncrease;</span>
 <span class="fc" id="L202">                app.getBalls().remove(this);</span>
 <span class="fc" id="L203">                this.absorb();</span>
             }
 
 <span class="fc bfc" id="L206" title="All 4 branches covered.">            else if (this.colour == 0 || hole.getColour() == 0) {</span>
-<span class="fc" id="L207">                App.score += App.scoreIncrease.get(&quot;grey&quot;) * app.modScoreIncrease;</span>
+<span class="fc" id="L207">                App.scoreTemp += app.getScoreIncrease().get(&quot;grey&quot;) * app.getModScoreIncrease();</span>
 <span class="fc" id="L208">                app.getBalls().remove(this);</span>
 <span class="fc" id="L209">                this.absorb();</span>
             }
 
             else {
-<span class="fc" id="L213">                App.score -= App.scoreDecrease.get(hole.colourToString()) * app.modScoreDecrease;</span>
+<span class="fc" id="L213">                App.scoreTemp -= app.getScoreDecrease().get(hole.colourToString()) * app.getModScoreDecrease();</span>
 <span class="fc" id="L214">                app.getBalls().remove(this); // avoid concurrent modification</span>
 <span class="pc bpc" id="L215" title="1 of 2 branches missed.">                for (int i = 0; i &lt; app.ballQueue.length; i++) {</span>
 <span class="fc bfc" id="L216" title="All 2 branches covered.">                    if (app.ballQueue[i] == null) {</span>

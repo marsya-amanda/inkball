@@ -2,6 +2,10 @@ package inkball;
 
 import processing.core.PImage;
 
+/**
+ * Child class of Tile. Represents a "Blank" Tile.
+ * Has no inward functionality or specific interaction with other components.
+ */
 public class Blank extends Tile {
 
     public Blank(int x, int y) {

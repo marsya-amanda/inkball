@@ -1,5 +1,9 @@
 package inkball;
 
+/**
+ * Represents a tile on the game board.
+ * This is an abstract parent class with an abstract draw() method.
+ */
 public abstract class Tile {
     protected int x;
     protected int y;
